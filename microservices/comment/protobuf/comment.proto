@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package comment;
+
+service CommentServer {
+    rpc Get(GetRequest) returns (GetResponse) {}
+    rpc Set(SetRequest) returns (SetResponse) {}
+    rpc Update(UpdateRequest) returns (UpdateResponse) {}
+    rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+	rpc List(ListRequest) returns (ListResponse) {}
+}
+
+message Comment {
+	string ID = 1;
+	string productID = 2;
+	string message = 3;
+	string userID = 4;
+}
+
+message GetRequest {
+    string ID = 1;
+}
+
+message GetResponse {
+    Comment comment = 1;
+	string error = 2;
+}
+
+message SetRequest {
+	Comment comment = 1;
+}
+
+message SetResponse {
+	bool success = 1;
+	string error = 2;
+}
+
+message UpdateRequest {
+	Comment comment = 1;
+}
+
+message UpdateResponse {
+	bool success = 1;
+	string error = 2;
+}
+
+message DeleteRequest {
+    string ID = 1;
+}
+
+message DeleteResponse {
+	bool success = 1;
+	string error = 2;
+}
+
+message ListRequest {
+    string productID = 1;
+}
+
+message ListResponse {
+    repeated Comment comment = 1;
+	string error = 2;
+}
