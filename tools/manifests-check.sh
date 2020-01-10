@@ -1,3 +1,5 @@
 #!/bin/bash
-conftest test --policy tools/policy ./manifests/*/*.yaml
+for SVC in $(ls microservices/); do
+  conftest test --policy tools/policy ./manifests/${SVC}/*.yaml
+done
 
