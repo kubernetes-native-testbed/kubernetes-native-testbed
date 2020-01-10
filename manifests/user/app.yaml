@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+  labels:
+    service: user
+    role: app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      service: user
+      role: app
+  template:
+    metadata:
+      labels:
+        service: user
+        role: app
+    spec:
+      containers:
+        - name: user
+          image: k8stestbed/user:latest
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user
+  labels:
+    service: user
+    role: app
+spec:
+  type: ClusterIP
+  ports:
+    - name: "http-port"
+      protocol: "TCP"
+      port: 8080
+      targetPort: 8080
+  selector:
+    service: user
+    role: app
