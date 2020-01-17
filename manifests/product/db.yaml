@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: product-db
+  namespace: product
+type: Opaque
+data:
+  ROOT_PASSWORD: cHJvZHVjdA==
+  DATABASE: cHJvZHVjdA==
+  USER: cHJvZHVjdA==
+  PASSWORD: cHJvZHVjdA==
+---
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlCluster
+metadata:
+  name: product-db
+  namespace: product
+spec:
+  replicas: 2
+  secretName: product-db
+  mysqlVersion: "5.7"
+  # initBucketURL: gs://bucket_name/backup.xtrabackup.gz
+  # initBucketSecretName:
+
+  minAvailable: "1"
+
+  ## For recurrent backups set backupSchedule with a cronjob expression
+  # backupSchedule:
+  # backupURL: s3://bucket_name/
+  # backupSecretName:
+  # backupScheduleJobsHistoryLimit:
+  # backupRemoteDeletePolicy:
+
+  # mysqlConf:
+  #   innodb-buffer-size: "128M"
+
+  podSpec:
+    persistentVolumeClaim:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: rook
+      resources:
+        requests:
+          storage: 4Gi
+
+  ## Specify service objectives
+  ## If thoses SLO are not fulfilled by cluster node then that node is
+  ## removed from scheme
+  # targetSLO:
+  #   maxSlaveLatency: 10s
+---

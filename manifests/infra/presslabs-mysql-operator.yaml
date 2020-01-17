@@ -232,7 +232,7 @@ roleRef:
   name: mysql-operator
 subjects:
   - name: mysql-operator
-    namespace: "default"
+    namespace: infra
     kind: ServiceAccount
 ---
 # Source: mysql-operator/templates/orc-service.yaml
@@ -326,7 +326,7 @@ spec:
                   name: mysql-operator-orc
                   key: TOPOLOGY_PASSWORD
           args:
-            - --leader-election-namespace=default
+            - --leader-election-namespace=infra
             # connect to orchestrator on localhost
             - --orchestrator-uri=http://127.0.0.1:3000/api
             - --sidecar-image=quay.io/presslabs/mysql-operator-sidecar:0.3.6

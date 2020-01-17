@@ -22,6 +22,22 @@ spec:
       containers:
         - name: product-app
           image: k8stestbed/product:latest
+          env:
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: product-db
+                key: USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: product-db
+                key: PASS
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: product-db
+                key: DATABASE
           resources:
             requests:
               cpu: 100m
