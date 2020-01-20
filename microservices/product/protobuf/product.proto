@@ -1,53 +1,43 @@
 syntax = "proto3";
 
-package product;
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
-service ProductServer {
+package productpb;
+
+service ProductAPI {
     rpc Get(GetRequest) returns (GetResponse) {}
-    rpc Set(SetRequest) returns (SetResponse) {}
-    rpc Update(UpdateRequest) returns (UpdateResponse) {}
-    rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+    rpc Set(SetRequest) returns (google.protobuf.Empty) {}
+    rpc Update(UpdateRequest) returns (google.protobuf.Empty) {}
+    rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
 }
 
 message Product {
-	string ID = 1;
+	string UUID = 1;
 	string name = 2;
-	string price = 3;
-	string imageURLs = 4;
+	int32 price = 3;
+	repeated string imageURLs = 4;
+	google.protobuf.Timestamp createdAt = 5;
+	google.protobuf.Timestamp updatedAt = 6;
+	google.protobuf.Timestamp deletedAt = 7;
 }
 
 message GetRequest {
-    string ID = 1;
+    string UUID = 1;
 }
 
 message GetResponse {
     Product product = 1;
-	string error = 2;
 }
 
 message SetRequest {
 	Product product = 1;
 }
 
-message SetResponse {
-	bool success = 1;
-	string error = 2;
-}
-
 message UpdateRequest {
 	Product product = 1;
 }
 
-message UpdateResponse {
-	bool success = 1;
-	string error = 2;
-}
-
 message DeleteRequest {
-    string ID = 1;
-}
-
-message DeleteResponse {
-	bool success = 1;
-	string error = 2;
+    string UUID = 1;
 }
