@@ -9,3 +9,4 @@ spec:
     - services:
         - name: payment-info
           port: 8080
+      permitInsecure: true
