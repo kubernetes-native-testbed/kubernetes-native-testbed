@@ -146,7 +146,7 @@ func main() {
 
 	db, err := gorm.Open(
 		"mysql",
-		fmt.Sprintf("%s:%s@%s/%s?charset=utf8&parseTime=True&loc=Local",
+		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 			dbUser,
 			dbPassword,
 			dbAddress,
