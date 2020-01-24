@@ -23,6 +23,8 @@ spec:
         - name: product-app
           image: k8stestbed/product:latest
           env:
+          - name: DB_HOST
+            value: product-db-mysql-master.product.svc.cluster.local
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:
@@ -32,7 +34,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: product-db
-                key: PASS
+                key: PASSWORD
           - name: DB_NAME
             valueFrom:
               secretKeyRef:
