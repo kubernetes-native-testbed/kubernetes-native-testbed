@@ -4,6 +4,9 @@ kind: HTTPProxy
 metadata:
   name: user
   namespace: user
+  labels:
+    service: user
+    role: proxy
 spec:
   routes:
     - services:

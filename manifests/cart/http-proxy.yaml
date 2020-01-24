@@ -4,6 +4,9 @@ kind: HTTPProxy
 metadata:
   name: cart
   namespace: cart
+  labels:
+    service: cart
+    role: proxy
 spec:
   routes:
     - services:

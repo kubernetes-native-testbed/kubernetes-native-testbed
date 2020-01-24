@@ -4,6 +4,9 @@ kind: HTTPProxy
 metadata:
   name: order
   namespace: order
+  labels:
+    service: order
+    role: proxy
 spec:
   routes:
     - services:
