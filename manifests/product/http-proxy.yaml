@@ -1,0 +1,11 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: product
+  namespace: product
+spec:
+  routes:
+    - services:
+        - name: product
+          port: 8080

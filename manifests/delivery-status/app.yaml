@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-status
+  namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      service: delivery-status
+      role: app
+  template:
+    metadata:
+      labels:
+        service: delivery-status
+        role: app
+    spec:
+      containers:
+        - name: delivery-status-app
+          image: k8stestbed/delivery-status:latest
+          env:
+          - name: DB_HOST
+            value: delivery-status-db-mysql-master.delivery-status.svc.cluster.local
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: delivery-status-db
+                key: USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: delivery-status-db
+                key: PASSWORD
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: delivery-status-db
+                key: DATABASE
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery-status
+  namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: app
+spec:
+  type: ClusterIP
+  ports:
+    - name: "http-port"
+      protocol: "TCP"
+      port: 8080
+      targetPort: 8080
+  selector:
+    service: delivery-status
+    role: app
