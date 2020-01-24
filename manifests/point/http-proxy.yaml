@@ -1,0 +1,12 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: point
+  namespace: point
+spec:
+  routes:
+    - services:
+        - name: point
+          port: 8080
+      permitInsecure: true
