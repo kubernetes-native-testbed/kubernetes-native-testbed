@@ -1,11 +1,21 @@
 package main
 
-import "github.com/jinzhu/gorm"
+import "time"
 
 type product struct {
-	gorm.Model
 	UUID      string `gorm:"primary_key"`
 	Name      string
-	Price     int
-	ImageURLs []string
+	Price     uint64
+	ImageURLs []productImage `gorm:"foreignkey:ProductUUID;association_foreignkey:UUID"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index"`
+}
+
+type productImage struct {
+	ProductUUID string `gorm:"primary_key"`
+	URL         string `gorm:"primary_key"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   *time.Time `sql:"index"`
 }

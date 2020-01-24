@@ -12,6 +12,8 @@ type productRepository interface {
 	store(*product) (string, error)
 	update(*product) error
 	deleteByUUID(string) error
+
+	initDB() error
 }
 
 type productRepositoryImpl struct {
@@ -28,6 +30,7 @@ func (pr *productRepositoryImpl) findByUUID(uuid string) (*product, error) {
 
 func (pr *productRepositoryImpl) store(p *product) (string, error) {
 	p.UUID = uuid.New().String()
+
 	if !pr.db.NewRecord(p) {
 		return "", fmt.Errorf("store error: this key already exists")
 
@@ -49,6 +52,13 @@ func (pr *productRepositoryImpl) update(p *product) error {
 func (pr *productRepositoryImpl) deleteByUUID(uuid string) error {
 	if err := pr.db.Delete(&product{UUID: uuid}).Error; err != nil {
 		return fmt.Errorf("deleteByID error: %w (uuid: %s)", err, uuid)
+	}
+	return nil
+}
+
+func (pr *productRepositoryImpl) initDB() error {
+	if err := pr.db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&product{}, &productImage{}).Error; err != nil {
+		return err
 	}
 	return nil
 }

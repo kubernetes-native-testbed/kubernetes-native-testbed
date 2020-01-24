@@ -70,11 +70,17 @@ func (s *productAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.Get
 	if dat, err = ptypes.TimestampProto(*p.DeletedAt); err != nil {
 		return &pb.GetResponse{}, err
 	}
+
+	urls := make([]string, len(p.ImageURLs))
+	for i := range p.ImageURLs {
+		urls[i] = p.ImageURLs[i].URL
+	}
+
 	resp.Product = &pb.Product{
 		UUID:      p.UUID,
 		Name:      p.Name,
-		Price:     int32(p.Price),
-		ImageURLs: p.ImageURLs,
+		Price:     p.Price,
+		ImageURLs: urls,
 		CreatedAt: cat,
 		UpdatedAt: uat,
 		DeletedAt: dat,
@@ -84,10 +90,15 @@ func (s *productAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.Get
 }
 
 func (s *productAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*empty.Empty, error) {
+	urls := make([]productImage, len(req.GetProduct().GetImageURLs()))
+	for i, url := range req.GetProduct().GetImageURLs() {
+		urls[i] = productImage{URL: url}
+	}
+
 	p := &product{
 		Name:      req.GetProduct().GetName(),
-		Price:     int(req.GetProduct().GetPrice()),
-		ImageURLs: req.GetProduct().GetImageURLs(),
+		Price:     req.GetProduct().GetPrice(),
+		ImageURLs: urls,
 	}
 
 	_, err := s.productRepository.store(p)
@@ -99,11 +110,15 @@ func (s *productAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*empty.
 }
 
 func (s *productAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+	urls := make([]productImage, len(req.GetProduct().GetImageURLs()))
+	for i, url := range req.GetProduct().GetImageURLs() {
+		urls[i] = productImage{ProductUUID: req.GetProduct().GetUUID(), URL: url}
+	}
 	p := &product{
 		UUID:      req.GetProduct().GetUUID(),
 		Name:      req.GetProduct().GetName(),
-		Price:     int(req.GetProduct().GetPrice()),
-		ImageURLs: req.GetProduct().GetImageURLs(),
+		Price:     req.GetProduct().GetPrice(),
+		ImageURLs: urls,
 	}
 
 	if err := s.productRepository.update(p); err != nil {
@@ -145,11 +160,16 @@ func main() {
 
 	log.Printf("start product API server")
 	s := grpc.NewServer()
-	pb.RegisterProductAPIServer(s, &productAPIServer{
+	api := &productAPIServer{
 		productRepository: &productRepositoryImpl{
 			db: db,
 		},
-	})
+	}
+	pb.RegisterProductAPIServer(s, api)
+
+	if err := api.productRepository.initDB(); err != nil {
+		log.Fatalf("failed to init database: %v", err)
+	}
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

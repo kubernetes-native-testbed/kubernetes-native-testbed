@@ -15,7 +15,7 @@ service ProductAPI {
 message Product {
 	string UUID = 1;
 	string name = 2;
-	int32 price = 3;
+	uint64 price = 3;
 	repeated string imageURLs = 4;
 	google.protobuf.Timestamp createdAt = 5;
 	google.protobuf.Timestamp updatedAt = 6;
