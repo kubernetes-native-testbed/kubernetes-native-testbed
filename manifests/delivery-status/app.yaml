@@ -70,3 +70,68 @@ spec:
   selector:
     service: delivery-status
     role: app
+---
+# nats-sub -s nats://$(cat /var/run/secrets/nats.io/token)@delivery-status-queue.delivery-status.svc.cluster.local:4222 foo.bar
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nats-user-pod
+  namespace: delivery-status
+  labels:
+    nats_cluster: delivery-status-queue
+spec:
+  volumes:
+    - name: "token"
+      projected:
+        sources:
+        - secret:
+            name: "nats-user-delivery-status-queue-bound-token"
+            items:
+              - key: token
+                path: "token"
+  restartPolicy: Never
+  containers:
+    - name: nats-ops
+      command: ["/bin/sh"]
+      image: "wallyqs/nats-ops:latest"
+      tty: true
+      stdin: true
+      stdinOnce: true
+
+      # Service Account Token is mounted via projected volume.
+      volumeMounts:
+      - name: "token"
+        mountPath: "/var/run/secrets/nats.io"
+        readOnly: true
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nats-admin-user-pod
+  namespace: delivery-status
+  labels:
+    nats_cluster: delivery-status-queue
+spec:
+  volumes:
+    - name: "token"
+      projected:
+        sources:
+        - secret:
+            name: "nats-admin-user-delivery-status-queue-bound-token"
+            items:
+              - key: token
+                path: "token"
+  restartPolicy: Never
+  containers:
+    - name: nats-ops
+      command: ["/bin/sh"]
+      image: "wallyqs/nats-ops:latest"
+      tty: true
+      stdin: true
+      stdinOnce: true
+
+      # Service Account Token is mounted via projected volume.
+      volumeMounts:
+      - name: "token"
+        mountPath: "/var/run/secrets/nats.io"
+        readOnly: true
