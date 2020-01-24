@@ -4,6 +4,9 @@ kind: Secret
 metadata:
   name: payment-info-db
   namespace: payment-info
+  labels:
+    service: payment-info
+    role: db
 data:
   password: cGF5bWVudEluZm8=
 ---
@@ -11,6 +14,9 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: payment-info-db-config
+  labels:
+    service: payment-info
+    role: db
 data:
   my.cnf: |-
     [mysqld]
@@ -21,6 +27,9 @@ kind: Cluster
 metadata:
   name: payment-info-db
   namespace: payment-info
+  labels:
+    service: payment-info
+    role: db
 spec:
   multiMaster: true
   members: 3

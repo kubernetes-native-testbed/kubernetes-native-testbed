@@ -4,6 +4,9 @@ kind: Secret
 metadata:
   name: product-db
   namespace: product
+  labels:
+    service: product
+    role: db
 type: Opaque
 data:
   ROOT_PASSWORD: cHJvZHVjdA==
@@ -16,6 +19,9 @@ kind: MysqlCluster
 metadata:
   name: product-db
   namespace: product
+  labels:
+    service: product
+    role: db
 spec:
   replicas: 2
   secretName: product-db
