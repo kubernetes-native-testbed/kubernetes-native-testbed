@@ -3,6 +3,9 @@ kind: postgresql
 metadata:
   name: user-db-cluster
   namespace: user
+  labels:
+    service: user
+    role: db
 spec:
   dockerImage: registry.opensource.zalan.do/acid/spilo-cdp-12:1.6-p16
   teamId: "user"

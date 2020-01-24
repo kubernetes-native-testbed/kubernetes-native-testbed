@@ -40,6 +40,10 @@ spec:
           - "/bin/bash"
           - "-cx"
           - "exec /run.sh mysqlrouter"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
         - name: payment-info-app
           image: k8stestbed/payment-info:latest
           env:

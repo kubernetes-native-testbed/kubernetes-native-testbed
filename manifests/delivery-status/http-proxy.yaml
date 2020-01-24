@@ -4,6 +4,9 @@ kind: HTTPProxy
 metadata:
   name: delivery-status
   namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: proxy
 spec:
   routes:
     - services:

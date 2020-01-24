@@ -3,6 +3,9 @@ kind: Elasticsearch
 metadata:
   name: search-db
   namespace: search
+  labels:
+    service: search
+    role: db
 spec:
   version: 7.5.2
   nodeSets:

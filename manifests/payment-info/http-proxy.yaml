@@ -4,6 +4,9 @@ kind: HTTPProxy
 metadata:
   name: payment-info
   namespace: payment-info
+  labels:
+    service: payment-info
+    role: proxy
 spec:
   routes:
     - services:

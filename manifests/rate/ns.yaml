@@ -2,3 +2,6 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: rate
+  labels:
+    service: rate
+    role: ns

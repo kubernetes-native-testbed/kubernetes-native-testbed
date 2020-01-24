@@ -4,6 +4,9 @@ kind: HTTPProxy
 metadata:
   name: point
   namespace: point
+  labels:
+    service: point
+    role: proxy
 spec:
   routes:
     - services:

@@ -3,6 +3,9 @@ kind: Kafka
 metadata:
   name: point-queue
   namespace: point
+  labels:
+    service: point
+    role: queue
 spec:
   kafka:
     version: 2.4.0

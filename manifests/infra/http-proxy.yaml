@@ -4,6 +4,9 @@ kind: HTTPProxy
 metadata:
   name: namespace-delegation-root
   namespace: infra
+  labels:
+    service: infra
+    role: proxy
 spec:
   virtualhost:
     fqdn: testbed.amsy.dev

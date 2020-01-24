@@ -4,6 +4,9 @@ kind: NatsCluster
 metadata:
   name: delivery-status-queue
   namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: queue
 spec:
   size: 3
   version: "1.2.0"
@@ -20,22 +23,27 @@ kind: ServiceAccount
 metadata:
   name: nats-admin-user
   namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: queue
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: nats-user
   namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: queue
 ---
 apiVersion: nats.io/v1alpha2
 kind: NatsServiceRole
 metadata:
   name: nats-user
   namespace: delivery-status #nats-io
-
-  # Specifies which NATS cluster will be mapping this account,
-  # (have to create a service role with permission per cluster).
   labels:
+    service: delivery-status
+    role: queue
     nats_cluster: delivery-status-queue
 spec:
   permissions:
@@ -49,6 +57,8 @@ metadata:
   name: nats-admin-user
   namespace: delivery-status #nats-io
   labels:
+    service: delivery-status
+    role: queue
     nats_cluster: delivery-status-queue
 spec:
   permissions:
