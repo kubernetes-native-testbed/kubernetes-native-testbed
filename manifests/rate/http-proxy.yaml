@@ -1,0 +1,12 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: rate
+  namespace: rate
+spec:
+  routes:
+    - services:
+        - name: rate
+          port: 8080
+      permitInsecure: true
