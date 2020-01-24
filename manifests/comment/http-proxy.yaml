@@ -1,0 +1,11 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: comment
+  namespace: comment
+spec:
+  routes:
+    - services:
+        - name: comment
+          port: 8080
