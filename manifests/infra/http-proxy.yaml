@@ -31,6 +31,26 @@ spec:
     namespace: comment
     conditions:
     - prefix: /comment
+  - name: order
+    namespace: order
+    conditions:
+    - prefix: /order
+  - name: rate
+    namespace: rate
+    conditions:
+    - prefix: /rate
+  - name: cart
+    namespace: cart
+    conditions:
+    - prefix: /cart
+  - name: point
+    namespace: point
+    conditions:
+    - prefix: /point
+  - name: search
+    namespace: search
+    conditions:
+    - prefix: /search
   routes:
     - services:
         - name: default-http-backend

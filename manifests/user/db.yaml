@@ -1,15 +1,43 @@
----
-apiVersion: keycloak.org/v1alpha1
-kind: Keycloak
+apiVersion: acid.zalan.do/v1
+kind: postgresql
 metadata:
-  name: user-db
+  name: user-db-cluster
   namespace: user
-  labels:
-    service: user
-    role: db
 spec:
-  instances: 1
-  extensions:
-    - https://github.com/aerogear/keycloak-metrics-spi/releases/download/1.0.4/keycloak-metrics-spi-1.0.4.jar
-  externalAccess:
-    enabled: True
+  dockerImage: registry.opensource.zalan.do/acid/spilo-cdp-12:1.6-p16
+  teamId: "user"
+  volume:
+    size: 10Gi
+    storageClass: rook
+  numberOfInstances: 3
+  users:
+    useruser:
+    - superuser
+    - createdb
+  # enableMasterLoadBalancer: false
+  # enableReplicaLoadBalancer: false
+  databases:
+    user-db: useruser
+  postgresql:
+    version: "11"
+    parameters: # Expert section
+      shared_buffers: "32MB"
+      max_connections: "10"
+      log_statement: "all"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  patroni:
+    initdb:
+      encoding: "UTF8"
+      locale: "en_US.UTF-8"
+      data-checksums: "true"
+    ttl: 30
+    loop_wait: &loop_wait 10
+    retry_timeout: 10
+    maximum_lag_on_failover: 33554432
+

@@ -1,0 +1,12 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: order
+  namespace: order
+spec:
+  routes:
+    - services:
+        - name: order
+          port: 8080
+      permitInsecure: true

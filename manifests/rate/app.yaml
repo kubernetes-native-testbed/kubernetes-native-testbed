@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rate
+  namespace: rate
+  labels:
+    service: rate
+    role: app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      service: rate
+      role: app
+  template:
+    metadata:
+      labels:
+        service: rate
+        role: app
+    spec:
+      containers:
+        - name: rate
+          image: k8stestbed/rate:latest
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rate
+  namespace: rate
+  labels:
+    service: rate
+    role: app
+spec:
+  type: ClusterIP
+  ports:
+    - name: "http-port"
+      protocol: "TCP"
+      port: 8080
+      targetPort: 8080
+  selector:
+    service: rate
+    role: app

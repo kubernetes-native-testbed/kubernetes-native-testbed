@@ -1,0 +1,15 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: search-db
+  namespace: search
+spec:
+  version: 7.5.2
+  nodeSets:
+  - name: default
+    count: 3
+    config:
+      node.master: true
+      node.data: true
+      node.ingest: true
+      node.store.allow_mmap: false

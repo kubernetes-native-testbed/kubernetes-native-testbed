@@ -1,0 +1,12 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: search
+  namespace: search
+spec:
+  routes:
+    - services:
+        - name: search
+          port: 8080
+      permitInsecure: true
