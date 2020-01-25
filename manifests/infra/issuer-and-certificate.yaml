@@ -1,0 +1,35 @@
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: letsencrypt-issuer
+  namespace: infra
+spec:
+  acme:
+    email: amsy810@gmail.com
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: issuer-account-key
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: testbed2.amsy.dev
+  namespace: infra
+spec:
+  secretName: testbed-tls
+  issuerRef:
+    name: letsencrypt-issuer
+  dnsNames:
+  - testbed2.amsy.dev
+  acme:
+    config:
+    - http01:
+        ingressClass: nginx
+      domains:
+      - testbed2.amsy.dev
+
