@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: rook-data-deleter
+  namespace: infra
+  labels:
+    service: infra
+spec:
+  selector:
+    matchLabels:
+      app: rook-data-deleter
+  template:
+    metadata:
+      labels:
+        app: rook-data-deleter
+    spec:
+      containers:
+        - name: busybox
+          image: busybox
+          command:
+            - rm
+            - -rf
+            - /data/*
+          volumeMounts:
+            - mountPath: /data
+              name: var-lib-rook
+      volumes:
+        - name: var-lib-rook
+          hostPath:
+            path: /var/lib/rook
+            type: DirectoryOrCreate
