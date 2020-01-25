@@ -22,7 +22,7 @@ var (
 	dbUser     string
 	dbPassword string
 	dbName     string
-	dbAddress  string
+	dbHost     string
 )
 
 const (
@@ -32,7 +32,7 @@ const (
 	defaultDBUser     = componentName
 	defaultDBPassword = componentName
 	defaultDBName     = componentName
-	defaultDBAddress  = componentName
+	defaultDBHost     = componentName
 )
 
 func init() {
@@ -45,8 +45,8 @@ func init() {
 	if dbName = os.Getenv("DB_NAME"); dbName == "" {
 		dbName = defaultDBName
 	}
-	if dbAddress = os.Getenv("DB_ADDRESS"); dbAddress == "" {
-		dbAddress = defaultDBAddress
+	if dbHost = os.Getenv("DB_HOST"); dbHost == "" {
+		dbHost = defaultDBHost
 	}
 }
 
@@ -56,6 +56,7 @@ type productAPIServer struct {
 
 func (s *productAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	uuid := req.GetUUID()
+	log.Printf("{\"operation\":\"get\", \"uuid\":\"%s\"}", uuid)
 	p, err := s.productRepository.findByUUID(uuid)
 	if err != nil {
 		return &pb.GetResponse{}, err
@@ -102,6 +103,7 @@ func (s *productAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*empty.
 		Price:     req.GetProduct().GetPrice(),
 		ImageURLs: urls,
 	}
+	log.Printf("{\"operation\":\"set\", \"uuid\":\"%s\", \"name\":\"%s\", \"price\":\"%d\", \"image_urls\":\"%v\"}", p.UUID, p.Name, p.Price, p.ImageURLs)
 
 	_, err := s.productRepository.store(p)
 	if err != nil {
@@ -122,6 +124,7 @@ func (s *productAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*
 		Price:     req.GetProduct().GetPrice(),
 		ImageURLs: urls,
 	}
+	log.Printf("{\"operation\":\"update\", \"uuid\":\"%s\", \"name\":\"%s\", \"price\":\"%d\", \"image_urls\":\"%v\"}", p.UUID, p.Name, p.Price, p.ImageURLs)
 
 	if err := s.productRepository.update(p); err != nil {
 		return &empty.Empty{}, err
@@ -132,6 +135,7 @@ func (s *productAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*
 
 func (s *productAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
 	uuid := req.GetUUID()
+	log.Printf("{\"operation\":\"delete\", \"uuid\":\"%s\"}", uuid)
 
 	if err := s.productRepository.deleteByUUID(uuid); err != nil {
 		return &empty.Empty{}, err
@@ -145,13 +149,14 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
+	log.Printf("listen on %s", defaultBindAddr)
 
 	db, err := gorm.Open(
 		"mysql",
 		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 			dbUser,
 			dbPassword,
-			dbAddress,
+			dbHost,
 			dbName,
 		),
 	)
@@ -159,8 +164,8 @@ func main() {
 		log.Fatalf("failed to open database: %v", err)
 	}
 	defer db.Close()
+	log.Printf("success for connection to %s:%s@tcp(%s)/%s", dbUser, dbPassword, dbHost, dbName)
 
-	log.Printf("start product API server")
 	s := grpc.NewServer()
 	api := &productAPIServer{
 		productRepository: &productRepositoryImpl{
@@ -175,6 +180,7 @@ func main() {
 		log.Fatalf("failed to init database: %v", err)
 	}
 
+	log.Printf("start product API server")
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
