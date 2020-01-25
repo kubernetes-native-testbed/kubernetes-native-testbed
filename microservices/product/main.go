@@ -14,6 +14,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product/protobuf"
 	"google.golang.org/grpc"
+	health "google.golang.org/grpc/health"
+	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
 var (
@@ -166,6 +168,8 @@ func main() {
 		},
 	}
 	pb.RegisterProductAPIServer(s, api)
+
+	healthpb.RegisterHealthServer(s, health.NewServer())
 
 	if err := api.productRepository.initDB(); err != nil {
 		log.Fatalf("failed to init database: %v", err)
