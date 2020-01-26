@@ -92,7 +92,7 @@ func (s *productAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.Get
 	return &resp, nil
 }
 
-func (s *productAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*empty.Empty, error) {
+func (s *productAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
 	urls := make([]productImage, len(req.GetProduct().GetImageURLs()))
 	for i, url := range req.GetProduct().GetImageURLs() {
 		urls[i] = productImage{URL: url}
@@ -105,12 +105,12 @@ func (s *productAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*empty.
 	}
 	log.Printf("{\"operation\":\"set\", \"uuid\":\"%s\", \"name\":\"%s\", \"price\":\"%d\", \"image_urls\":\"%v\"}", p.UUID, p.Name, p.Price, p.ImageURLs)
 
-	_, err := s.productRepository.store(p)
+	uuid, err := s.productRepository.store(p)
 	if err != nil {
-		return &empty.Empty{}, err
+		return &pb.SetResponse{}, err
 	}
 
-	return &empty.Empty{}, nil
+	return &pb.SetResponse{UUID: uuid}, nil
 }
 
 func (s *productAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
