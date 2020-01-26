@@ -29,12 +29,12 @@ func (pr *productRepositoryImpl) findByUUID(uuid string) (*product, error) {
 }
 
 func (pr *productRepositoryImpl) store(p *product) (string, error) {
-	p.UUID = uuid.New().String()
-
 	if !pr.db.NewRecord(p) {
 		return "", fmt.Errorf("store error: this key already exists")
 
 	}
+
+	p.UUID = uuid.New().String()
 	if err := pr.db.Create(p).Error; err != nil {
 		return "", fmt.Errorf("store error: %w (product: %v)", err, p)
 	}
