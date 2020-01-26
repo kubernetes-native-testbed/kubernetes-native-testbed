@@ -70,8 +70,10 @@ func (s *productAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.Get
 	if uat, err = ptypes.TimestampProto(p.UpdatedAt); err != nil {
 		return &pb.GetResponse{}, err
 	}
-	if dat, err = ptypes.TimestampProto(*p.DeletedAt); err != nil {
-		return &pb.GetResponse{}, err
+	if p.DeletedAt != nil {
+		if dat, err = ptypes.TimestampProto(*p.DeletedAt); err != nil {
+			return &pb.GetResponse{}, err
+		}
 	}
 
 	urls := make([]string, len(p.ImageURLs))
