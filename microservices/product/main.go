@@ -95,12 +95,12 @@ func (s *productAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.Get
 }
 
 func (s *productAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
-	urls := make([]productImage, len(req.GetProduct().GetImageURLs()))
+	urls := make([]ProductImage, len(req.GetProduct().GetImageURLs()))
 	for i, url := range req.GetProduct().GetImageURLs() {
-		urls[i] = productImage{URL: url}
+		urls[i] = ProductImage{URL: url}
 	}
 
-	p := &product{
+	p := &Product{
 		Name:      req.GetProduct().GetName(),
 		Price:     req.GetProduct().GetPrice(),
 		ImageURLs: urls,
@@ -116,11 +116,11 @@ func (s *productAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.Set
 }
 
 func (s *productAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
-	urls := make([]productImage, len(req.GetProduct().GetImageURLs()))
+	urls := make([]ProductImage, len(req.GetProduct().GetImageURLs()))
 	for i, url := range req.GetProduct().GetImageURLs() {
-		urls[i] = productImage{ProductUUID: req.GetProduct().GetUUID(), URL: url}
+		urls[i] = ProductImage{ProductUUID: req.GetProduct().GetUUID(), URL: url}
 	}
-	p := &product{
+	p := &Product{
 		UUID:      req.GetProduct().GetUUID(),
 		Name:      req.GetProduct().GetName(),
 		Price:     req.GetProduct().GetPrice(),
@@ -178,6 +178,7 @@ func main() {
 
 	healthpb.RegisterHealthServer(s, health.NewServer())
 
+	log.Printf("setup database")
 	if err := api.productRepository.initDB(); err != nil {
 		log.Fatalf("failed to init database: %v", err)
 	}
