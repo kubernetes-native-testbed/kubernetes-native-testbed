@@ -18,6 +18,10 @@ spec:
     namespace: product
     conditions:
     - prefix: /product
+  - name: client
+    namespace: client
+    conditions:
+    - prefix: /client
   - name: payment-info
     namespace: payment-info
     conditions:
