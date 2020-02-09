@@ -2,19 +2,17 @@
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: product
-  namespace: product
+  name: admin
+  namespace: admin
   labels:
-    service: product
+    service: admin
     role: proxy
 spec:
   routes:
     - services:
-        - name: product
+        - name: admin
           port: 8080
-      conditions:
-        - prefix: /product
       pathRewritePolicy:
         replacePrefix:
-          - replacement: /product
+          - replacement: /
       permitInsecure: true

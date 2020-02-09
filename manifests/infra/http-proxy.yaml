@@ -18,10 +18,6 @@ spec:
     namespace: product
     conditions:
     - prefix: /product
-  - name: client
-    namespace: client
-    conditions:
-    - prefix: /client
   - name: payment-info
     namespace: payment-info
     conditions:
@@ -58,6 +54,10 @@ spec:
     namespace: search
     conditions:
     - prefix: /search
+  - name: admin
+    namespace: admin
+    conditions:
+    - prefix: /admin
   routes:
     - services:
         - name: default-http-backend
