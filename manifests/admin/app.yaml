@@ -2,26 +2,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: client
-  namespace: client
+  name: admin
+  namespace: admin
   labels:
-    service: client
+    service: admin
     role: app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: client
+      service: admin
       role: app
   template:
     metadata:
       labels:
-        service: client
+        service: admin
         role: app
     spec:
       containers:
-        - name: client
-          image: k8stestbed/client:latest
+        - name: admin
+          image: k8stestbed/admin:latest
           resources:
             requests:
               cpu: 100m
@@ -32,10 +32,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: client
-  namespace: client
+  name: admin
+  namespace: admin
   labels:
-    service: client
+    service: admin
     role: app
 spec:
   type: ClusterIP
@@ -45,5 +45,5 @@ spec:
       port: 8080
       targetPort: 80
   selector:
-    service: client
+    service: admin
     role: app
