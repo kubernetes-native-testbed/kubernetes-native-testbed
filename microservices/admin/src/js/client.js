@@ -1,5 +1,5 @@
-const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Product} = require('./product_pb.js');
-const {ProductAPIClient} = require('./product_grpc_web_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Product} = require('./protobuf/product_pb.js');
+const {ProductAPIClient} = require('./protobuf/product_grpc_web_pb.js');
 const {Empty} = require('google-protobuf/google/protobuf/empty_pb.js');
 
 const defaultEndpoint = 'https://testbed.amsy.dev/product';
@@ -44,18 +44,9 @@ const product = new Vue({
       req.setUuid(this.form.uuid);
       this.client.get(req, {}, (err, resp) => {
         if (err) {
-          console.log(err.code);
-          console.log(err.message);
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
-          console.log(resp.getProduct().getUuid());
-          console.log(resp.getProduct().getName());
-          console.log(resp.getProduct().getPrice());
-          console.log(resp.getProduct().getImageurlsList());
-          console.log(resp.getProduct().getCreatedat());
-          console.log(resp.getProduct().getUpdatedat());
-          console.log(resp.getProduct().getDeletedat());
           let p = new Object();
           p.uuid = resp.getProduct().getUuid();
           p.price = resp.getProduct().getPrice();
@@ -82,12 +73,9 @@ const product = new Vue({
       req.setProduct(p);
       this.client.set(req, {}, (err, resp) => {
         if (err) {
-          console.log(err.code);
-          console.log(err.message);
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
-          console.log(resp.getUuid());
           let p = new Object();
           p.uuid = resp.getUuid();
           this.resp.product.push(p);
@@ -106,8 +94,6 @@ const product = new Vue({
       req.setProduct(p);
       this.client.update(req, {}, (err, resp) => {
         if (err) {
-          console.log(err.code);
-          console.log(err.message);
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
@@ -121,8 +107,6 @@ const product = new Vue({
       req.setUuid(this.form.uuid);
       this.client.delete(req, {}, (err, resp) => {
         if (err) {
-          console.log(err.code);
-          console.log(err.message);
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {

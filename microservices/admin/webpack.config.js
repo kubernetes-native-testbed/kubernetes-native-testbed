@@ -1,8 +1,8 @@
 module.exports = {
-  entry: './client.js',
+  entry: './src/js/client.js',
   output: {
-      path: __dirname + '/dist',
-      filename: 'main.js',
+      path: __dirname + '/public',
+      filename: 'bundle.js',
   },
   resolve: {
     modules: [
