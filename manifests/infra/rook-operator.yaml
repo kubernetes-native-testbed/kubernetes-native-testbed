@@ -1666,6 +1666,7 @@ roleRef:
 # Also see other operator sample files for variations of operator.yaml:
 # - operator-openshift.yaml: Common settings for running in OpenShift
 #################################################################################################################
+---
 # OLM: BEGIN OPERATOR DEPLOYMENT
 apiVersion: apps/v1
 kind: Deployment
