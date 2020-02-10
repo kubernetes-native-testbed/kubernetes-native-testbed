@@ -54,6 +54,10 @@ spec:
     namespace: search
     conditions:
     - prefix: /search
+  - name: admin
+    namespace: admin
+    conditions:
+    - prefix: /admin
   routes:
     - services:
         - name: default-http-backend

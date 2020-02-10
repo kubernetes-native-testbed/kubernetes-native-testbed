@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--link rel="stylesheet" href="index.css"-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <h1>Client Page</h1>
+    <div id="product">
+      <p>
+        <b>[Form]</b><br/>
+        UUID: <input v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
+        Name: <input v-model="form.name" type="text" placeholder="Sample Product"><br/>
+        Price: <input v-model="form.price" type="text" placeholder="100"><br/>
+        ImageURLs:
+        <span v-for="(url, index) in form.imageURLs">
+          <br/>
+          <input v-model="url.value" :key="index" type="text" placeholder="http://example.com/image.png">
+        </span>
+        <button v-on:click="addImageURL">+</button>
+        <br/>
+
+        <button v-on:click="getProduct">Get</button>
+        <button v-on:click="setProduct">Set</button>
+        <button v-on:click="updateProduct">Update</button>
+        <button v-on:click="deleteProduct">Delete</button>
+        <span>|</span>
+        <button v-on:click="clearForm">Clear</button>
+      </p>
+      Response: {{ resp.product }}<br/>
+      <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+    </div>
+    <script src="./bundle.js"></script>
+  </body>
+</html>
