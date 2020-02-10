@@ -1,1 +1,4 @@
+tls.key
+tls.crt
+cert.yaml
 /microservices/product/product
