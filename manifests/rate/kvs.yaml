@@ -1,0 +1,44 @@
+---
+apiVersion: databases.spotahome.com/v1
+kind: RedisFailover
+metadata:
+  name: rate-kvs
+  namespace: rate
+  labels:
+    service: rate
+    role: kvs
+spec:
+  sentinel:
+    replicas: 3
+    image: redis:5.0
+    imagePullPolicy: IfNotPresent
+    customConfig:
+    - "down-after-milliseconds 1000"
+    - "failover-timeout 3000"
+    resources:
+      requests:
+        cpu: 100m
+      limits:
+        memory: 100Mi
+  redis:
+    replicas: 3
+    image: redis:5.0
+    imagePullPolicy: IfNotPresent
+    customConfig:
+    - "save 300 10"
+    storage:
+      keepAfterDeletion: true
+      persistentVolumeClaim:
+        metadata:
+          name: rate-kvs
+          namespace: rate
+          labels:
+            service: rate
+            role: kvs
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi
+          storageClassName: rook
