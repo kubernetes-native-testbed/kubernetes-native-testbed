@@ -18,6 +18,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: monitor
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 type: Opaque
 data:
   username: YWRtaW4=
@@ -37,6 +39,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: monitor
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 data:
   prometheus-config: |-
     global:
@@ -117,6 +121,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: pd
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 data:
   startup-script: |-
     #!/bin/sh
@@ -232,6 +238,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: tidb
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 data:
   startup-script: |-
     #!/bin/sh
@@ -302,6 +310,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: tidb
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 data:
   startup-script: |-
     #!/bin/sh
@@ -371,6 +381,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: tikv
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 data:
   startup-script: |-
     #!/bin/sh
@@ -436,6 +448,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: discovery
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 rules:
 - apiGroups: ["pingcap.com"]
   resources: ["tidbclusters"]
@@ -453,6 +467,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: discovery
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 subjects:
 - kind: ServiceAccount
   name: order-db-discovery
@@ -472,6 +488,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: discovery
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 
 ---
 # Source: tidb-cluster/templates/monitor-rbac.yaml
@@ -487,6 +505,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: monitor
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 rules:
 - apiGroups: [""]
   resources: ["pods"]
@@ -503,6 +523,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: monitor
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 subjects:
 - kind: ServiceAccount
   name: order-db-monitor
@@ -522,6 +544,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: monitor
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 
 ---
 # Source: tidb-cluster/templates/discovery-service.yaml
@@ -536,6 +560,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: discovery
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 spec:
   type: ClusterIP
   ports:
@@ -562,6 +588,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: monitor
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 spec:
   ports:
   - name: grafana
@@ -585,6 +613,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: monitor
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 spec:
   ports:
   - name: reloader
@@ -608,6 +638,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: monitor
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 spec:
   ports:
   - name: prometheus
@@ -633,6 +665,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: tidb
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 spec:
   type: NodePort
   ports:
@@ -662,6 +696,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: discovery
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 spec:
   # don't modify this replicas
   replicas: 1
@@ -712,6 +748,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: monitor
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 spec:
   replicas: 1
   strategy:
@@ -917,6 +955,8 @@ metadata:
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: tidb-cluster
     helm.sh/chart: tidb-cluster-v1.0.6
+    service: order
+    role: db
 spec:
   pvReclaimPolicy: Retain
   timezone: UTC
