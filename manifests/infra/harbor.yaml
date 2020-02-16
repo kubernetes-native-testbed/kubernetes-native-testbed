@@ -809,6 +809,7 @@ metadata:
     chart: harbor
     app: "harbor"
 spec:
+  type: LoadBalancer
   ports:
     - name: registry
       port: 5000
