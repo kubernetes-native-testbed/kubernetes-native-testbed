@@ -1,62 +1,181 @@
 ---
-apiVersion: tekton.dev/v1alpha1
-kind: PipelineResource
+apiVersion: v1
+kind: Secret
 metadata:
-  name: skaffold-git
-spec:
-  type: git
-  params:
-    - name: revision
-      value: master
-    - name: url
-      value: https://github.com/GoogleContainerTools/skaffold
+  name: harbor-credentials
+  annotations:
+    tekton.dev/docker-0: https://harbor.infra.svc.cluster.local/v2/
+type: kubernetes.io/basic-auth
+stringData:
+  username: admin
+  password: admin
 ---
-apiVersion: tekton.dev/v1alpha1
-kind: PipelineResource
+apiVersion: v1
+kind: ServiceAccount
 metadata:
-  name: skaffold-image-leeroy-web
+  name: tekton-sa
 spec:
-  type: image
-  params:
-    - name: url
-      value: gcr.io/<use your project>/leeroy-web
+secrets:
+- name: harbor-credentials
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: build-docker-image-from-git-source
+  name: kaniko-build-and-push
 spec:
   inputs:
-    resources:
-      - name: docker-source
-        type: git
     params:
-      - name: pathToDockerFile
-        type: string
-        description: The path to the dockerfile to build
-        default: /workspace/docker-source/Dockerfile
-      - name: pathToContext
-        type: string
-        description:
-          The build context used by Kaniko
-          (https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts)
-        default: /workspace/docker-source
+    - name: DOCKERFILE
+      description: Path to the Dockerfile to build.
+      default: ./Dockerfile
+    - name: CONTEXT
+      description: The build context used by Kaniko.
+      default: ./
+    - name: EXTRA_ARGS
+      default: ""
+    - name: BUILDER_IMAGE
+      description: The image on which builds will run
+      default: gcr.io/kaniko-project/executor:v0.13.0
+    - name: COMMIT_HASH
+      default: latest
+    resources:
+    - name: source-repo
+      type: git
   outputs:
     resources:
-      - name: builtImage
-        type: image
+    - name: image-repo
+      type: image
   steps:
-    - name: build-and-push
-      image: gcr.io/kaniko-project/executor:v0.15.0
-      # specifying DOCKER_CONFIG is required to allow kaniko to detect docker credential
-      env:
-        - name: "DOCKER_CONFIG"
-          value: "/tekton/home/.docker/"
-      command:
-        - /kaniko/executor
-      args:
-        - --dockerfile=$(inputs.params.pathToDockerFile)
-        - --destination=$(outputs.resources.builtImage.url)
-        - --context=$(inputs.params.pathToContext)
+  - name: build-and-push
+    workingdir: /workspace/source-repo
+    image: $(inputs.params.BUILDER_IMAGE)
+    # specifying DOCKER_CONFIG is required to allow kaniko to detect docker credential
+    # https://github.com/tektoncd/pipeline/pull/706
+    env:
+    - name: DOCKER_CONFIG
+      value: /tekton/home/.docker
+    command:
+    - /kaniko/executor
+    - $(inputs.params.EXTRA_ARGS)
+    - --dockerfile=$(inputs.params.DOCKERFILE)
+    - --context=/workspace/source-repo/$(inputs.params.CONTEXT)
+    - --destination=$(outputs.resources.image-repo.url):$(inputs.params.COMMIT_HASH)
+    - --cache=true
+    - --insecure
+    - --skip-tls-verify
+    securityContext:
+      runAsUser: 0
 ---
-
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: pull-request-manifest
+spec:
+  inputs:
+    params:
+    - name: MICROSERVICE
+      default: somemicroservice 
+    resources:
+    - name: source-repo
+      type: git
+  steps:
+  - name: pull-request-manifest
+    workingdir: /workspace/source-repo
+    image: centos:8
+    command:
+    - cat
+    - /workspace/source-repo/microservices/$(inputs.params.MICROSERVICE)/main.go
+    securityContext:
+      runAsUser: 0
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: ci
+spec:
+  resources:
+    - name: source-repo
+      type: git
+    - name: image-repo
+      type: image
+  params:
+  - name: MICROSERVICE
+    default: somemicroservice
+  - name: COMMIT_HASH
+    default: xxxxxxxx
+  tasks:
+  - name: build-and-push
+    taskRef:
+      name: kaniko-build-and-push
+    params:
+    - name: DOCKERFILE
+      value: ./microservices/$(params.MICROSERVICE)/Dockerfile
+    - name: CONTEXT
+      value: ./microservices/$(params.MICROSERVICE)
+    - name: COMMIT_HASH
+      value: $(params.COMMIT_HASH)
+    resources:
+      inputs:
+      - name: source-repo
+        resource: source-repo
+      outputs:
+      - name: image-repo
+        resource: image-repo
+  - name: pull-request-manifest
+    taskRef:
+      name: pull-request-manifest
+    runAfter:
+    - build-and-push
+    params:
+    - name: MICROSERVICE
+      value: $(params.MICROSERVICE)
+    resources:
+      inputs:
+      - name: source-repo
+        resource: source-repo
+---
+##################################################################
+# for each microservice
+##################################################################
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: source-repo-comment
+spec:
+  type: git
+  params:
+    - name: revision
+      value: develop
+    - name: url
+      value: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: image-repo-comment
+spec:
+  type: image
+  params:
+    - name: url
+      value: harbor.infra.svc.cluster.local/library/comment
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: ci-comment
+spec:
+  serviceAccountName: tekton-sa
+  pipelineRef:
+    name: ci
+  params:
+    - name: MICROSERVICE
+      value: comment
+    - name: COMMIT_HASH
+      value: abcdef
+  resources:
+    - name: source-repo
+      resourceRef:
+        name: source-repo-comment
+    - name: image-repo
+      resourceRef:
+        name: image-repo-comment
