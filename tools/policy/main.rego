@@ -24,7 +24,7 @@ expected_labels(labels) {
 
 deny[msg] {
   not expected_labels(input.metadata.labels)
-  msg = sprintf("Please set [service] [role] labels (metadata.labels): [Resource=%s, Name=%s]", [resources.kind, resources.metadata.name])
+  msg = sprintf("Please set [service] [role] labels (metadata.labels): [Resource=%s, Name=%s]", [input.kind, input.metadata.name])
 }
 
 deny[msg] {
