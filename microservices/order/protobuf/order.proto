@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+package orderpb;
+
+service OrderAPI {
+    rpc Get(GetRequest) returns (GetResponse) {}
+    rpc Set(SetRequest) returns (SetResponse) {}
+    rpc Update(UpdateRequest) returns (google.protobuf.Empty) {}
+    rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+}
+
+message Order {
+	string UUID = 1;
+	repeated OrderedProduct orderedProducts = 2;
+	string userUUID = 3;
+	string paymentInfoUUID = 4;
+	string addressUUID = 5;
+	google.protobuf.Timestamp createdAt = 6;
+	google.protobuf.Timestamp updatedAt = 7;
+	google.protobuf.Timestamp deletedAt = 8;
+}
+
+message OrderedProduct {
+	string orderUUID = 1;
+	string productUUID = 2;
+	int32 count = 3;
+	int32 price = 4;
+	google.protobuf.Timestamp createdAt = 5;
+	google.protobuf.Timestamp updatedAt = 6;
+	google.protobuf.Timestamp deletedAt = 7;
+}
+
+message GetRequest {
+    string UUID = 1;
+}
+
+message GetResponse {
+    Order order = 1;
+}
+
+message SetRequest {
+	Order order = 1;
+}
+
+message SetResponse {
+	string UUID = 1;
+}
+
+message UpdateRequest {
+	Order order = 1;
+}
+
+message DeleteRequest {
+    string UUID = 1;
+}

@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+package cartpb;
+
+service CartAPI {
+    rpc Get(GetRequest) returns (GetResponse) {}
+    rpc Set(SetRequest) returns (SetResponse) {}
+    rpc Update(UpdateRequest) returns (google.protobuf.Empty) {}
+    rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+}
+
+message Cart {
+	string UUID = 1;
+	string userUUID = 2;
+	map<string, int32> cartProductsMap = 3;
+	google.protobuf.Timestamp createdAt = 4;
+	google.protobuf.Timestamp updatedAt = 5;
+	google.protobuf.Timestamp deletedAt = 6;
+}
+
+message GetRequest {
+    string UUID = 1;
+}
+
+message GetResponse {
+    Cart cart = 1;
+}
+
+message SetRequest {
+	Cart cart = 1;
+}
+
+message SetResponse {
+	string UUID = 1;
+}
+
+message UpdateRequest {
+	Cart cart = 1;
+}
+
+message DeleteRequest {
+    string UUID = 1;
+}

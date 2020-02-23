@@ -1,29 +1,33 @@
 syntax = "proto3";
 
-package comment;
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
-service CommentServer {
+package commentpb;
+
+service CommentAPI {
     rpc Get(GetRequest) returns (GetResponse) {}
     rpc Set(SetRequest) returns (SetResponse) {}
-    rpc Update(UpdateRequest) returns (UpdateResponse) {}
-    rpc Delete(DeleteRequest) returns (DeleteResponse) {}
-	rpc List(ListRequest) returns (ListResponse) {}
+    rpc Update(UpdateRequest) returns (google.protobuf.Empty) {}
+    rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
 }
 
 message Comment {
-	string ID = 1;
-	string productID = 2;
-	string message = 3;
-	string userID = 4;
+	string UUID = 1;
+	string message = 2;
+	string userUUID = 3;
+	string parentCommentUUID = 4;
+	google.protobuf.Timestamp createdAt = 5;
+	google.protobuf.Timestamp updatedAt = 6;
+	google.protobuf.Timestamp deletedAt = 7;
 }
 
 message GetRequest {
-    string ID = 1;
+    string UUID = 1;
 }
 
 message GetResponse {
     Comment comment = 1;
-	string error = 2;
 }
 
 message SetRequest {
@@ -31,33 +35,13 @@ message SetRequest {
 }
 
 message SetResponse {
-	bool success = 1;
-	string error = 2;
+	string UUID = 1;
 }
 
 message UpdateRequest {
 	Comment comment = 1;
 }
 
-message UpdateResponse {
-	bool success = 1;
-	string error = 2;
-}
-
 message DeleteRequest {
-    string ID = 1;
-}
-
-message DeleteResponse {
-	bool success = 1;
-	string error = 2;
-}
-
-message ListRequest {
-    string productID = 1;
-}
-
-message ListResponse {
-    repeated Comment comment = 1;
-	string error = 2;
+    string UUID = 1;
 }

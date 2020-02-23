@@ -22,6 +22,14 @@ spec:
       containers:
         - name: rate
           image: k8stestbed/rate:latest
+          env:
+          - name: SENTINEL_HOST
+            value: rfs-rate-kvs.rate.svc.cluster.local
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: rate-kvs
+                key: PASSWORD
           resources:
             requests:
               cpu: 100m
