@@ -13,5 +13,6 @@ FROM ubuntu:18.04
 EXPOSE 8080
 COPY --from=builder1 /comment .
 COPY --from=builder2 /bin/grpc_health_probe /bin/grpc_health_probe
+
 USER nobody
 ENTRYPOINT ["./comment"]
