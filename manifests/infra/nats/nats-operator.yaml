@@ -3,11 +3,6 @@
 # and using clusterscope nats operator
 ---
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: nats-io
----
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: nats-operator

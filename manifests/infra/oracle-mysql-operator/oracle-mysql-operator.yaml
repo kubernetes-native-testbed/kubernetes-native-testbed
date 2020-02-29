@@ -2,11 +2,6 @@
 # cd oracle-mysql-operator
 # helm2 template oracle-mysql-operator > ../oracle-mysql-operator.yaml
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: oracle-mysql-operator
----
 # Source: oracle-mysql-operator/templates/02-rbac.yaml
 apiVersion: v1
 kind: ServiceAccount
