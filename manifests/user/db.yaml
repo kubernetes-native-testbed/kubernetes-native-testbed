@@ -11,7 +11,7 @@ spec:
   teamId: "user"
   volume:
     size: 10Gi
-    storageClass: rook
+    storageClass: rook-ceph-block
   numberOfInstances: 3
   users:
     useruser:
