@@ -13,7 +13,7 @@ spec:
       recurse: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: cart
   syncPolicy:
     automated:
       prune: true
