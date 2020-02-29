@@ -1,11 +1,6 @@
 # curl -O https://raw.githubusercontent.com/projectcontour/contour/release-1.1/examples/render/contour.yaml
 ---
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: projectcontour 
----
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: contour
