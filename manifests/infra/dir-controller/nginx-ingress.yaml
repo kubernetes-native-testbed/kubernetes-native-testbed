@@ -1,6 +1,5 @@
 # helm fetch stable/nginx-ingress
 # helm template nginx-ingress-1.29.5.tgz > nginx-ingress.yaml
-# add issuer and certificate resources
 ---
 # Source: nginx-ingress/templates/controller-serviceaccount.yaml
 apiVersion: v1
@@ -238,7 +237,7 @@ spec:
     app: nginx-ingress
     component: "controller"
     release: infra
-  type: "LoadBalancer"
+  type: "ClusterIP"
 ---
 # Source: nginx-ingress/templates/default-backend-service.yaml
 apiVersion: v1
