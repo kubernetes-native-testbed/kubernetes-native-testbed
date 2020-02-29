@@ -1,5 +1,5 @@
 # helm repo add harbor https://helm.goharbor.io
-# helm --namespace infra template registry  harbor/harbor --set persistence.persistentVolumeClaim.registry.storageClass=rook --set persistence.persistentVolumeClaim.chartmuseum.storageClass=rook --set persistence.persistentVolumeClaim.jobservice.storageClass=rook --set persistence.persistentVolumeClaim.database.storageClass=rook --set persistence.persistentVolumeClaim.redis.storageClass=rook --set harborAdminPassword=admin --set expose.type=loadBalancer --set expose.tls.commonName=harbor.infra.svc.cluster.local > harbor.yaml
+# helm --namespace infra template registry  harbor/harbor --set persistence.persistentVolumeClaim.registry.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.chartmuseum.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.jobservice.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.database.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.redis.storageClass=rook-ceph-block --set harborAdminPassword=admin --set expose.type=loadBalancer --set expose.tls.commonName=harbor.infra.svc.cluster.local > harbor.yaml
 ---
 # Source: harbor/templates/chartmuseum/chartmuseum-secret.yaml
 apiVersion: v1
@@ -561,7 +561,7 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: rook
+  storageClassName: rook-ceph-block
 ---
 # Source: harbor/templates/jobservice/jobservice-pvc.yaml
 kind: PersistentVolumeClaim
@@ -582,7 +582,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: rook
+  storageClassName: rook-ceph-block
 ---
 # Source: harbor/templates/registry/registry-pvc.yaml
 kind: PersistentVolumeClaim
@@ -603,7 +603,7 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: rook
+  storageClassName: rook-ceph-block
 ---
 # Source: harbor/templates/chartmuseum/chartmuseum-svc.yaml
 apiVersion: v1
@@ -1622,7 +1622,7 @@ spec:
         app: "harbor"
     spec:
       accessModes: ["ReadWriteOnce"]
-      storageClassName: "rook"
+      storageClassName: "rook-ceph-block"
       resources:
         requests:
           storage: "1Gi"
@@ -1685,7 +1685,7 @@ spec:
         app: "harbor"
     spec:
       accessModes: ["ReadWriteOnce"]
-      storageClassName: "rook"
+      storageClassName: "rook-ceph-block"
       resources:
         requests:
           storage: "1Gi"

@@ -1,5 +1,5 @@
 # helm2 fetch presslabs/mysql-operator
-# helm2 template mysql-operator-0.3.6.tgz  --set orchestrator.service.type=LoadBalancer --set orchestrator.persistence.storageClass=rook --set installCRDs=true | sed -e 's|RELEASE-NAME-||g' -e 's|release: .*RELEASE-NAME.*||g' -e 's|release-name-||g' -e 's|release: .*release-name.*||g'
+# helm2 template mysql-operator-0.3.6.tgz  --set orchestrator.service.type=LoadBalancer --set orchestrator.persistence.storageClass=rook-ceph-block --set installCRDs=true | sed -e 's|RELEASE-NAME-||g' -e 's|release: .*RELEASE-NAME.*||g' -e 's|release-name-||g' -e 's|release: .*release-name.*||g'
 
 ---
 # Source: mysql-operator/templates/orc-secret.yaml
@@ -396,7 +396,7 @@ spec:
         resources:
           requests:
             storage: 1Gi
-        storageClassName: "rook"
+        storageClassName: "rook-ceph-block"
 
 ---
 # Source: mysql-operator/templates/orc-ingress.yaml

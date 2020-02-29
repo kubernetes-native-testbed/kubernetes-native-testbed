@@ -1437,6 +1437,7 @@ spec:
   selector:
     app: envoy
   type: LoadBalancer
+  loadBalancerIP: testbed-gcp-ip
 ---
 apiVersion: apps/v1
 kind: Deployment

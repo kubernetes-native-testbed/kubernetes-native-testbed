@@ -44,7 +44,7 @@ spec:
   podSpec:
     persistentVolumeClaim:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: rook
+      storageClassName: rook-ceph-block
       resources:
         requests:
           storage: 4Gi
