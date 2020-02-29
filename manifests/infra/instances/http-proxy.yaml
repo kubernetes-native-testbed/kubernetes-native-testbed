@@ -9,7 +9,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: testbed.35.244.247.95.xip.io
+    fqdn: testbed.34.84.105.184.xip.io
     tls:
       secretName: testbed-cert
   includes:
