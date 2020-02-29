@@ -18,13 +18,13 @@ spec:
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
-  name: testbed2.amsy.dev
+  name: testbed.35.244.247.95.xip.io
   namespace: infra
 spec:
   secretName: testbed-cert
   issuerRef:
     name: letsencrypt-issuer
   dnsNames:
-  - testbed2.amsy.dev
-  - argocd.amsy.dev
-  commonName: testbed2.amsy.dev
+  - testbed.35.244.247.95.xip.io
+  - argocd.35.244.247.95.xip.io
+  commonName: testbed.35.244.247.95.xip.io
