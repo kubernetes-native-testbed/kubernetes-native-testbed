@@ -70,7 +70,7 @@ spec:
           port: 8080
       permitInsecure: true
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: default-http-backend
