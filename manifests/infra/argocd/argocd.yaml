@@ -2219,6 +2219,7 @@ spec:
         - "20"
         - --operation-processors
         - "10"
+        - --disable-auth
         image: argoproj/argocd:v1.4.2
         imagePullPolicy: Always
         livenessProbe:
