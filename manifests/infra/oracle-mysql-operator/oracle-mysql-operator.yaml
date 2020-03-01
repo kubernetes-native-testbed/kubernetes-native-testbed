@@ -219,7 +219,7 @@ subjects:
   namespace: oracle-mysql-operator
 ---
 # Source: oracle-mysql-operator/templates/03-deployment.yaml
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: oracle-mysql-operator
