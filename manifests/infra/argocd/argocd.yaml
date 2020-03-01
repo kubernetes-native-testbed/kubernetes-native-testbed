@@ -2392,6 +2392,7 @@ spec:
         - argocd-server
         - --staticassets
         - /shared/app
+        - --disable-auth
         image: argoproj/argocd:v1.4.2
         imagePullPolicy: Always
         livenessProbe:
