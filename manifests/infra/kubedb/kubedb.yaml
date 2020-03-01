@@ -459,6 +459,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: kubedb-operator-cleaner
+  namespace: infra
   labels:
     chart: "kubedb-v0.13.0-rc.0"
     app: "kubedb"
