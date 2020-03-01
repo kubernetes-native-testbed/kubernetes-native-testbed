@@ -70,6 +70,30 @@ spec:
           port: 8080
       permitInsecure: true
 ---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: argocd-httpproxy
+  namespace: infra
+  labels:
+    service: infra
+    role: proxy
+spec:
+  virtualhost:
+    fqdn: argocd.34.84.105.184.xip.io
+    tls:
+      secretName: testbed-cert
+  includes:
+  - name: root
+    namespace: argocd
+  routes:
+    - conditions:
+      - prefix: /.well-known/acme-challenge
+      services:
+        - name: infra-nginx-ingress-controller
+          port: 80
+      permitInsecure: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -1,13 +1,13 @@
 ---
 apiVersion: cert-manager.io/v1alpha2
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: letsencrypt-issuer
   namespace: infra
 spec:
   acme:
     email: amsy810@gmail.com
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: issuer-account-key
     solvers:
@@ -24,6 +24,7 @@ spec:
   secretName: testbed-cert
   issuerRef:
     name: letsencrypt-issuer
+    kind: ClusterIssuer
   dnsNames:
   - testbed.34.84.105.184.xip.io
   - argocd.34.84.105.184.xip.io

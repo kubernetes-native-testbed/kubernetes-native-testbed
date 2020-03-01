@@ -1,0 +1,15 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: root
+  namespace: argocd
+  labels:
+    service: argocd
+    role: proxy
+spec:
+  routes:
+    - services:
+        - name: argocd-server
+          port: 80
+      permitInsecure: true
