@@ -86,7 +86,8 @@ metadata:
     k8s-app: kubernetes-dashboard
   name: kubernetes-dashboard-settings
   namespace: kubernetes-dashboard
-
+data:
+  _global: '{"clusterName":"","itemsPerPage":50,"logsAutoRefreshTimeInterval":1,"resourceAutoRefreshTimeInterval":5}'
 ---
 
 kind: Role
