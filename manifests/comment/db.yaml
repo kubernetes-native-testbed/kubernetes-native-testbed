@@ -11,7 +11,7 @@ spec:
   version: "4.1"
   storageType: Durable
   storage:
-    storageClassName: "rook"
+    storageClassName: "rook-ceph-block"
     accessModes:
     - ReadWriteOnce
     resources:
@@ -19,7 +19,7 @@ spec:
         storage: 3Gi
   databaseSecret:
     secretName: comment-db-auth
-  terminationPolicy: DoNotTerminate
+  terminationPolicy: Pause
 
 ---
 apiVersion: v1
