@@ -1,0 +1,15 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: dashboard
+  namespace: kubernetes-dashboard
+  labels:
+    service: kubernetes-dashboard
+    role: proxy
+spec:
+  routes:
+    - services:
+        - name: kubernetes-dashboard
+          port: 8080
+      permitInsecure: true

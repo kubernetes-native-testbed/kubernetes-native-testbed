@@ -28,7 +28,8 @@ spec:
     allowMultiplePerNode: false
   dashboard:
     enabled: true
-    ssl: true
+    ssl: false
+    urlPrefix: /
   monitoring:
     enabled: true
     rulesNamespace: rook-ceph

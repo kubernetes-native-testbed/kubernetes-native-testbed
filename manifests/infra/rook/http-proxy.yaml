@@ -1,0 +1,15 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: rook
+  namespace: rook-ceph
+  labels:
+    service: rook
+    role: proxy
+spec:
+  routes:
+    - services:
+        - name: rook-ceph-mgr-dashboard
+          port: 8443
+      permitInsecure: true
