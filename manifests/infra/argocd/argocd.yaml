@@ -2393,6 +2393,7 @@ spec:
         - --staticassets
         - /shared/app
         - --disable-auth
+        - --insecure
         image: argoproj/argocd:v1.4.2
         imagePullPolicy: Always
         livenessProbe:
