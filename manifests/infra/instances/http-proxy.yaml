@@ -86,6 +86,8 @@ spec:
   includes:
   - name: root
     namespace: argocd
+    conditions:
+    - prefix: /
   routes:
     - conditions:
       - prefix: /.well-known/acme-challenge
