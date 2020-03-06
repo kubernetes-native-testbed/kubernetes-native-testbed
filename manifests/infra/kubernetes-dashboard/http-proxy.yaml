@@ -11,5 +11,5 @@ spec:
   routes:
     - services:
         - name: kubernetes-dashboard
-          port: 8080
+          port: 80
       permitInsecure: true

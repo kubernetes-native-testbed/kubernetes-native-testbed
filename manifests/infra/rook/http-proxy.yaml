@@ -11,5 +11,5 @@ spec:
   routes:
     - services:
         - name: rook-ceph-mgr-dashboard
-          port: 8443
+          port: 8080
       permitInsecure: true
