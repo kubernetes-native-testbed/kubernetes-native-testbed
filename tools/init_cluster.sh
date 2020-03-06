@@ -1,3 +1,4 @@
 #!/bin/bash
-kubectl sort-manifests -R -f ../manifests/ | kubectl apply -f -
+CURRENT_DIR=$(cd $(dirname $0); pwd)
+kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/ | kubectl apply -f -
 
