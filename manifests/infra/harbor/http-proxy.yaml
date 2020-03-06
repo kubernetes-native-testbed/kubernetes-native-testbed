@@ -2,14 +2,14 @@
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: argocd
-  namespace: argocd
+  name: harbor
+  namespace: infra
   labels:
-    service: argocd
+    service: harbor
     role: proxy
 spec:
   routes:
     - services:
-        - name: argocd-server
+        - name: registry-harbor-portal
           port: 80
       permitInsecure: true
