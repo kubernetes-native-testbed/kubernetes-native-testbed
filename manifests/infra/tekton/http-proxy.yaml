@@ -2,14 +2,14 @@
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: argocd
-  namespace: argocd
+  name: tekton
+  namespace: tekton-pipelines
   labels:
-    service: argocd
+    service: tekton
     role: proxy
 spec:
   routes:
     - services:
-        - name: argocd-server
-          port: 80
+        - name: tekton-dashboard
+          port: 9097
       permitInsecure: true
