@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: delivery-status-app
-          image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}
+          image: k8stestbed/delivery-status:latest
           env:
           - name: DB_HOST
             value: delivery-status-db-mysql-master.delivery-status.svc.cluster.local
@@ -93,7 +93,7 @@ spec:
 #   containers:
 #     - name: nats-ops
 #       command: ["/bin/sh"]
-#       image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}
+#       image: "wallyqs/nats-ops:latest"
 #       tty: true
 #       stdin: true
 #       stdinOnce: true
@@ -125,7 +125,7 @@ spec:
 #   containers:
 #     - name: nats-ops
 #       command: ["/bin/sh"]
-#       image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}
+#       image: "wallyqs/nats-ops:latest"
 #       tty: true
 #       stdin: true
 #       stdinOnce: true
