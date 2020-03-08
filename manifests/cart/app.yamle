@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: cart
-          image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}
+          image: k8stestbed/cart:latest
           resources:
             requests:
               cpu: 100m
