@@ -608,7 +608,7 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: tekton-triggers-role
-  namespace: infra
+  namespace: tekton-pipelines
 rules:
 - apiGroups:
   - tekton.dev
@@ -639,7 +639,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: tekton-triggers-role-binding
-  namespace: infra
+  namespace: tekton-pipelines
 subjects:
   - kind: ServiceAccount
     name: tekton-sa
