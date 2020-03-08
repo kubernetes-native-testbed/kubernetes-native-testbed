@@ -107,8 +107,6 @@ spec:
       default: xxxxxxxx
     - name: REGISTRY_REPO
       default: k8stestbed
-    - name: GITHUB_USER
-    - name: GITHUB_TOKEN
     resources:
     - name: source-repo
       type: git
@@ -156,8 +154,6 @@ spec:
   - name: MICROSERVICE
   - name: COMMIT_HASH
   - name: REGISTRY_REPO
-  - name: GITHUB_USER
-  - name: GITHUB_TOKEN
   tasks:
   - name: build-and-push
     taskRef:
@@ -186,10 +182,6 @@ spec:
       value: $(params.COMMIT_HASH)
     - name: REGISTRY_REPO
       value: $(params.REGISTRY_REPO)
-    - name: GITHUB_USER
-      value: $(params.GITHUB_USER)
-    - name: GITHUB_TOKEN
-      value: $(params.GITHUB_TOKEN)
     resources:
       inputs:
       - name: source-repo
@@ -213,10 +205,6 @@ spec:
     - name: REGISTRY_REPO
       description: registry's repo path
       default: registry-harbor-core.infra.svc.cluster.local/library
-    - name: GITHUB_USER
-      description: GitHub Username
-    - name: GITHUB_TOKEN
-      description: GitHub Personal Access Token from https://github.com/settings/tokens
   resourcetemplates:
   - apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
@@ -257,10 +245,6 @@ spec:
           value: $(params.COMMIT_HASH)
         - name: REGISTRY_REPO
           value: $(params.REGISTRY_REPO)
-        - name: GITHUB_USER
-          value: $(params.GITHUB_USER)
-        - name: GITHUB_TOKEN
-          value: $(params.GITHUB_TOKEN)
       resources:
         - name: source-repo
           resourceRef:
