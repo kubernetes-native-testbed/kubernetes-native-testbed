@@ -18,7 +18,7 @@ spec:
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
-  name: testbed.34.84.105.184.xip.io
+  name: testbed.34.84.105.184.nip.io
   namespace: infra
 spec:
   secretName: testbed-cert
@@ -26,11 +26,11 @@ spec:
     name: letsencrypt-issuer
     kind: ClusterIssuer
   dnsNames:
-  - testbed.34.84.105.184.xip.io
-  - argocd.34.84.105.184.xip.io
-  - tekton.34.84.105.184.xip.io
-  - harbor.34.84.105.184.xip.io
-  - notary.34.84.105.184.xip.io
-  - dashboard.34.84.105.184.xip.io
-  - rook.34.84.105.184.xip.io
-  commonName: testbed.34.84.105.184.xip.io
+  - testbed.34.84.105.184.nip.io
+  - argocd.34.84.105.184.nip.io
+  - tekton.34.84.105.184.nip.io
+  - harbor.34.84.105.184.nip.io
+  - notary.34.84.105.184.nip.io
+  - dashboard.34.84.105.184.nip.io
+  - rook.34.84.105.184.nip.io
+  commonName: testbed.34.84.105.184.nip.io
