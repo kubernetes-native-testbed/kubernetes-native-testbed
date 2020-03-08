@@ -1,5 +1,5 @@
 # helm2 fetch presslabs/mysql-operator
-# helm2 template mysql-operator-0.3.6.tgz  --set orchestrator.service.type=LoadBalancer --set orchestrator.persistence.storageClass=rook-ceph-block --set installCRDs=true | sed -e 's|RELEASE-NAME-||g' -e 's|release: .*RELEASE-NAME.*||g' -e 's|release-name-||g' -e 's|release: .*release-name.*||g'
+# helm2 template mysql-operator-0.3.6.tgz --set orchestrator.persistence.storageClass=rook-ceph-block --set installCRDs=true | sed -e 's|RELEASE-NAME-||g' -e 's|release: .*RELEASE-NAME.*||g' -e 's|release-name-||g' -e 's|release: .*release-name.*||g'
 
 ---
 # Source: mysql-operator/templates/orc-secret.yaml
@@ -276,7 +276,7 @@ metadata:
     
     heritage: Tiller
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: mysql-operator
   ports:
