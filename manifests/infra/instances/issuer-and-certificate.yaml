@@ -30,6 +30,7 @@ spec:
   - argocd.34.84.105.184.xip.io
   - tekton.34.84.105.184.xip.io
   - harbor.34.84.105.184.xip.io
+  - notary.34.84.105.184.xip.io
   - dashboard.34.84.105.184.xip.io
   - rook.34.84.105.184.xip.io
   commonName: testbed.34.84.105.184.xip.io

@@ -12,4 +12,44 @@ spec:
     - services:
         - name: registry-harbor-portal
           port: 80
-      permitInsecure: true
+      conditions:
+      - prefix: /
+    - services:
+        - name: registry-harbor-core
+          port: 80
+      conditions:
+      - prefix: /api/
+    - services:
+        - name: registry-harbor-core
+          port: 80
+      conditions:
+      - prefix: /service/
+    - services:
+        - name: registry-harbor-core
+          port: 80
+      conditions:
+      - prefix: /v2/
+    - services:
+        - name: registry-harbor-core
+          port: 80
+      conditions:
+      - prefix: /chartrepo/
+    - services:
+        - name: registry-harbor-core
+          port: 80
+      conditions:
+      - prefix: /c/
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: notary
+  namespace: infra
+  labels:
+    service: notary
+    role: proxy
+spec:
+  routes:
+    - services:
+        - name: registry-harbor-notary-server
+          port: 4443
