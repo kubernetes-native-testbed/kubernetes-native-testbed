@@ -10,6 +10,6 @@ metadata:
 spec:
   routes:
     - services:
-        - name: registry-harbor-portal
+        - name: harbor
           port: 80
       permitInsecure: true
