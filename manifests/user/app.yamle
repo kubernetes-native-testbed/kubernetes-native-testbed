@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: user
-          image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}
+          image: k8stestbed/user:latest
           resources:
             requests:
               cpu: 100m
