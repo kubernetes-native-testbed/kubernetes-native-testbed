@@ -5,7 +5,7 @@ metadata:
   name: harbor-credentials
   namespace: tekton-pipelines
   annotations:
-    tekton.dev/docker-0: https://harbor.infra.svc.cluster.local/v2/
+    tekton.dev/docker-0: https://registry-harbor-core.infra.svc.cluster.local/v2/
 type: kubernetes.io/basic-auth
 stringData:
   username: admin
@@ -152,7 +152,7 @@ spec:
   - apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
     metadata:
-      name: source-repo-$(params.MICROSERVICE)-$(uid)
+      name: source-repo-$(params.MICROSERVICE)-$(params.COMMIT_HASH)
       namespace: tekton-pipelines
     spec:
       type: git
@@ -164,29 +164,32 @@ spec:
   - apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
     metadata:
-      name: image-repo-$(params.MICROSERVICE)-$(uid)
+      name: image-repo-$(params.MICROSERVICE)-$(params.COMMIT_HASH)
       namespace: tekton-pipelines
     spec:
       type: image
       params:
         - name: url
-          value: harbor.infra.svc.cluster.local/library/$(params.MICROSERVICE):$(params.COMMIT_HASH)
+          value: registry-harbor-core.infra.svc.cluster.local/library/$(params.MICROSERVICE):$(params.COMMIT_HASH)
   - apiVersion: tekton.dev/v1alpha1
     kind: PipelineRun
     metadata:
-      name: ci-$(params.MICROSERVICE)-$(uid)
+      name: ci-$(params.MICROSERVICE)-$(params.COMMIT_HASH)-$(uid)
       namespace: tekton-pipelines
     spec:
       serviceAccountName: tekton-sa
+      timeout: 1h0m0s
       pipelineRef:
         name: ci
       params:
         - name: MICROSERVICE
           value: $(params.MICROSERVICE)
+        - name: COMMIT_HASH
+          value: $(params.COMMIT_HASH)
       resources:
         - name: source-repo
           resourceRef:
-            name: source-repo-$(params.MICROSERVICE)-$(uid)
+            name: source-repo-$(params.MICROSERVICE)-$(params.COMMIT_HASH)
         - name: image-repo
           resourceRef:
-            name: image-repo-$(params.MICROSERVICE)-$(uid)
+            name: image-repo-$(params.MICROSERVICE)-$(params.COMMIT_HASH)

@@ -9,8 +9,7 @@ spec:
     - name: GIT_REPO_URL
       value: "$(body.repository.url)"
     - name: COMMIT_HASH
-      value: $(body.head)
-      # value: $(body.after)
+      value: $(body.after)
     - name: MICROSERVICE
       value: comment
 ---
