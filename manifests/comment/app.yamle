@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: comment
-          image: hoge/comment:123
+          image: k8stestbed/comment:latest
           resources:
             requests:
               cpu: 100m
