@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: product-app
-          image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}
+          image: k8stestbed/product:latest
           env:
           - name: DB_HOST
             value: product-db-mysql-master.product.svc.cluster.local
