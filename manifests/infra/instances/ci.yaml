@@ -64,6 +64,13 @@ spec:
     - --cache=true
     - --insecure
     - --skip-tls-verify
+    resources:
+      limits:
+        cpu: 2
+        memory: "2Gi"
+      requests:
+        cpu: 1
+        memory: "1Gi"
     securityContext:
       runAsUser: 0
 ---
@@ -135,6 +142,13 @@ spec:
           secretKeyRef:
             name: github-credentials
             key: GITHUB_TOKEN
+    resources:
+      limits:
+        cpu: 2
+        memory: "2Gi"
+      requests:
+        cpu: 1
+        memory: "1Gi"
     securityContext:
       runAsUser: 0
     volumeMounts:
