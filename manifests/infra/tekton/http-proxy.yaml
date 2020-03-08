@@ -13,3 +13,9 @@ spec:
         - name: tekton-dashboard
           port: 9097
       permitInsecure: true
+    - conditions:
+      - prefix: /event-listener
+      services:
+        - name: el-github-listener
+          port: 8080
+      permitInsecure: true
