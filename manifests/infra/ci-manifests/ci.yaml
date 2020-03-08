@@ -38,8 +38,8 @@ spec:
       interceptors:
         - github:
             secretRef:
-              secretKey: github-webhook-credentials
-              secretName: github-webhook-secret
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
               namespace: tekton-pipelines
             eventTypes:
               - push
