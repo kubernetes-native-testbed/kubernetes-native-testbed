@@ -74,7 +74,7 @@ metadata:
   namespace: tekton-pipelines
 data:
   entrypoint.sh: |-
-    git checkout -b $(inputs.params.MICROSERVICE)-$(inputs.params.COMMIT_HASH);
+    git checkout -b ${MICROSERVICE}-${COMMIT_HASH};
     git config --global user.email "${GITHUB_USER}@example.com";
     git config --global user.name "${GITHUB_USER}";
     git config --global credential.helper "store --file ~/.config/gh/git-cmd-credential"
@@ -87,11 +87,11 @@ data:
       - user: ${GITHUB_USER}
         oauth_token: ${GITHUB_TOKEN}
     _EOF_
-    sed -ie 's|image: .*|image: $(inputs.params.REGISTRY_REPO)/$(inputs.params.MICROSERVICE):$(inputs.params.COMMIT_HASH)|g' /workspace/source-repo/manifests/$(inputs.params.MICROSERVICE)/app.yaml;
+    sed -ie 's|image: .*|image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}|g' /workspace/source-repo/manifests/${MICROSERVICE}/app.yaml;
     git add --all;
-    git commit -m "Update $(inputs.params.MICROSERVICE) manifest for new image tag $(inputs.params.COMMIT_HASH)";
-    git push origin $(inputs.params.MICROSERVICE)-$(inputs.params.COMMIT_HASH);
-    gh pr create --base develop --title "Update $(inputs.params.MICROSERVICE) manifest for new image tag $(inputs.params.COMMIT_HASH)" --body "RP is opened at $(date +%s)";
+    git commit -m "Update ${MICROSERVICE} manifest for new image tag ${COMMIT_HASH}";
+    git push origin ${MICROSERVICE}-${COMMIT_HASH};
+    gh pr create --base develop --title "Update ${MICROSERVICE} manifest for new image tag ${COMMIT_HASH}" --body "RP is opened at $(date +%s)";
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
@@ -119,6 +119,12 @@ spec:
     - -c
     - /data/entrypoint.sh
     env:
+      - name: MICROSERVICE
+        value: $(inputs.params.MICROSERVICE)
+      - name: COMMIT_HASH
+        value: $(inputs.params.COMMIT_HASH)
+      - name: REGISTRY_REPO
+        value: $(inputs.params.REGISTRY_REPO)
       - name: GITHUB_USER
         valueFrom:
           secretKeyRef:
