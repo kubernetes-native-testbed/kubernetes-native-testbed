@@ -94,7 +94,7 @@ data:
       - user: ${GITHUB_USER}
         oauth_token: ${GITHUB_TOKEN}
     _EOF_
-    sed -ie 's|image: .*|image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}|g' /workspace/source-repo/manifests/${MICROSERVICE}/app.yaml;
+    sed -i -e "s|image: .*|image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}|g" /workspace/source-repo/manifests/${MICROSERVICE}/app.yaml;
     git add --all;
     git commit -m "Update ${MICROSERVICE} manifest for new image tag ${COMMIT_HASH}";
     git push origin ${MICROSERVICE}-${COMMIT_HASH};
