@@ -1,0 +1,15 @@
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: admin-ci
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: GIT_REPO_URL
+      value: "$(body.repository.url)"
+    - name: COMMIT_HASH
+      value: $(body.after)
+    - name: MICROSERVICE
+      value: admin
+---

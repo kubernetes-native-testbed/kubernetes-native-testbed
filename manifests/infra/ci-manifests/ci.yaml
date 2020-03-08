@@ -1,28 +1,5 @@
 ---
 apiVersion: tekton.dev/v1alpha1
-kind: TriggerBinding
-metadata:
-  name: microservice-ci-trigger-binding
-  namespace: tekton-pipelines
-spec:
-  params:
-    - name: GIT_REPO_URL
-      value: "$(body.repository.url)"
-    - name: COMMIT_HASH
-      value: $(body.after)
-    - name: MICROSERVICE
-      value: comment
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: github-webhook-credentials
-  namespace: tekton-pipelines
-type: Opaque
-stringData:
-  github-webhook-secret: please-modify-for-high-security-here
----
-apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
   name: github-listener
@@ -33,7 +10,17 @@ spec:
     - template:
         name: microservice-ci-trigger
       bindings:
-      - name: microservice-ci-trigger-binding
+      - name: admin-ci
+      - name: cart-ci
+      - name: comment-ci
+      - name: delivery-status-ci
+      - name: order-ci
+      - name: payment-info-ci
+      - name: point-ci
+      - name: product-ci
+      - name: rate-ci
+      - name: search-ci
+      - name: user-ci
       interceptors:
         - github:
             secretRef:
@@ -42,4 +29,4 @@ spec:
               namespace: tekton-pipelines
             eventTypes:
               - push
-
+---
