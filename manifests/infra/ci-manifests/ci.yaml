@@ -14,6 +14,15 @@ spec:
     - name: MICROSERVICE
       value: comment
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: github-webhook-credentials
+  namespace: tekton-pipelines
+type: Opaque
+stringData:
+  github-webhook-secret: please-modify-for-high-security-here
+---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
@@ -28,10 +37,10 @@ spec:
       - name: microservice-ci-trigger-binding
       interceptors:
         - github:
-            secretRef: {}
-            #   secretKey: ""
-            #   secretName: ""
-            #   namespace: ""
+            secretRef:
+              secretKey: github-webhook-credentials
+              secretName: github-webhook-secret
+              namespace: tekton-pipelines
             eventTypes:
               - push
 
