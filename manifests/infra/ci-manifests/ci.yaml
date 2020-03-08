@@ -12,19 +12,7 @@ spec:
         name: microservice-ci-trigger
       bindings:
       - name: admin-ci
-      - name: cart-ci
-      - name: comment-ci
-      - name: delivery-status-ci
-      - name: order-ci
-      - name: payment-info-ci
-      - name: point-ci
-      - name: product-ci
-      - name: rate-ci
-      - name: search-ci
-      - name: user-ci
       interceptors:
-        - cel:
-            filter: "body.ref.startsWith('refs/heads/develop')"
         - github:
             secretRef:
               secretName: github-webhook-credentials
@@ -32,4 +20,146 @@ spec:
               namespace: tekton-pipelines
             eventTypes:
               - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
+    - template:
+        name: microservice-ci-trigger
+      bindings:
+      - name: cart-ci
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
+              namespace: tekton-pipelines
+            eventTypes:
+              - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
+    - template:
+        name: microservice-ci-trigger
+      bindings:
+      - name: comment-ci
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
+              namespace: tekton-pipelines
+            eventTypes:
+              - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
+    - template:
+        name: microservice-ci-trigger
+      bindings:
+      - name: delivery-status-ci
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
+              namespace: tekton-pipelines
+            eventTypes:
+              - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
+    - template:
+        name: microservice-ci-trigger
+      bindings:
+      - name: order-ci
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
+              namespace: tekton-pipelines
+            eventTypes:
+              - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
+    - template:
+        name: microservice-ci-trigger
+      bindings:
+      - name: payment-info-ci
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
+              namespace: tekton-pipelines
+            eventTypes:
+              - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
+    - template:
+        name: microservice-ci-trigger
+      bindings:
+      - name: point-ci
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
+              namespace: tekton-pipelines
+            eventTypes:
+              - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
+    - template:
+        name: microservice-ci-trigger
+      bindings:
+      - name: product-ci
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
+              namespace: tekton-pipelines
+            eventTypes:
+              - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
+    - template:
+        name: microservice-ci-trigger
+      bindings:
+      - name: rate-ci
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
+              namespace: tekton-pipelines
+            eventTypes:
+              - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
+    - template:
+        name: microservice-ci-trigger
+      bindings:
+      - name: search-ci
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
+              namespace: tekton-pipelines
+            eventTypes:
+              - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
+    - template:
+        name: microservice-ci-trigger
+      bindings:
+      - name: user-ci
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-webhook-credentials
+              secretKey: github-webhook-secret
+              namespace: tekton-pipelines
+            eventTypes:
+              - push
+        - cel:
+           filter: body.ref == 'refs/heads/develop'
 ---
