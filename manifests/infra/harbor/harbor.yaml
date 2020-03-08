@@ -159,7 +159,7 @@ data:
   DISABLE_API: "false"
   DISABLE_STATEFILES: "false"
   ALLOW_OVERWRITE: "true"
-  #CHART_URL: https://core.harbor.domain/chartrepo
+  CHART_URL: https://harbor.34.84.105.184.xip.io/chartrepo
   AUTH_ANONYMOUS_GET: "false"
   TLS_CERT: ""
   TLS_KEY: ""
@@ -202,7 +202,7 @@ data:
   POSTGRESQL_SSLMODE: "disable"
   POSTGRESQL_MAX_IDLE_CONNS: "50"
   POSTGRESQL_MAX_OPEN_CONNS: "100"
-  EXT_ENDPOINT: "https://core.harbor.domain"
+  EXT_ENDPOINT: "https://harbor.34.84.105.184.xip.io"
   CORE_URL: "http://registry-harbor-core"
   JOBSERVICE_URL: "http://registry-harbor-jobservice"
   REGISTRY_URL: "http://registry-harbor-registry:5000"
@@ -313,7 +313,7 @@ data:
     auth:
       token:
         issuer: harbor-token-issuer
-        realm: "https://core.harbor.domain/service/token"
+        realm: "https://harbor.34.84.105.184.xip.io/service/token"
         rootcertbundle: /etc/registry/root.crt
         service: harbor-registry
     validation:
@@ -1417,63 +1417,3 @@ spec:
       resources:
         requests:
           storage: "1Gi"
----
-# Source: harbor/templates/ingress/ingress.yaml
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: "registry-harbor-ingress"
-  namespace: infra
-  labels:
-    heritage: Helm
-    release: registry
-    chart: harbor
-    app: "harbor"
-  annotations:
-    ingress.kubernetes.io/proxy-body-size: "0"
-    ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-spec:
-  tls:
-  - secretName: "registry-harbor-ingress"
-    hosts:
-    - core.harbor.domain
-  - secretName: "registry-harbor-ingress"
-    hosts:
-    - notary.harbor.domain
-  rules:
-  - http:
-      paths:
-      - path: /
-        backend:
-          serviceName: registry-harbor-portal
-          servicePort: 80
-      - path: /api/
-        backend:
-          serviceName: registry-harbor-core
-          servicePort: 80
-      - path: /service/
-        backend:
-          serviceName: registry-harbor-core
-          servicePort: 80
-      - path: /v2/
-        backend:
-          serviceName: registry-harbor-core
-          servicePort: 80
-      - path: /chartrepo/
-        backend:
-          serviceName: registry-harbor-core
-          servicePort: 80
-      - path: /c/
-        backend:
-          serviceName: registry-harbor-core
-          servicePort: 80
-    host: core.harbor.domain
-  - http:
-      paths:
-      - path: /
-        backend:
-          serviceName: registry-harbor-notary-server
-          servicePort: 4443
-    host: notary.harbor.domain
