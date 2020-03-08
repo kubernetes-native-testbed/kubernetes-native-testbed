@@ -193,3 +193,13 @@ spec:
         - name: image-repo
           resourceRef:
             name: image-repo-$(params.MICROSERVICE)-$(params.COMMIT_HASH)
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: github-webhook-credentials
+  namespace: tekton-pipelines
+type: Opaque
+stringData:
+  github-webhook-secret: please-modify-for-high-security-here
+---
