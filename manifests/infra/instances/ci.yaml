@@ -138,6 +138,7 @@ spec:
     - name: entrypoint-cm
       configMap:
         name: pull-request-command
+        defaultMode: 493 # mode 755
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
