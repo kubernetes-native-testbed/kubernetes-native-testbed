@@ -1,0 +1,40 @@
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: microservice-ci-trigger-binding
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: GIT_REPO_URL
+      value: "$(body.repository.url)"
+    - name: COMMIT_HASH
+      value: $(body.head)
+      # value: $(body.after)
+      description: GitHub commit hash
+      default: xxxxxxxx
+    - name: MICROSERVICE
+      value: comment
+      default: somemicroservice
+---
+apiVersion: tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: github-listener
+  namespace: tekton-pipelines
+spec:
+  serviceAccountName: tekton-sa
+  triggers:
+    - template:
+        name: microservice-ci-trigger
+      binding:
+        name: microservice-ci-trigger-binding
+      interceptors:
+        - github:
+            # secretRef:
+            #   secretKey: ""
+            #   secretName: ""
+            #   namespace: ""
+            eventTypes:
+              - push
+
