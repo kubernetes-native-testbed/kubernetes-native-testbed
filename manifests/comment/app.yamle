@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comment
+  namespace: comment
+  labels:
+    service: comment
+    role: app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      service: comment
+      role: app
+  template:
+    metadata:
+      labels:
+        service: comment
+        role: app
+    spec:
+      containers:
+        - name: comment
+          image: hoge/comment:123
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comment
+  namespace: comment
+  labels:
+    service: comment
+    role: app
+spec:
+  type: ClusterIP
+  ports:
+    - name: "http-port"
+      protocol: "TCP"
+      port: 8080
+      targetPort: 8080
+  selector:
+    service: comment
+    role: app
