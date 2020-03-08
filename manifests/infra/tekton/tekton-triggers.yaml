@@ -1,3 +1,6 @@
+# curl -L  https://github.com/tektoncd/triggers/releases/download/v0.3.0/release.yaml -o ./tekton-triggers.yaml
+# and add role/rolebinding
+
 # Copyright 2019 The Tekton Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -450,8 +453,8 @@ kind: Service
 metadata:
   labels:
     app: tekton-triggers-controller
-    version: "v0.3.1"
-    triggers.tekton.dev/release: "v0.3.1"
+    version: "v0.3.0"
+    triggers.tekton.dev/release: "v0.3.0"
   name: tekton-triggers-controller
   namespace: tekton-pipelines
 spec:
@@ -487,7 +490,7 @@ metadata:
     app.kubernetes.io/name: tekton-triggers
     app.kubernetes.io/component: controller
     # tekton.dev/release value replaced with inputs.params.versionTag in triggers/tekton/publish.yaml
-    triggers.tekton.dev/release: "v0.3.1"
+    triggers.tekton.dev/release: "v0.3.0"
 spec:
   replicas: 1
   selector:
@@ -499,15 +502,15 @@ spec:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
       labels:
         app: tekton-triggers-controller
-        triggers.tekton.dev/release: "v0.3.1"
+        triggers.tekton.dev/release: "v0.3.0"
         # version value replaced with inputs.params.versionTag in triggers/tekton/publish.yaml
-        version: "v0.3.1"
+        version: "v0.3.0"
     spec:
       serviceAccountName: tekton-triggers-controller
       containers:
       - name: tekton-triggers-controller
-        image: gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller@sha256:dc6eafe048692e7f8d8f33453eafe9f55222f372d84c9a2128a14d52aa145e00
-        args: ["-logtostderr", "-stderrthreshold", "INFO", "-el-image", "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/eventlistenersink@sha256:99a594c37c68cc3127ea3ebc03b03514727442fb6ed8818b49cc740bcb474f8e",
+        image: gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller@sha256:db2f44641a42295bbb346ae653de706639ccb00a221cd217703bad71e4d12e2b
+        args: ["-logtostderr", "-stderrthreshold", "INFO", "-el-image", "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/eventlistenersink@sha256:59c6d09041b702ec50c18e5c1b122f92f16b8971ef6736a594b62c3674e9046b",
           "-el-port", "8080", "-period-seconds", "10", "-failure-threshold", "1"]
         volumeMounts:
         - name: config-logging
@@ -534,8 +537,8 @@ kind: Service
 metadata:
   labels:
     app: tekton-triggers-webhook
-    version: "v0.3.1"
-    triggers.tekton.dev/release: "v0.3.1"
+    version: "v0.3.0"
+    triggers.tekton.dev/release: "v0.3.0"
   name: tekton-triggers-webhook
   namespace: tekton-pipelines
 spec:
@@ -570,7 +573,7 @@ metadata:
     app.kubernetes.io/name: tekton-triggers
     app.kubernetes.io/component: webhook-controller
     # tekton.dev/release value replaced with inputs.params.versionTag in triggers/tekton/publish.yaml
-    triggers.tekton.dev/release: "v0.3.1"
+    triggers.tekton.dev/release: "v0.3.0"
 spec:
   replicas: 1
   selector:
@@ -582,14 +585,14 @@ spec:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
       labels:
         app: tekton-triggers-webhook
-        triggers.tekton.dev/release: "v0.3.1"
+        triggers.tekton.dev/release: "v0.3.0"
         # version value replaced with inputs.params.versionTag in triggers/tekton/publish.yaml
-        version: "v0.3.1"
+        version: "v0.3.0"
     spec:
       serviceAccountName: tekton-triggers-controller
       containers:
       - name: webhook
-        image: gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook@sha256:7e3d8824ac60574de00a31c8afaba51fec33f7ca7b13e50d7dffea7c66e8b9eb
+        image: gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook@sha256:65634247de121dceefd5771976f89c1ff4382743e40ed486ac50b391cb0b1aa6
         env:
         - name: SYSTEM_NAMESPACE
           valueFrom:
@@ -647,3 +650,5 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: tekton-triggers-role
+
+
