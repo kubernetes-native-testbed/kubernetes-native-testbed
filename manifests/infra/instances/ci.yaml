@@ -78,7 +78,7 @@ data:
     git config --global user.email "${GITHUB_USER}@example.com";
     git config --global user.name "${GITHUB_USER}";
     git config --global credential.helper "store --file ~/.config/gh/git-cmd-credential"
-    mkdir -p /root/.config/gh
+    mkdir -p ~/.config/gh
     cat << _EOF_ > ~/.config/gh/git-cmd-credential
     https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com
     _EOF_
