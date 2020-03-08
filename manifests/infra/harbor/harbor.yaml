@@ -1,3 +1,6 @@
+# helm --namespace infra template registry  harbor/harbor --set expose.ingress.hosts.core=harbor.34.84.105.184.xip.io --set expose.ingress.hosts.notary=notary.34.84.105.184.xip.io  --set persistence.persistentVolumeClaim.registry.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.chartmuseum.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.jobservice.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.database.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.redis.storageClass=rook-ceph-block --set harborAdminPassword=admin  --set expose.tls.commonName=harbor.infra.svc.cluster.local > fuga | perl -p -e 's|^  selfLink: .*\n||g' | perl -p -e 's|^  uid: .*\n||g'| perl -p -e 's|^  resourceVersion: .*\n||g' | perl -p -e 's|^  creationTimestamp: .*\n||g' | perl -p -e 's|^  creationTimestamp: .*\n||g' > harbor.yaml
+# modify namespace
+# replace harbor.domain
 ---
 # Source: harbor/templates/chartmuseum/chartmuseum-secret.yaml
 apiVersion: v1
