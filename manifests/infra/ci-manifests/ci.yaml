@@ -6,6 +6,7 @@ metadata:
   namespace: tekton-pipelines
 spec:
   serviceAccountName: tekton-sa
+  serviceType: ClusterIP
   triggers:
     - template:
         name: microservice-ci-trigger
@@ -22,6 +23,8 @@ spec:
       - name: search-ci
       - name: user-ci
       interceptors:
+        - cel:
+            filter: "body.ref.startsWith('refs/heads/develop')"
         - github:
             secretRef:
               secretName: github-webhook-credentials
