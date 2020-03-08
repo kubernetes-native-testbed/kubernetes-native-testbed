@@ -28,7 +28,7 @@ spec:
       - name: microservice-ci-trigger-binding
       interceptors:
         - github:
-            # secretRef:
+            secretRef: {}
             #   secretKey: ""
             #   secretName: ""
             #   namespace: ""
