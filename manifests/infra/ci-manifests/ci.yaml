@@ -11,11 +11,8 @@ spec:
     - name: COMMIT_HASH
       value: $(body.head)
       # value: $(body.after)
-      description: GitHub commit hash
-      default: xxxxxxxx
     - name: MICROSERVICE
       value: comment
-      default: somemicroservice
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
@@ -27,8 +24,8 @@ spec:
   triggers:
     - template:
         name: microservice-ci-trigger
-      binding:
-        name: microservice-ci-trigger-binding
+      bindings:
+      - name: microservice-ci-trigger-binding
       interceptors:
         - github:
             # secretRef:
