@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: point-app
-          image: k8stestbed/point:latest
+          image: registry-harbor-core.infra.svc.cluster.local/library/point:9eb01af6ec205a98a2e62fff12617c169bedc87f
           resources:
             requests:
               cpu: 100m
