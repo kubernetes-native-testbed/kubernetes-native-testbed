@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: product-app
-          image: k8stestbed/product:latest
+          image: registry-harbor-core.infra.svc.cluster.local/library/product:9eb01af6ec205a98a2e62fff12617c169bedc87f
           env:
           - name: DB_HOST
             value: product-db-mysql-master.product.svc.cluster.local
