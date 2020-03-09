@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: comment
-          image: k8stestbed/comment:latest
+          image: registry-harbor-core.infra.svc.cluster.local/library/comment:9fa95a7cccfdfb3f22aeaad7c70e6eebece2a4ed
           resources:
             requests:
               cpu: 100m
