@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: user
-          image: k8stestbed/user:latest
+          image: registry-harbor-core.infra.svc.cluster.local/library/user:9eb01af6ec205a98a2e62fff12617c169bedc87f
           resources:
             requests:
               cpu: 100m
