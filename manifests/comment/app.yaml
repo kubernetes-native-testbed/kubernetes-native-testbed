@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: comment
-          image: registry-harbor-core.infra.svc.cluster.local/library/comment:55399b474d522d7b10938fe971df251458b81c15
+          image: registry-harbor-core.infra.svc.cluster.local/library/comment:05de42feb11cbe28d3e6ad7c20cb6d1e9f35a1fa
           resources:
             requests:
               cpu: 100m
