@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: order
-          image: k8stestbed/order:latest
+          image: registry-harbor-core.infra.svc.cluster.local/library/order:2c2f70ac31607b96e97f5941906557a3d1fda682
           resources:
             requests:
               cpu: 100m
