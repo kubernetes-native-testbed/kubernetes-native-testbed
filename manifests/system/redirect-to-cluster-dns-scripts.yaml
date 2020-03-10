@@ -1,0 +1,118 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redirect-to-cluster-dns-scripts
+  namespace: kube-system
+data:
+  entrypoint.sh: |-
+    CLUSTER_DNS_SERVICE_NAME=${CLUSTER_DNS_SERVICE_NAME:-kube-dns}
+    ETCDIR=${HOSTDIR:-/hostdir}/etc
+    SYNC_INTERVAL=${SYNC_INTERVAL:-60}
+
+    CLUSTER_DNS_IP=$(kubectl -n kube-system get service ${CLUSTER_DNS_SERVICE_NAME} -o jsonpath='{.spec.clusterIP}')
+    echo "cluster dns IP address is [${CLUSTER_DNS_IP}]"
+
+    if [ -z "${CLUSTER_DNS_IP}" ]; then exit 1; fi
+
+    while true; do
+        if [ ! -f ${ETCDIR}/resolv.conf.default ]; then
+        cat ${ETCDIR}/resolv.conf  > ${ETCDIR}/resolv.conf.default
+        echo "copy host's files from /etc/resolv.conf.default"
+        fi
+
+        if [ -L ${ETCDIR}/resolv.conf ]; then
+        unlink ${ETCDIR}/resolv.conf
+        echo "remove host's /etc/resolv.conf"
+        fi
+
+    cat << _EOF_ > ${ETCDIR}/resolv.conf
+    nameserver ${CLUSTER_DNS_IP}
+    $(cat ${ETCDIR}/resolv.conf.default)
+    _EOF_
+        echo "regenerate host's /etc/resolv.conf"
+
+        sleep ${SYNC_INTERVAL};
+    done
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: redirect-to-cluster-dns
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: redirect-to-cluster-dns-role
+  namespace: kube-system
+rules:
+- apiGroups:
+  - "*"
+  resources:
+  - services
+  verbs:
+  - "get"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: redirect-to-cluster-dns-rolebinding
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: redirect-to-cluster-dns-role
+subjects:
+- kind: ServiceAccount
+  name: redirect-to-cluster-dns
+  namespace: kube-system
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: redirect-to-cluster-dns
+  namespace: kube-system
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: redirect-to-cluster-dns
+  template:
+    metadata:
+      labels:
+        app: redirect-to-cluster-dns
+    spec:
+      serviceAccountName: redirect-to-cluster-dns
+      containers:
+        - name: kubectl-container
+          image: bitnami/kubectl:1.17.3
+          env:
+            - name: CLUSTER_DNS_SERVICE_NAME
+              value: kube-dns
+            - name: SYNC_INTERVAL
+              value: "60"
+            - name: HOSTDIR
+              value: /hostdir
+          command:
+            - sh
+            - -c
+          args:
+            - /data/entrypoint.sh
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: entrypoint-cm
+              mountPath: /data
+            - name: host-dir
+              mountPath: /hostdir
+      volumes:
+        - name: entrypoint-cm
+          configMap:
+            name: redirect-to-cluster-dns-scripts
+            defaultMode: 493 # mode 755
+        - name: host-dir
+          hostPath:
+            path: /
+            type: DirectoryOrCreate
