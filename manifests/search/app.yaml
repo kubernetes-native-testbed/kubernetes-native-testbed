@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: search-app
-          image: registry-harbor-core.infra.svc.cluster.local/library/search:55399b474d522d7b10938fe971df251458b81c15
+          image: registry-harbor-core.infra.svc.cluster.local/library/search:20b6b9c82ad5851f2336f8131b4203d6990061ba
           resources:
             requests:
               cpu: 100m
