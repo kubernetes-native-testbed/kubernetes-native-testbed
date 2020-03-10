@@ -2,7 +2,7 @@
 #   helm2 repo add pingcap https://charts.pingcap.org/
 #   helm2 repo update
 #   helm2 fetch --version v1.0.6 pingcap/tidb-cluster
-#   helm2 template --name cart-db --namespace cart --set tidb.replicas=0 --set pd.storageClassName=rook --set tikv.storageClassName=rook tidb-cluster-v1.0.6.tgz > db.yaml
+#   helm2 template --name cart-db --namespace cart --set tidb.replicas=0 --set pd.storageClassName=rook-ceph-block --set tikv.storageClassName=rook-ceph-block tidb-cluster-v1.0.6.tgz > db.yaml
 #   # add namespace cart to each metadata
 ---
 # Source: tidb-cluster/templates/monitor-secret.yaml
@@ -929,7 +929,7 @@ spec:
     replicas: 3
     image: pingcap/pd:v3.0.5
     imagePullPolicy: IfNotPresent
-    storageClassName: rook
+    storageClassName: rook-ceph-block
     limits: {}
     requests:
       storage: 1Gi
@@ -945,7 +945,7 @@ spec:
     replicas: 3
     image: pingcap/tikv:v3.0.5
     imagePullPolicy: IfNotPresent
-    storageClassName: rook
+    storageClassName: rook-ceph-block
     limits: {}
     requests:
       storage: 10Gi
