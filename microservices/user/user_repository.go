@@ -12,6 +12,7 @@ type userRepository interface {
 	store(*User) (string, error)
 	update(*User) error
 	deleteByUUID(string) error
+	initDB() error
 }
 
 type userRepositoryImpl struct {

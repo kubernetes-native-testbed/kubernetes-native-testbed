@@ -28,7 +28,7 @@ var (
 const (
 	defaultBindAddr = ":8080"
 
-	componentName = "user"
+	componentName     = "user"
 	defaultDBUser     = componentName
 	defaultDBPassword = componentName
 	defaultDBName     = componentName
@@ -79,29 +79,29 @@ func (s *userAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetRes
 	addresses := make([]*pb.Address, len(u.Addresses))
 	for i := range u.Addresses {
 		addresses[i] = &pb.Address{
-			UUID: u.Addresses[i].UUID,
-			UserUUID: u.Addresses[i].UserUUID,
-			ZipCode: u.Addresses[i].ZipCode,
-			Country: u.Addresses[i].Country,
-			State: u.Addresses[i].State,
-			City: u.Addresses[i].City,
+			UUID:        u.Addresses[i].UUID,
+			UserUUID:    u.Addresses[i].UserUUID,
+			ZipCode:     u.Addresses[i].ZipCode,
+			Country:     u.Addresses[i].Country,
+			State:       u.Addresses[i].State,
+			City:        u.Addresses[i].City,
 			AddressLine: u.Addresses[i].AddressLine,
-			Disabled: u.Addresses[i].Disabled,
+			Disabled:    u.Addresses[i].Disabled,
 		}
 	}
 
 	resp.User = &pb.User{
-		UUID:      u.UUID,
-		Username:      u.Username,
-		FirstName:     u.FirstName,
-		LastName: u.LastName,
-		Age: u.Age,
-		Addresses: addresses,
-		PasswordHash: u.PasswordHash,
+		UUID:                   u.UUID,
+		Username:               u.Username,
+		FirstName:              u.FirstName,
+		LastName:               u.LastName,
+		Age:                    u.Age,
+		Addresses:              addresses,
+		PasswordHash:           u.PasswordHash,
 		DefaultPaymentInfoUUID: u.DefaultPaymentInfoUUID,
-		CreatedAt: cat,
-		UpdatedAt: uat,
-		DeletedAt: dat,
+		CreatedAt:              cat,
+		UpdatedAt:              uat,
+		DeletedAt:              dat,
 	}
 
 	return &resp, nil
@@ -111,26 +111,26 @@ func (s *userAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRes
 	addresses := make([]Address, len(req.GetUser().GetAddresses()))
 	for i, address := range req.GetUser().GetAddresses() {
 		addresses[i] = Address{
-			ZipCode: address.ZipCode,
-			Country: address.Country,
-			State: address.State,
-			City: address.City,
+			ZipCode:     address.ZipCode,
+			Country:     address.Country,
+			State:       address.State,
+			City:        address.City,
 			AddressLine: address.AddressLine,
-			Disabled: address.Disabled,
+			Disabled:    address.Disabled,
 		}
 	}
 
 	u := &User{
-		Username:      req.GetUser().GetUsername(),
-		FirstName:     req.GetUser().GetFirstName(),
-		LastName:     req.GetUser().GetLastName(),
-		Age:     req.GetUser().GetAge(),
-		PasswordHash:     req.GetUser().GetPasswordHash(),
-		DefaultPaymentInfoUUID:     req.GetUser().GetDefaultPaymentInfoUUID(),
-		Addresses: addresses,
+		Username:               req.GetUser().GetUsername(),
+		FirstName:              req.GetUser().GetFirstName(),
+		LastName:               req.GetUser().GetLastName(),
+		Age:                    req.GetUser().GetAge(),
+		PasswordHash:           req.GetUser().GetPasswordHash(),
+		DefaultPaymentInfoUUID: req.GetUser().GetDefaultPaymentInfoUUID(),
+		Addresses:              addresses,
 	}
-	log.Printf("{\"operation\":\"set\", \"uuid\":\"%s\", \"username\":\"%s\", \"first_name\":\"%s\", \"last_name\":\"%s\", \"age\":\"%d\", \"password_hash\":\"%s\", \"default_payment_info_uuid\":\"%s\", \"addresses\":\"%v\"}", 
-	u.UUID, u.Username, u.FirstName, u.LastName, u.Age, u.PasswordHash, u.DefaultPaymentInfoUUID, u.Addresses)
+	log.Printf("{\"operation\":\"set\", \"uuid\":\"%s\", \"username\":\"%s\", \"first_name\":\"%s\", \"last_name\":\"%s\", \"age\":\"%d\", \"password_hash\":\"%s\", \"default_payment_info_uuid\":\"%s\", \"addresses\":\"%v\"}",
+		u.UUID, u.Username, u.FirstName, u.LastName, u.Age, u.PasswordHash, u.DefaultPaymentInfoUUID, u.Addresses)
 
 	uuid, err := s.userRepository.store(u)
 	if err != nil {
@@ -144,26 +144,26 @@ func (s *userAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*emp
 	addresses := make([]Address, len(req.GetUser().GetAddresses()))
 	for i, address := range req.GetUser().GetAddresses() {
 		addresses[i] = Address{
-			ZipCode: address.ZipCode,
-			Country: address.Country,
-			State: address.State,
-			City: address.City,
+			ZipCode:     address.ZipCode,
+			Country:     address.Country,
+			State:       address.State,
+			City:        address.City,
 			AddressLine: address.AddressLine,
-			Disabled: address.Disabled,
+			Disabled:    address.Disabled,
 		}
 	}
 	u := &User{
-		UUID:      req.GetUser().GetUUID(),
-		Username:      req.GetUser().GetUsername(),
-		FirstName:     req.GetUser().GetFirstName(),
-		LastName:     req.GetUser().GetLastName(),
-		Age:     req.GetUser().GetAge(),
-		PasswordHash:     req.GetUser().GetPasswordHash(),
-		DefaultPaymentInfoUUID:     req.GetUser().GetDefaultPaymentInfoUUID(),
-		Addresses: addresses,
+		UUID:                   req.GetUser().GetUUID(),
+		Username:               req.GetUser().GetUsername(),
+		FirstName:              req.GetUser().GetFirstName(),
+		LastName:               req.GetUser().GetLastName(),
+		Age:                    req.GetUser().GetAge(),
+		PasswordHash:           req.GetUser().GetPasswordHash(),
+		DefaultPaymentInfoUUID: req.GetUser().GetDefaultPaymentInfoUUID(),
+		Addresses:              addresses,
 	}
-	log.Printf("{\"operation\":\"update\", \"uuid\":\"%s\", \"username\":\"%s\", \"first_name\":\"%s\", \"last_name\":\"%s\", \"age\":\"%d\", \"password_hash\":\"%s\", \"default_payment_info_uuid\":\"%s\", \"addresses\":\"%v\"}", 
-	u.UUID, u.Username, u.FirstName, u.LastName, u.Age, u.PasswordHash, u.DefaultPaymentInfoUUID, u.Addresses)
+	log.Printf("{\"operation\":\"update\", \"uuid\":\"%s\", \"username\":\"%s\", \"first_name\":\"%s\", \"last_name\":\"%s\", \"age\":\"%d\", \"password_hash\":\"%s\", \"default_payment_info_uuid\":\"%s\", \"addresses\":\"%v\"}",
+		u.UUID, u.Username, u.FirstName, u.LastName, u.Age, u.PasswordHash, u.DefaultPaymentInfoUUID, u.Addresses)
 
 	if err := s.userRepository.update(u); err != nil {
 		return &empty.Empty{}, err
