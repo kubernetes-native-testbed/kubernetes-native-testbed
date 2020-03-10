@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: delivery-status-app
-          image: k8stestbed/delivery-status:latest
+          image: registry-harbor-core.infra.svc.cluster.local/library/delivery-status:4ffa52fb9e7ab0ce663f31840bd15e0a04b9bccd
           env:
           - name: DB_HOST
             value: delivery-status-db-mysql-master.delivery-status.svc.cluster.local
