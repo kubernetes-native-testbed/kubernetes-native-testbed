@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: user
-          image: registry-harbor-core.infra.svc.cluster.local/library/user:05de42feb11cbe28d3e6ad7c20cb6d1e9f35a1fa
+          image: registry-harbor-core.infra.svc.cluster.local/library/user:20b6b9c82ad5851f2336f8131b4203d6990061ba
           env:
           - name: DB_HOST
             value: user-db-mysql-master.product.svc.cluster.local
