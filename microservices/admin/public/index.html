@@ -6,6 +6,9 @@
   </head>
   <body>
     <h1>Client Page</h1>
+
+    <!-- Product -->
+    <hr color="#ffffff" width="80%" size="3">
     <div id="product">
       <p>
         <b>[Form]</b><br/>
@@ -30,6 +33,43 @@
       Response: {{ resp.product }}<br/>
       <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
     </div>
+
+    <!-- User -->
+    <hr color="#ffffff" width="80%" size="3">
+    <div id="user">
+      <p>
+        <b>[Form]</b><br/>
+        UUID: <input v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
+        Username: <input v-model="form.username" type="text" placeholder="amsy810"><br/>
+        FirstName: <input v-model="form.firstName" type="text" placeholder="Masaya"><br/>
+        LastName: <input v-model="form.lastName" type="text" placeholder="Aoyama"><br/>
+        Age: <input v-model="form.age" type="text" placeholder="27"><br/>
+        PasswordHash: <input v-model="form.passwordHash" type="text" placeholder="PASSWORD"><br/>
+        
+        Addresses:
+        <span v-for="(address, index) in form.Addresses">
+          <br/>
+          <input v-model="address.zipCode" :key="index" type="text" placeholder="100-0000">
+          <input v-model="address.country" :key="index" type="text" placeholder="Japan">
+          <input v-model="address.state" :key="index" type="text" placeholder="Tokyo">
+          <input v-model="address.city" :key="index" type="text" placeholder="Shibuya-ku">
+          <input v-model="address.addressLine" :key="index" type="text" placeholder="1-2-3-100">
+          <input v-model="address.disabled" :key="index" type="text" placeholder="false">
+        </span>
+        <button v-on:click="addAddress">+</button>
+        <br/>
+
+        <button v-on:click="getUser">Get</button>
+        <button v-on:click="setUser">Set</button>
+        <button v-on:click="updateUser">Update</button>
+        <button v-on:click="deleteUser">Delete</button>
+        <span>|</span>
+        <button v-on:click="clearForm">Clear</button>
+      </p>
+      Response: {{ resp.product }}<br/>
+      <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+    </div>
+
     <script src="./bundle.js"></script>
   </body>
 </html>
