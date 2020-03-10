@@ -94,7 +94,7 @@ spec:
             - name: SYNC_INTERVAL
               value: "60"
             - name: HOSTDIR
-              value: /hostetc
+              value: /hostdir
           command:
             - sh
             - -c
