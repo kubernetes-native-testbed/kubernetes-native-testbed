@@ -7,7 +7,7 @@ type User struct {
 	Username               string
 	FirstName              string
 	LastName               string
-	Age                    int
+	Age                    int32
 	Addresses              []Address `gorm:"foreignkey:UserUUID;association_foreignkey:UUID"`
 	PasswordHash           string
 	DefaultPaymentInfoUUID string
