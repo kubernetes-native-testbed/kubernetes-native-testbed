@@ -96,7 +96,7 @@ data:
     _EOF_
     sed -i -e "s|image: .*/${MICROSERVICE}:.*|image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}|g" /workspace/source-repo/manifests/${MICROSERVICE}/app.yaml;
     git add --all;
-    git commit -m "Update ${MICROSERVICE} manifest for new image tag ${COMMIT_HASH}";
+    git commit -m "[Update manifest] ${MICROSERVICE} for new image tag ${COMMIT_HASH}";
     git push origin ${MICROSERVICE}-${COMMIT_HASH};
     gh pr create --base develop --title "Update ${MICROSERVICE} manifest for new image tag ${COMMIT_HASH}" --body "RP is opened at $(date +%s)";
 ---
