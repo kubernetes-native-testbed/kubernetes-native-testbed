@@ -1,46 +1,37 @@
-apiVersion: acid.zalan.do/v1
-kind: postgresql
+---
+apiVersion: v1
+kind: Secret
 metadata:
-  name: user-db-cluster
+  name: user-db
+  namespace: user
+  labels:
+    service: user
+    role: db
+type: Opaque
+data:
+  ROOT_PASSWORD: cHJvZHVjdA==
+  DATABASE: cHJvZHVjdA==
+  USER: cHJvZHVjdA==
+  PASSWORD: cHJvZHVjdA==
+---
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlCluster
+metadata:
+  name: user-db
   namespace: user
   labels:
     service: user
     role: db
 spec:
-  dockerImage: registry.opensource.zalan.do/acid/spilo-cdp-12:1.6-p16
-  teamId: "user"
-  volume:
-    size: 10Gi
-    storageClass: rook-ceph-block
-  numberOfInstances: 3
-  users:
-    useruser:
-    - superuser
-    - createdb
-  # enableMasterLoadBalancer: false
-  # enableReplicaLoadBalancer: false
-  databases:
-    user-db: useruser
-  postgresql:
-    version: "11"
-    parameters: # Expert section
-      shared_buffers: "32MB"
-      max_connections: "10"
-      log_statement: "all"
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
-  patroni:
-    initdb:
-      encoding: "UTF8"
-      locale: "en_US.UTF-8"
-      data-checksums: "true"
-    ttl: 30
-    loop_wait: &loop_wait 10
-    retry_timeout: 10
-    maximum_lag_on_failover: 33554432
-
+  replicas: 2
+  secretName: user-db
+  mysqlVersion: "5.7"
+  minAvailable: "10%"
+  podSpec:
+    persistentVolumeClaim:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: rook-ceph-block
+      resources:
+        requests:
+          storage: 4Gi
+---

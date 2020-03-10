@@ -22,6 +22,24 @@ spec:
       containers:
         - name: user
           image: k8stestbed/user:latest
+          env:
+          - name: DB_HOST
+            value: user-db-mysql-master.product.svc.cluster.local
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: user-db
+                key: USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: user-db
+                key: PASSWORD
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: user-db
+                key: DATABASE
           resources:
             requests:
               cpu: 100m
@@ -42,6 +60,8 @@ metadata:
   labels:
     service: user
     role: app
+  annotations:
+    contour.heptio.com/upstream-protocol.h2c: "8080"
 spec:
   type: ClusterIP
   ports:

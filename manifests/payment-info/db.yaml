@@ -1,64 +1,47 @@
----
-apiVersion: v1
-kind: Secret
+apiVersion: acid.zalan.do/v1
+kind: postgresql
 metadata:
-  name: payment-info-db
-  namespace: payment-info
-  labels:
-    service: payment-info
-    role: db
-data:
-  password: cGF5bWVudEluZm8=
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: payment-info-db-config
-  labels:
-    service: payment-info
-    role: db
-data:
-  my.cnf: |-
-    [mysqld]
-    default_authentication_plugin=mysql_native_password
----
-apiVersion: mysql.oracle.com/v1alpha1
-kind: Cluster
-metadata:
-  name: payment-info-db
+  name: payment-info-db-cluster
   namespace: payment-info
   labels:
     service: payment-info
     role: db
 spec:
-  multiMaster: true
-  members: 3
-  config:
-    name: mysql-config
-  rootPasswordSecret:
-    name: payment-info-db
+  dockerImage: registry.opensource.zalan.do/acid/spilo-cdp-12:1.6-p16
+  teamId: "user"
+  volume:
+    size: 10Gi
+    storageClass: rook-ceph-block
+  numberOfInstances: 3
+  users:
+    payment-info-user:
+    - superuser
+    - createdb
+  # enableMasterLoadBalancer: false
+  # enableReplicaLoadBalancer: false
+  databases:
+    payment-info-db: payment-info-user
+  postgresql:
+    version: "11"
+    parameters: # Expert section
+      shared_buffers: "32MB"
+      max_connections: "10"
+      log_statement: "all"
   resources:
-    agent:
-      requests:
-        cpu: 100m
-        memory: 64Mi
-      limits:
-        cpu: 300m
-        memory: 128Mi
-    server:
-      requests:
-        cpu: 500m
-        memory: 512Mi
-      limits:
-        cpu: 1000m
-        memory: 512Mi
-  volumeClaimTemplate:
-    metadata:
-      name: data
-    spec:
-      storageClassName: rook-ceph-block
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 5Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  patroni:
+    initdb:
+      encoding: "UTF8"
+      locale: "en_US.UTF-8"
+      data-checksums: "true"
+    ttl: 30
+    loop_wait: &loop_wait 10
+    retry_timeout: 10
+    maximum_lag_on_failover: 33554432
+
+
