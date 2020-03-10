@@ -113,7 +113,7 @@ spec:
     - name: COMMIT_HASH
       default: xxxxxxxx
     - name: REGISTRY_REPO
-      default: k8stestbed
+      default: registry-harbor-core.infra.svc.cluster.local/library
     resources:
     - name: source-repo
       type: git
