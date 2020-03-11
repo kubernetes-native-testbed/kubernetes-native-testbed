@@ -31,6 +31,7 @@ data:
     $(cat ${ETCDIR}/resolv.conf.default)
     _EOF_
         echo "regenerate host's /etc/resolv.conf"
+        cat ${ETCDIR}/resolv.conf
 
         sleep ${SYNC_INTERVAL};
     done
