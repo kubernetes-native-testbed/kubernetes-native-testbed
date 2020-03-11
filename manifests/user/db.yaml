@@ -17,7 +17,7 @@ spec:
       dataVolumeClaimTemplate:
         accessModes:
         - ReadWriteOnce
-        storageClassName: standard
+        storageClassName: rook-ceph-block
         resources:
           requests:
             storage: 2Gi
@@ -88,7 +88,7 @@ spec:
                   memory: 256Mi
             dataVolumeClaimTemplate:
               accessModes: ["ReadWriteOnce"]
-              storageClassName: standard
+              storageClassName: rook-ceph-block
               resources:
                 requests:
                   storage: 10Gi
@@ -107,7 +107,7 @@ spec:
                   memory: 256Mi
             dataVolumeClaimTemplate:
               accessModes: ["ReadWriteOnce"]
-              storageClassName: standard
+              storageClassName: rook-ceph-block
               resources:
                 requests:
                   storage: 10Gi
