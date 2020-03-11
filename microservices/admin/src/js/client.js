@@ -116,3 +116,132 @@ const product = new Vue({
     },
   }
 });
+
+const user = new Vue({
+  el: '#user',
+  data: {
+    endpoint: defaultEndpoint,
+    form: {
+      uuid: '',
+      username: '',
+      firstName: '',
+      lastName: '',
+      age: 0,
+      passwordHash: '',
+      addresses: [],
+    },
+    resp: {
+      user: [],
+      errorCode: 0,
+      errorMsg: '',
+    }
+  },
+  created: function() {
+      this.client = new UserAPIClient(this.endpoint);
+  },
+  methods: {
+    addAddresses: function() {
+      this.form.addresses.push({value:''});
+    },
+    clearForm: function() {
+      this.form.uuid = '',
+      this.form.username = '',
+      this.form.firstName = '',
+      this.form.lastName = '',
+      this.form.age = null,
+      this.form.passwordHash = '',
+      this.form.addresses = [];
+    },
+    clearResponseField: function() {
+      this.resp.user = [];
+      this.resp.errorCode = 0;
+      this.errorMsg = '';
+    },
+    getUser: function() {
+      this.clearResponseField();
+      const req = new GetRequest();
+      req.setUuid(this.form.uuid);
+      this.client.get(req, {}, (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let u = new Object();
+          u.uuid = resp.getUser().getUuid();
+          u.username = resp.getUser().getUsername();
+          u.firstName = resp.getUser().getFirstName();
+          u.lastName = resp.getUser().getLastName();
+          u.age = resp.getUser().getAge();
+          u.passwordHash = resp.getUser().getPasswordHash();
+          u.addresses = resp.getUser().getAddressList();
+          u.createdAt = resp.getUser().getCreatedat();
+          u.updatedAt = resp.getUser().getUpdatedat();
+          u.deletedAt = resp.getUser().getDeletedat();
+          this.resp.user.push(u);
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    setUser: function() {
+      this.clearResponseField();
+      const req = new SetRequest();
+      const u = new User();
+      u.setUsername(this.form.username);
+      u.setFirstName(this.form.firstName);
+      u.setLastName(this.form.lastName);
+      u.setAge(this.form.age);
+      u.setPasswordHash(this.form.passwordHash);
+
+      addresses = []
+      this.form.addresses.forEach(function(v) {
+        addresses.push(v.value)
+      });
+      u.setAddressesList(addresses);
+      req.setUser(u);
+      this.client.set(req, {}, (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let u = new Object();
+          u.uuid = resp.getUuid();
+          this.resp.user.push(u);
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    updateUser: function() {
+      this.clearResponseField();
+      const req = new UpdateRequest();
+      const u = new User();
+      u.setUsername(this.form.username);
+      u.setFirstName(this.form.firstName);
+      u.setLastName(this.form.lastName);
+      u.setAge(this.form.age);
+      u.setPasswordHash(this.form.passwordHash);
+      u.setAddressesList(this.form.imageURLs);
+      req.setUser(u);
+      this.client.update(req, {}, (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    deleteUser: function() {
+      this.clearResponseField();
+      const req = new DeleteRequest();
+      req.setUuid(this.form.uuid);
+      this.client.delete(req, {}, (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+  }
+});
