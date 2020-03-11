@@ -7,3 +7,5 @@ sh ${CURRENT_DIR}/init_cli.sh
 sh ${CURRENT_DIR}/create_cluster.sh
 sh ${CURRENT_DIR}/init_cluster.sh
 sh ${CURRENT_DIR}/init_credential.sh
+sh ${CURRENT_DIR}/init_workarounds.sh
+
