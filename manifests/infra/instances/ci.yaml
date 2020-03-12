@@ -81,6 +81,13 @@ metadata:
   namespace: tekton-pipelines
 data:
   entrypoint.sh: |-
+    #!/bin/bash
+    # Work around: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/issues/124
+    IS_CHANGED=$(git diff --name-only `git show ${COMMIT_HASH} | grep -e "^Merge: " | sed -e 's|^Merge: ||'` | grep -e "^microservices/${MICROSERVICE}/")
+    if [ -z "${IS_CHANGED}" ]; then
+      exit 0;
+    fi
+
     git checkout -b ${MICROSERVICE}-${COMMIT_HASH};
     git config --global user.email "${GITHUB_USER}@example.com";
     git config --global user.name "${GITHUB_USER}";

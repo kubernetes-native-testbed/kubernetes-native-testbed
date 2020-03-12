@@ -454,37 +454,6 @@ spec:
         beta.kubernetes.io/os: linux
         
 ---
-# Source: kubedb/templates/cleaner.yaml
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: kubedb-operator-cleaner
-  namespace: infra
-  labels:
-    chart: "kubedb-v0.13.0-rc.0"
-    app: "kubedb"
-    release: "kubedb-operator"
-    heritage: "Tiller"
-  annotations:
-    "helm.sh/hook": pre-delete
-    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
-spec:
-  backoffLimit: 3
-  activeDeadlineSeconds: 120
-  template:
-    spec:
-      serviceAccountName: kubedb-operator
-      containers:
-      - name: busybox
-        image: appscode/kubectl:v1.12
-        command:
-          - sh
-          - -c
-          - "sleep 2; kubectl delete validatingwebhookconfigurations validators.kubedb.com || true; kubectl delete mutatingwebhookconfiguration mutators.kubedb.com || true"
-        imagePullPolicy: IfNotPresent
-      restartPolicy: Never
-
----
 # Source: kubedb/templates/apiregistration.yaml
 
 apiVersion: apiregistration.k8s.io/v1beta1
