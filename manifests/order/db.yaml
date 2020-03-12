@@ -2,127 +2,47 @@
 #   helm2 repo add pingcap https://charts.pingcap.org/
 #   helm2 repo update
 #   helm2 fetch --version v1.0.6 pingcap/tidb-cluster
-#   helm2 template --name order-db --namespace order --set pd.storageClassName=rook-ceph-block --set tikv.storageClassName=rook-ceph-block tidb-cluster-v1.0.6.tgz > db.yaml
-#   # add namespace order to each metadata
+#   helm2 template --name order-db --namespace order --set pd.storageClassName=rook-ceph-block --set tikv.storageClassName=rook-ceph-block --set tidb.passwordSecretName=order-db --set tidb.permitHost='%' --set tidb.initSqlConfigMapName=order-db-init-conf --set monitor.create=false --set enableConfigMapRollout=false tidb-cluster-v1.0.6.tgz > db.yaml
+# add namespace order to each metadata
 ---
-# Source: tidb-cluster/templates/monitor-secret.yaml
-
 apiVersion: v1
 kind: Secret
 metadata:
-  name: order-db-monitor
+  name: order-db
   namespace: order
   labels:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/managed-by: Tiller
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
-    helm.sh/chart: tidb-cluster-v1.0.6
     service: order
     role: db
-type: Opaque
-data:
-  username: YWRtaW4=
-  password: YWRtaW4=
-
+stringData:
+  root: order
+  order: order
 ---
-# Source: tidb-cluster/templates/monitor-configmap.yaml
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: order-db-monitor
+  name: order-db-init-conf
   namespace: order
   labels:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/managed-by: Tiller
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
-    helm.sh/chart: tidb-cluster-v1.0.6
     service: order
     role: db
 data:
-  prometheus-config: |-
-    global:
-      scrape_interval: 15s
-      evaluation_interval: 15s
-    scrape_configs:
-      - job_name: 'tidb-cluster'
-        scrape_interval: 15s
-        honor_labels: true
-        kubernetes_sd_configs:
-        - role: pod
-          namespaces:
-            names:
-            - order
-        tls_config:
-          insecure_skip_verify: true
-        relabel_configs:
-        - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_instance]
-          action: keep
-          regex: order-db
-        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
-          action: keep
-          regex: true
-        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
-          action: replace
-          target_label: __metrics_path__
-          regex: (.+)
-        - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
-          action: replace
-          regex: ([^:]+)(?::\d+)?;(\d+)
-          replacement: $1:$2
-          target_label: __address__
-        - source_labels: [__meta_kubernetes_namespace]
-          action: replace
-          target_label: kubernetes_namespace
-        - source_labels: [__meta_kubernetes_pod_node_name]
-          action: replace
-          target_label: kubernetes_node
-        - source_labels: [__meta_kubernetes_pod_ip]
-          action: replace
-          target_label: kubernetes_pod_ip
-        - source_labels: [__meta_kubernetes_pod_name]
-          action: replace
-          target_label: instance
-        - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_instance]
-          action: replace
-          target_label: cluster
-    rule_files:
-      - '/prometheus-rules/rules/*.rules.yml'
-    
-  dashboard-config: |-
-    {
-        "apiVersion": 1,
-        "providers": [
-            {
-                "folder": "",
-                "name": "0",
-                "options": {
-                    "path": "/grafana-dashboard-definitions/tidb"
-                },
-                "orgId": 1,
-                "type": "file"
-            }
-        ]
-    }
-    
-
+  initSql: |-
+    CREATE DATABASE order;
 ---
 # Source: tidb-cluster/templates/pd-configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: order-db-pd-cfa0d77a
+  name: order-db-pd
   namespace: order
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: pd
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 data:
   startup-script: |-
     #!/bin/sh
@@ -225,78 +145,6 @@ data:
     
 
 ---
-# Source: tidb-cluster/templates/tidb-configmap-rollout.yaml
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: order-db-tidb-a4c4bb14
-  namespace: order
-  labels:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/managed-by: Tiller
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: tidb
-    helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
-data:
-  startup-script: |-
-    #!/bin/sh
-    
-    # This script is used to start tidb containers in kubernetes cluster
-    
-    # Use DownwardAPIVolumeFiles to store informations of the cluster:
-    # https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-expose-pod-information/#the-downward-api
-    #
-    #   runmode="normal/debug"
-    #
-    set -uo pipefail
-    
-    
-    
-    ANNOTATIONS="/etc/podinfo/annotations"
-    
-    if [[ ! -f "${ANNOTATIONS}" ]]
-    then
-        echo "${ANNOTATIONS} does't exist, exiting."
-        exit 1
-    fi
-    source ${ANNOTATIONS} 2>/dev/null
-    runmode=${runmode:-normal}
-    if [[ X${runmode} == Xdebug ]]
-    then
-        echo "entering debug mode."
-        tail -f /dev/null
-    fi
-    
-    ARGS="--store=tikv \
-    --host=0.0.0.0 \
-    --path=${CLUSTER_NAME}-pd:2379 \
-    --config=/etc/tidb/tidb.toml
-    "
-    
-    if [[ X${BINLOG_ENABLED:-} == Xtrue ]]
-    then
-        ARGS="${ARGS} --enable-binlog=true"
-    fi
-    
-    SLOW_LOG_FILE=${SLOW_LOG_FILE:-""}
-    if [[ ! -z "${SLOW_LOG_FILE}" ]]
-    then
-        ARGS="${ARGS} --log-slow-query=${SLOW_LOG_FILE:-}"
-    fi
-    
-    echo "start tidb-server ..."
-    echo "/tidb-server ${ARGS}"
-    exec /tidb-server ${ARGS}
-    
-  config-file: |-
-    [log]
-    level = "info"
-    
-
----
 # Source: tidb-cluster/templates/tidb-configmap.yaml
 
 apiVersion: v1
@@ -305,13 +153,13 @@ metadata:
   name: order-db-tidb
   namespace: order
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: tidb
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 data:
   startup-script: |-
     #!/bin/sh
@@ -373,16 +221,16 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: order-db-tikv-3a588779
+  name: order-db-tikv
   namespace: order
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: tikv
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 data:
   startup-script: |-
     #!/bin/sh
@@ -443,13 +291,13 @@ metadata:
   name: order-db-discovery
   namespace: order
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: discovery
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 rules:
 - apiGroups: ["pingcap.com"]
   resources: ["tidbclusters"]
@@ -462,13 +310,13 @@ metadata:
   name: order-db-discovery
   namespace: order
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: discovery
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 subjects:
 - kind: ServiceAccount
   name: order-db-discovery
@@ -483,69 +331,13 @@ metadata:
   name: order-db-discovery
   namespace: order
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: discovery
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
-
----
-# Source: tidb-cluster/templates/monitor-rbac.yaml
-
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: order-db-monitor
-  namespace: order
-  labels:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/managed-by: Tiller
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
-    helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
-rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "watch", "list"]
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: order-db-monitor
-  namespace: order
-  labels:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/managed-by: Tiller
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
-    helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
-subjects:
-- kind: ServiceAccount
-  name: order-db-monitor
-roleRef:
-  kind: Role
-  name: order-db-monitor
-  apiGroup: rbac.authorization.k8s.io
----
-kind: ServiceAccount
-apiVersion: v1
-metadata:
-  name: order-db-monitor
-  namespace: order
-  labels:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/managed-by: Tiller
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
-    helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 
 ---
 # Source: tidb-cluster/templates/discovery-service.yaml
@@ -555,13 +347,13 @@ metadata:
   name: order-db-discovery
   namespace: order
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: discovery
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 spec:
   type: ClusterIP
   ports:
@@ -575,84 +367,6 @@ spec:
     app.kubernetes.io/component: discovery
 
 ---
-# Source: tidb-cluster/templates/monitor-service.yaml
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: order-db-grafana
-  namespace: order
-  labels:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/managed-by: Tiller
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
-    helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
-spec:
-  ports:
-  - name: grafana
-    port: 3000
-    protocol: TCP
-    targetPort: 3000
-  type: NodePort
-  selector:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: order-db-monitor-reloader
-  namespace: order
-  labels:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/managed-by: Tiller
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
-    helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
-spec:
-  ports:
-  - name: reloader
-    port: 9089
-    protocol: TCP
-    targetPort: 9089
-  type: NodePort
-  selector:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: order-db-prometheus
-  namespace: order
-  labels:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/managed-by: Tiller
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
-    helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
-spec:
-  ports:
-  - name: prometheus
-    port: 9090
-    protocol: TCP
-    targetPort: 9090
-  type: NodePort
-  selector:
-    app.kubernetes.io/name: tidb-cluster
-    app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
-
----
 # Source: tidb-cluster/templates/tidb-service.yaml
 apiVersion: v1
 kind: Service
@@ -660,13 +374,13 @@ metadata:
   name: order-db-tidb
   namespace: order
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: tidb
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 spec:
   type: NodePort
   ports:
@@ -691,13 +405,13 @@ metadata:
   name: order-db-discovery
   namespace: order
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: discovery
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 spec:
   # don't modify this replicas
   replicas: 1
@@ -735,208 +449,71 @@ spec:
                 fieldPath: metadata.namespace
 
 ---
-# Source: tidb-cluster/templates/monitor-deployment.yaml
+# Source: tidb-cluster/templates/tidb-initializer-job.yaml
 
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: order-db-monitor
+  name: order-db-tidb-initializer
   namespace: order
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
-    app.kubernetes.io/component: monitor
+    app.kubernetes.io/component: tidb-initializer
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-    rollingUpdate: null
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: tidb-cluster
-      app.kubernetes.io/instance: order-db
-      app.kubernetes.io/component: monitor
+  backoffLimit: 1000
   template:
     metadata:
       labels:
         app.kubernetes.io/name: tidb-cluster
         app.kubernetes.io/instance: order-db
-        app.kubernetes.io/component: monitor
+        app.kubernetes.io/component: tidb-initializer
     spec:
-      serviceAccount: order-db-monitor
-      initContainers:
-      - name: monitor-initializer
-        image: pingcap/tidb-monitor-initializer:v3.0.5
-        imagePullPolicy: Always
-        env:
-        - name: GF_PROVISIONING_PATH
-          value: /grafana-dashboard-definitions/tidb
-        - name: GF_DATASOURCE_PATH
-          value: /etc/grafana/provisioning/datasources
-        - name: TIDB_CLUSTER_NAME
-          value: order-db
-        - name: TIDB_ENABLE_BINLOG
-          value: "false"
-        - name:  PROM_CONFIG_PATH
-          value: /prometheus-rules
-        - name: PROM_PERSISTENT_DIR
-          value: /data
-        - name: TIDB_VERSION
-          value: pingcap/tidb:v3.0.5
-        - name: GF_K8S_PROMETHEUS_URL
-          value: http://prometheus-k8s.monitoring.svc:9090
-        - name: GF_TIDB_PROMETHEUS_URL
-          value: http://127.0.0.1:9090
-        - name: TIDB_CLUSTER_NAMESPACE
-          value: order
+      restartPolicy: OnFailure
+      containers:
+      - name: mysql-client
+        image: tnir/mysqlclient
+        imagePullPolicy: IfNotPresent
         command:
-        - /bin/sh
+        - python
         - -c
         - |
-          mkdir -p /data/prometheus /data/grafana
-          chmod 777 /data/prometheus /data/grafana
-          /usr/bin/init.sh
-        securityContext:
-          runAsUser: 0
+          import os, MySQLdb
+          host = 'order-db-tidb'
+          permit_host = "%"
+          port = 4000
+          password_dir = '/etc/tidb/password'
+          conn = MySQLdb.connect(host=host, port=port, user='root', connect_timeout=5)
+          for file in os.listdir(password_dir):
+              if file.startswith('.'):
+                  continue
+              user = file
+              with open(os.path.join(password_dir, file), 'r') as f:
+                  password = f.read()
+              if user == 'root':
+                  conn.cursor().execute("set password for 'root'@'%%' = %s;", (password,))
+              else:
+                  conn.cursor().execute("create user %s@%s identified by %s;", (user, permit_host, password,))
+          if permit_host != '%%':
+              conn.cursor().execute("update mysql.user set Host=%s where User='root';", (permit_host,))
+          conn.cursor().execute("flush privileges;")
+          conn.commit()
+          
         volumeMounts:
-        - mountPath: /grafana-dashboard-definitions/tidb
-          name: grafana-dashboard
-          readOnly: false
-        - name: prometheus-rules
-          mountPath: /prometheus-rules
-          readOnly: false
-        - name: monitor-data
-          mountPath: /data
-        - name: datasource
-          mountPath: /etc/grafana/provisioning/datasources
-          readOnly: false
+        - name: password
+          mountPath: /etc/tidb/password
+          readOnly: true
         resources:
           {}
           
-      containers:
-      - name: prometheus
-        image: prom/prometheus:v2.11.1
-        imagePullPolicy: IfNotPresent
-        resources:
-            limits: {}
-            requests: {}
-            
-        command:
-        - /bin/prometheus
-        - --web.enable-admin-api
-        - --web.enable-lifecycle
-        - --log.level=info
-        - --config.file=/etc/prometheus/prometheus.yml
-        - --storage.tsdb.path=/data/prometheus
-        - --storage.tsdb.retention=12d
-        ports:
-        - name: prometheus
-          containerPort: 9090
-          protocol: TCP
-        # `TZ` is unused in Prometheus Docker image, we set it here just to keep consistency
-        env:
-        - name: TZ
-          value: UTC
-        volumeMounts:
-          - name: prometheus-config
-            mountPath: /etc/prometheus
-            readOnly: true
-          - name: monitor-data
-            mountPath: /data
-          - name: prometheus-rules
-            mountPath: /prometheus-rules
-            readOnly: false
-      - name: reloader
-        image: pingcap/tidb-monitor-reloader:v1.0.1
-        imagePullPolicy: IfNotPresent
-        command:
-        - /bin/reload
-        - --root-store-path=/data
-        - --sub-store-path=pingcap/tidb:v3.0.5
-        - --watch-path=/prometheus-rules/rules
-        - --prometheus-url=http://127.0.0.1:9090
-        ports:
-        - name: reloader
-          containerPort: 9089
-          protocol: TCP
-        volumeMounts:
-          - name: prometheus-rules
-            mountPath: /prometheus-rules
-            readOnly: false
-          - name: monitor-data
-            mountPath: /data
-        resources:
-          null
-          
-      - name: grafana
-        image: grafana/grafana:6.0.1
-        imagePullPolicy: IfNotPresent
-        resources:
-            limits: {}
-            requests: {}
-            
-        ports:
-        - name: grafana
-          containerPort: 3000
-          protocol: TCP
-        env:
-        - name: GF_PATHS_DATA
-          value: /data/grafana
-        - name: GF_SECURITY_ADMIN_USER
-          valueFrom:
-            secretKeyRef:
-              name: order-db-monitor
-              key: username
-        - name: GF_SECURITY_ADMIN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: order-db-monitor
-              key: password
-        - name: GF_AUTH_ANONYMOUS_ENABLED
-          value: "true"
-        - name: GF_AUTH_ANONYMOUS_ORG_NAME
-          value: "Main Org."
-        - name: GF_AUTH_ANONYMOUS_ORG_ROLE
-          value: "Viewer"
-        - name: TZ
-          value: UTC
-        volumeMounts:
-          - name: monitor-data
-            mountPath: /data
-          - mountPath: /etc/grafana/provisioning/datasources
-            name: datasource
-            readOnly: false
-          - mountPath: /etc/grafana/provisioning/dashboards
-            name: dashboards-provisioning
-            readOnly: false
-          - mountPath: /grafana-dashboard-definitions/tidb
-            name: grafana-dashboard
-            readOnly: false
       volumes:
-      - name: monitor-data
-        emptyDir: {}
-      - name: prometheus-config
-        configMap:
-          name: order-db-monitor
-          items:
-          - key: prometheus-config
-            path: prometheus.yml
-      - emptyDir: {}
-        name: datasource
-      - configMap:
-          name: order-db-monitor
-          items:
-          - key: dashboard-config
-            path: dashboards.yaml
-        name: dashboards-provisioning
-      - emptyDir: {}
-        name: prometheus-rules
-      - emptyDir: {}
-        name: grafana-dashboard
+      - name: password
+        secret:
+          secretName: order-db
 
 ---
 # Source: tidb-cluster/templates/tidb-cluster.yaml
@@ -945,18 +522,14 @@ kind: TidbCluster
 metadata:
   name: order-db
   namespace: order
-  annotations:
-    pingcap.com/pd.order-db-pd.sha: "cfa0d77a"
-    pingcap.com/tikv.order-db-tikv.sha: "3a588779"
-    pingcap.com/tidb.order-db-tidb.sha: "a4c4bb14"
   labels:
+    service: order
+    role: db
     app.kubernetes.io/name: tidb-cluster
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/instance: order-db
     app.kubernetes.io/component: tidb-cluster
     helm.sh/chart: tidb-cluster-v1.0.6
-    service: order
-    role: db
 spec:
   pvReclaimPolicy: Retain
   timezone: UTC
@@ -1041,7 +614,27 @@ spec:
 
 
 ---
+# Source: tidb-cluster/templates/monitor-configmap.yaml
+
+
+---
+# Source: tidb-cluster/templates/monitor-deployment.yaml
+
+
+---
 # Source: tidb-cluster/templates/monitor-pvc.yaml
+
+
+---
+# Source: tidb-cluster/templates/monitor-rbac.yaml
+
+
+---
+# Source: tidb-cluster/templates/monitor-secret.yaml
+
+
+---
+# Source: tidb-cluster/templates/monitor-service.yaml
 
 
 ---
@@ -1069,7 +662,7 @@ spec:
 
 
 ---
-# Source: tidb-cluster/templates/tidb-initializer-job.yaml
+# Source: tidb-cluster/templates/tidb-configmap-rollout.yaml
 
 
 ---
