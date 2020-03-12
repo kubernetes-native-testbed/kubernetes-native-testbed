@@ -85,6 +85,8 @@ data:
     # Work around: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/issues/124
     IS_CHANGED=$(git diff --name-only `git show ${COMMIT_HASH} | grep -e "^Merge: " | sed -e 's|^Merge: ||'` | grep -e "^microservices/${MICROSERVICE}/")
     if [ -z "${IS_CHANGED}" ]; then
+      echo "commit ${COMMIT_HASH} is not for ${MICROSERVICE} microservices."
+      git diff --name-only `git show ${COMMIT_HASH} | grep -e "^Merge: " | sed -e 's|^Merge: ||'`
       exit 0;
     fi
 
