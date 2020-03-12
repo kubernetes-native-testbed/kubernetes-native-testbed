@@ -23,17 +23,22 @@ spec:
         - name: payment-info-app
           image: registry-harbor-core.infra.svc.cluster.local/library/payment-info:1ea51ec8dff5fdadda280861d31b139812355299
           env:
-          - name: DB_HOST
-            value: 127.0.0.1
-          - name: DB_PORT
-            value: "6443"
-          - name: DB_USERNAME
-            value: root
-          - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: payment-info-db
-                key: password
+            - name: DB_HOST
+              value: payment-info-db.payment-info.svc.cluster.local
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: payment-info-user.payment-info-db.credentials
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: payment-info-user.payment-info-db.credentials
+                  key: password
+            - name: DB_NAME
+              value: payment_info_db
           resources:
             requests:
               cpu: 100m
