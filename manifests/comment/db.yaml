@@ -31,6 +31,6 @@ metadata:
     service: comment
     role: db
 type: Opaque
-data:
-  password: Y29tbWVudA==
-  username: Y29tbWVudA==
+stringData:
+  username: comment
+  password: comment
