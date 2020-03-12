@@ -23,23 +23,25 @@ spec:
         - name: user
           image: registry-harbor-core.infra.svc.cluster.local/library/user:5496e9e1d507f6a8e8a0782b798409b2492d6a7d
           env:
-          - name: DB_HOST
-            value: user-db-mysql-master.user.svc.cluster.local
-          - name: DB_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: user-db
-                key: USER
-          - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: user-db
-                key: PASSWORD
-          - name: DB_NAME
-            valueFrom:
-              secretKeyRef:
-                name: user-db
-                key: DATABASE
+            - name: DB_HOST
+              value: user-db-mysql-master.user.svc.cluster.local
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: user-db
+                  key: USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: user-db
+                  key: PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: user-db
+                  key: DATABASE
           resources:
             requests:
               cpu: 100m

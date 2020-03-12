@@ -22,6 +22,23 @@ spec:
       containers:
         - name: order
           image: registry-harbor-core.infra.svc.cluster.local/library/order:5496e9e1d507f6a8e8a0782b798409b2492d6a7d
+          env:
+            - name: DB_HOST
+              value: order-db-tidb.order.order.svc.cluster.local
+            - name: DB_PORT
+              value: "4000"
+            - name: DB_USERNAME
+              value: order
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: order-db
+                  key: order
+            - name: DB_NAME
+              valueFrom:
+                configMapRef:
+                  name: order-db-init-conf
+                  key: dbname
           resources:
             requests:
               cpu: 100m
