@@ -26,6 +26,7 @@ metadata:
     service: order
     role: db
 data:
+  dbname: order
   initSql: |-
     CREATE DATABASE order;
 ---
