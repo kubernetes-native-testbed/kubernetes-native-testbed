@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: check-scripts
+  namespace: comment
+  labels:
+    service: comment
+    role: check
+data:
+  check.sh: |-
+    #!/bin/bash
+    echo "check script running..."
+    mongo --host ${DB_HOST} --port ${DB_PORT} -u ${DB_USERNAME} -p ${DB_PASSWORD} --eval "db.getMongo()"
+    mongo --host ${DB_HOST} --port ${DB_PORT} -u ${DB_USERNAME} -p ${DB_PASSWORD} --eval "printjson(db.serverStatus())"
+    echo "show dbs" | mongo --host ${DB_HOST} --port ${DB_PORT} -u ${DB_USERNAME} -p ${DB_PASSWORD}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: check-job
+  namespace: comment
+  labels:
+    service: comment
+    role: check
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 30
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  suspend: false
+  jobTemplate:
+    spec:
+      completions: 1
+      parallelism: 1
+      backoffLimit: 10
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: check-container
+            image: mysql:5.7
+            command:
+            - /scripts/check.sh
+            env:
+            - name: DB_HOST
+              value: comment-db.comment.svc.cluster.local
+            - name: DB_PORT
+              value: "27017"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: comment-db
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: comment-db
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                configMapRef:
+                  name: comment-db-init-conf
+                  key: dbname
+            volumeMounts:
+            - name: scripts-volume
+              mountPath: /scripts
+          volumes:
+            - name: scripts-volume
+              configMap:
+                name: check-scripts
+                defaultMode: 493 # mode 755

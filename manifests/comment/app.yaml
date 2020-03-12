@@ -22,6 +22,26 @@ spec:
       containers:
         - name: comment
           image: registry-harbor-core.infra.svc.cluster.local/library/comment:1ea51ec8dff5fdadda280861d31b139812355299
+          env:
+            - name: DB_HOST
+              value: comment-db.comment.svc.cluster.local
+            - name: DB_PORT
+              value: "27017"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: comment-db
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: comment-db
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                configMapRef:
+                  name: comment-db-init-conf
+                  key: dbname
           resources:
             requests:
               cpu: 100m

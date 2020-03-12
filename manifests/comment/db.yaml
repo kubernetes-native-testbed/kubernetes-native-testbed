@@ -8,6 +8,9 @@ metadata:
     service: comment
     role: db
 spec:
+  replicas: 3
+  replicaSet:
+    name: rs0
   version: "4.1"
   storageType: Durable
   storage:
@@ -18,14 +21,40 @@ spec:
       requests:
         storage: 3Gi
   databaseSecret:
-    secretName: comment-db-auth
+    secretName: comment-db
   terminationPolicy: Pause
-
+  init:
+    scriptSource:
+      configMap:
+        name: comment-db-init-script
+  podTemplate:
+    spec:
+      livenessProbe:
+        exec:
+          command:
+          - mongo
+          - --eval
+          - db.adminCommand('ping')
+        failureThreshold: 3
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      readinessProbe:
+        exec:
+          command:
+          - mongo
+          - --eval
+          - db.adminCommand('ping')
+        failureThreshold: 3
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources: {}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: comment-db-auth
+  name: comment-db
   namespace: comment
   labels:
     service: comment
@@ -34,3 +63,17 @@ type: Opaque
 stringData:
   username: comment
   password: comment
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: comment-db-init-script
+  namespace: comment
+  labels:
+    service: comment
+    role: db
+data:
+  init.js: |-
+    use comment-db;
+    db.createCollection('comment-collection');
+
