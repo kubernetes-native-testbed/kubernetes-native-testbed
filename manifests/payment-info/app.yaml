@@ -50,7 +50,7 @@ spec:
           ports:
             - containerPort: 6443
         - name: payment-info-app
-          image: registry-harbor-core.infra.svc.cluster.local/library/payment-info:1ea51ec8dff5fdadda280861d31b139812355299
+          image: registry-harbor-core.infra.svc.cluster.local/library/payment-info:5496e9e1d507f6a8e8a0782b798409b2492d6a7d
           env:
           - name: DB_HOST
             value: 127.0.0.1
