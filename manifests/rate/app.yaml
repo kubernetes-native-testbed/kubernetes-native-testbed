@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: rate
-          image: registry-harbor-core.infra.svc.cluster.local/library/rate:1ea51ec8dff5fdadda280861d31b139812355299
+          image: registry-harbor-core.infra.svc.cluster.local/library/rate:458720d8212cb24c349df505bc6f6453a8e8bbb6
           env:
           - name: SENTINEL_HOST
             value: rfs-rate-kvs.rate.svc.cluster.local
