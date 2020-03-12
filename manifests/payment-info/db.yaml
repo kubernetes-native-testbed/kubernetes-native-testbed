@@ -1,14 +1,14 @@
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: payment-info-db-cluster
+  name: payment-info-db
   namespace: payment-info
   labels:
     service: payment-info
     role: db
 spec:
   dockerImage: registry.opensource.zalan.do/acid/spilo-cdp-12:1.6-p16
-  teamId: "user"
+  teamId: "payment-info"
   volume:
     size: 10Gi
     storageClass: rook-ceph-block
@@ -17,10 +17,10 @@ spec:
     payment-info-user:
     - superuser
     - createdb
-  # enableMasterLoadBalancer: false
-  # enableReplicaLoadBalancer: false
+  enableMasterLoadBalancer: false
+  enableReplicaLoadBalancer: false
   databases:
-    payment-info-db: payment-info-user
+    payment_info_db: payment-info-user
   postgresql:
     version: "11"
     parameters: # Expert section
