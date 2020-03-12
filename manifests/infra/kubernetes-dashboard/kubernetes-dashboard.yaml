@@ -195,6 +195,7 @@ spec:
           args:
             - --namespace=kubernetes-dashboard
             - --enable-insecure-login=true
+            - --enable-skip-login=true
             - --insecure-bind-address=0.0.0.0
             - --insecure-port=8080
             # Uncomment the following line to manually specify Kubernetes API server Host
