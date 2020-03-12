@@ -1,0 +1,65 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: check-scripts
+  namespace: rate
+  labels:
+    service: rate
+    role: check
+data:
+  check.sh: |-
+    #!/bin/bash
+    echo "check script running..."
+    redis-cli -h ${DB_HOST} -p ${DB_PORT} -a ${DB_PASSWORD} -r 10 ping
+    redis-cli -h ${DB_HOST} -p ${DB_PORT} -a ${DB_PASSWORD} info
+    redis-cli -h ${DB_HOST} -p ${DB_PORT} -a ${DB_PASSWORD} sentinel masters
+    redis-cli -h ${DB_HOST} -p ${DB_PORT} -a ${DB_PASSWORD} sentinel slaves mymaster
+    redis-cli -h ${DB_HOST} -p ${DB_PORT} -a ${DB_PASSWORD} sentinel replicas mymaster
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: check-job
+  namespace: rate
+  labels:
+    service: rate
+    role: check
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 30
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  suspend: false
+  jobTemplate:
+    spec:
+      completions: 1
+      parallelism: 1
+      backoffLimit: 10
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: check-container
+            image: redis:5.0
+            command:
+            - /scripts/check.sh
+            env:
+            - name: DB_HOST
+              value: rfs-rate-kvs.rate.svc.cluster.local
+            - name: DB_PORT
+              value: "26379"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rate-kvs
+                  key: password
+            volumeMounts:
+            - name: scripts-volume
+              mountPath: /scripts
+          volumes:
+            - name: scripts-volume
+              configMap:
+                name: check-scripts
+                defaultMode: 493 # mode 755

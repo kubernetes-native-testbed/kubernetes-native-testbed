@@ -8,8 +8,8 @@ metadata:
     service: rate
     role: kvs
 type: Opaque
-data:
-  PASSWORD: cmF0ZQ==
+stringData:
+  password: rate
 ---
 apiVersion: databases.spotahome.com/v1
 kind: RedisFailover
@@ -20,6 +20,8 @@ metadata:
     service: rate
     role: kvs
 spec:
+  auth:
+    secretPath: rate-kvs
   sentinel:
     replicas: 3
     image: redis:5.0
