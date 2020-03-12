@@ -24,7 +24,7 @@ spec:
           image: registry-harbor-core.infra.svc.cluster.local/library/user:05de42feb11cbe28d3e6ad7c20cb6d1e9f35a1fa
           env:
           - name: DB_HOST
-            value: user-db-mysql-master.product.svc.cluster.local
+            value: user-db-mysql-master.user.svc.cluster.local
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:
