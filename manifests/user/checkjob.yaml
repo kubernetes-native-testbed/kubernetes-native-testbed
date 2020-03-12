@@ -11,8 +11,8 @@ data:
   check.sh: |-
     #!/bin/bash
     echo "check script running..."
-    mysql -u ${DB_USERNAME} -p${DB_PASSWORD} -D ${DB_NAME} -h ${DB_HOST} -e "show tables\G"
-    mysql -u ${DB_USERNAME} -p${DB_PASSWORD} -D ${DB_NAME} -h ${DB_HOST} -e "show databases\G"
+    mysql -u ${DB_USERNAME} -p${DB_PASSWORD} -D ${DB_NAME} -h ${DB_HOST} -P ${DB_PORT} -e "show tables\G"
+    mysql -u ${DB_USERNAME} -p${DB_PASSWORD} -D ${DB_NAME} -h ${DB_HOST} -P ${DB_PORT} -e "show databases\G"
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -45,6 +45,8 @@ spec:
             env:
             - name: DB_HOST
               value: user-db-mysql-master.user.svc.cluster.local
+            - name: DB_PORT
+              value: "3306"
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:

@@ -3,9 +3,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: check-scripts
-  namespace: product
+  namespace: order
   labels:
-    service: product
+    service: order
     role: check
 data:
   check.sh: |-
@@ -18,9 +18,9 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: check-job
-  namespace: product
+  namespace: order
   labels:
-    service: product
+    service: order
     role: check
 spec:
   schedule: "*/1 * * * *"
@@ -44,24 +44,21 @@ spec:
             - /scripts/check.sh
             env:
             - name: DB_HOST
-              value: product-db-mysql-master.product.svc.cluster.local
+              value: order-db-tidb.order.order.svc.cluster.local
             - name: DB_PORT
-              value: "3306"
+              value: "4000"
             - name: DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: product-db
-                  key: USER
+              value: order
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: product-db
-                  key: PASSWORD
+                  name: order-db
+                  key: order
             - name: DB_NAME
               valueFrom:
-                secretKeyRef:
-                  name: product-db
-                  key: DATABASE
+                configMapRef:
+                  name: order-db-init-conf
+                  key: dbname
             volumeMounts:
             - name: scripts-volume
               mountPath: /scripts
