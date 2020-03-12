@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: cart
-          image: registry-harbor-core.infra.svc.cluster.local/library/cart:1ea51ec8dff5fdadda280861d31b139812355299
+          image: registry-harbor-core.infra.svc.cluster.local/library/cart:458720d8212cb24c349df505bc6f6453a8e8bbb6
           resources:
             requests:
               cpu: 100m
