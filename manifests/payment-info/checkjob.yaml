@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: check-scripts
+  namespace: payment-info
+  labels:
+    service: payment-info
+    role: check
+data:
+  check.sh: |-
+    #!/bin/bash
+    echo "check script running..."
+
+    export PGPASSWORD=${DB_PASSWORD}
+    psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_NAME} -c "\l"
+    psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_NAME} -c "\dt"
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: check-job
+  namespace: payment-info
+  labels:
+    service: payment-info
+    role: check
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 30
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  suspend: false
+  jobTemplate:
+    spec:
+      completions: 1
+      parallelism: 1
+      backoffLimit: 10
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: check-container
+            image: postgres:11.7
+            command:
+            - /scripts/check.sh
+            env:
+            - name: DB_HOST
+              value: payment-info-db.payment-info.svc.cluster.local
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: payment-info-user.payment-info-db.credentials
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: payment-info-user.payment-info-db.credentials
+                  key: password
+            - name: DB_NAME
+              value: payment_info_db
+            volumeMounts:
+            - name: scripts-volume
+              mountPath: /scripts
+          volumes:
+            - name: scripts-volume
+              configMap:
+                name: check-scripts
+                defaultMode: 493 # mode 755

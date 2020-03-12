@@ -1,64 +1,94 @@
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: payment-info-db
-  namespace: payment-info
-  labels:
-    service: payment-info
-    role: db
-data:
-  password: cGF5bWVudEluZm8=
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: payment-info-db-config
-  labels:
-    service: payment-info
-    role: db
-data:
-  my.cnf: |-
-    [mysqld]
-    default_authentication_plugin=mysql_native_password
----
-apiVersion: mysql.oracle.com/v1alpha1
-kind: Cluster
-metadata:
-  name: payment-info-db
-  namespace: payment-info
-  labels:
-    service: payment-info
-    role: db
-spec:
-  multiMaster: true
-  members: 3
-  config:
-    name: mysql-config
-  rootPasswordSecret:
-    name: payment-info-db
-  resources:
-    agent:
-      requests:
-        cpu: 100m
-        memory: 64Mi
-      limits:
-        cpu: 300m
-        memory: 128Mi
-    server:
-      requests:
-        cpu: 500m
-        memory: 512Mi
-      limits:
-        cpu: 1000m
-        memory: 512Mi
-  volumeClaimTemplate:
-    metadata:
-      name: data
-    spec:
-      storageClassName: rook-ceph-block
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 5Gi
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: payment-info-db
+#   namespace: payment-info
+#   labels:
+#     service: payment-info
+#     role: db
+# data:
+#   password: cGF5bWVudEluZm8=
+# ---
+# kind: ConfigMap
+# apiVersion: v1
+# metadata:
+#   name: payment-info-db-config
+#   labels:
+#     service: payment-info
+#     role: db
+# data:
+#   my.cnf: |-
+#     [mysqld]
+#     default_authentication_plugin=mysql_native_password
+# ---
+# apiVersion: mysql.oracle.com/v1alpha1
+# kind: Cluster
+# metadata:
+#   name: payment-info-db
+#   namespace: payment-info
+#   labels:
+#     service: payment-info
+#     role: db
+# spec:
+#   multiMaster: true
+#   members: 3
+#   config:
+#     name: mysql-config
+#   rootPasswordSecret:
+#     name: payment-info-db
+#   resources:
+#     agent:
+#       requests:
+#         cpu: 100m
+#         memory: 64Mi
+#       limits:
+#         cpu: 300m
+#         memory: 128Mi
+#     server:
+#       requests:
+#         cpu: 500m
+#         memory: 512Mi
+#       limits:
+#         cpu: 1000m
+#         memory: 512Mi
+#   volumeClaimTemplate:
+#     metadata:
+#       name: data
+#     spec:
+#       storageClassName: rook-ceph-block
+#       accessModes:
+#         - ReadWriteOnce
+#       resources:
+#         requests:
+#           storage: 5Gi
+# ---
+#         - name: mysqlrouter
+#           image: mysql/mysql-router:8.0.12
+#           env:
+#           - name: MYSQL_PASSWORD
+#             valueFrom:
+#               secretKeyRef:
+#                 name: payment-info-db
+#                 key: password
+#           - name: MYSQL_USER
+#             value: root
+#           - name: MYSQL_PORT
+#             value: "3306"
+#           - name: MYSQL_HOST
+#             value: payment-info-db-0.payment-info-db.payment-info.svc.cluster.local
+#           - name: MYSQL_INNODB_NUM_MEMBERS
+#             value: "3"
+#           command:
+#           - "/bin/bash"
+#           - "-cx"
+#           - "exec /run.sh mysqlrouter"
+#           resources:
+#             requests:
+#               cpu: 100m
+#               memory: 256Mi
+#           readinessProbe:
+#             tcpSocket:
+#               port: 6443
+#           ports:
+#             - containerPort: 6443

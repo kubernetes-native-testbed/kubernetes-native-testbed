@@ -20,35 +20,6 @@ spec:
         role: app
     spec:
       containers:
-        - name: mysqlrouter
-          image: mysql/mysql-router:8.0.12
-          env:
-          - name: MYSQL_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: payment-info-db
-                key: password
-          - name: MYSQL_USER
-            value: root
-          - name: MYSQL_PORT
-            value: "3306"
-          - name: MYSQL_HOST
-            value: payment-info-db-0.payment-info-db.payment-info.svc.cluster.local
-          - name: MYSQL_INNODB_NUM_MEMBERS
-            value: "3"
-          command:
-          - "/bin/bash"
-          - "-cx"
-          - "exec /run.sh mysqlrouter"
-          resources:
-            requests:
-              cpu: 100m
-              memory: 256Mi
-          readinessProbe:
-            tcpSocket:
-              port: 6443
-          ports:
-            - containerPort: 6443
         - name: payment-info-app
           image: registry-harbor-core.infra.svc.cluster.local/library/payment-info:1ea51ec8dff5fdadda280861d31b139812355299
           env:
