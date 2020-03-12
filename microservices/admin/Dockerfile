@@ -8,5 +8,5 @@ RUN yarn install
 RUN yarn run webpack
 
 FROM nginx:1.17
-COPY --from=builder /app/public/bundle.js /usr/share/nginx/html
-COPY public/index.html /usr/share/nginx/html
+COPY --from=builder /app/public/bundle.js /usr/share/nginx/html/
+COPY public/index.html /usr/share/nginx/html/
