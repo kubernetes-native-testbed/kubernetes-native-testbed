@@ -8,11 +8,11 @@ metadata:
     service: product
     role: db
 type: Opaque
-data:
-  ROOT_PASSWORD: cHJvZHVjdA==
-  DATABASE: cHJvZHVjdA==
-  USER: cHJvZHVjdA==
-  PASSWORD: cHJvZHVjdA==
+stringData:
+  ROOT_PASSWORD: product
+  DATABASE: product
+  USER: product
+  PASSWORD: product
 ---
 apiVersion: mysql.presslabs.org/v1alpha1
 kind: MysqlCluster
