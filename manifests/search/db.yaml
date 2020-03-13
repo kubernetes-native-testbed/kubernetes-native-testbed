@@ -64,6 +64,9 @@ spec:
     tls:
       selfSignedCertificate:
         disabled: true
+  config:
+    server.host: "0.0.0.0"
+    server.basePath: "/search/kibana"
   podTemplate:
     metadata:
       labels:
