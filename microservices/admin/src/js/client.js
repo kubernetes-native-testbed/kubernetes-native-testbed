@@ -2,7 +2,7 @@ const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRe
 const {ProductAPIClient} = require('./protobuf/product_grpc_web_pb.js');
 const {Empty} = require('google-protobuf/google/protobuf/empty_pb.js');
 
-const defaultEndpoint = 'https://34.84.105.184.nip.io';
+const defaultEndpoint = 'https://testbed.34.84.105.184.nip.io';
 
 const product = new Vue({
   el: '#product',
