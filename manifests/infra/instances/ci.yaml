@@ -82,7 +82,6 @@ metadata:
 data:
   check_target_microservice.sh: |-
     #!/bin/bash
-    # Work around: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/issues/124
     git fetch --unshallow
     echo Changed file at commit ${COMMIT_HASH}
     git diff --name-only `git show ${COMMIT_HASH} --pretty="MERGE: %P"| grep -e "^MERGE: " | sed -e 's|^MERGE: ||'`
