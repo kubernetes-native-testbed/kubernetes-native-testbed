@@ -66,11 +66,11 @@ spec:
           type: topic
           name: point-topic
           patternType: literal
-        operation: "*" # Read, Write, Describe, Create, etc.
+        operation: "All"
         host: "*"
       - resource:
           type: topic
           name: test-topic
           patternType: literal
-        operation: Read
+        operation: Read # "Read", "Write", "Create", "Delete", "Alter", "Describe", "ClusterAction", "AlterConfigs", "DescribeConfigs", "IdempotentWrite", "All"
         host: "*"

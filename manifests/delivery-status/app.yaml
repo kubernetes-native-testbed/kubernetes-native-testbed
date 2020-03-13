@@ -22,24 +22,6 @@ spec:
       containers:
         - name: delivery-status-app
           image: registry-harbor-core.infra.svc.cluster.local/library/delivery-status:5e63eb6068e70266fa92d2f90bb66f24f305fd2e
-          env:
-          - name: DB_HOST
-            value: delivery-status-db-mysql-master.delivery-status.svc.cluster.local
-          - name: DB_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: delivery-status-db
-                key: USER
-          - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: delivery-status-db
-                key: PASSWORD
-          - name: DB_NAME
-            valueFrom:
-              secretKeyRef:
-                name: delivery-status-db
-                key: DATABASE
           resources:
             requests:
               cpu: 100m
