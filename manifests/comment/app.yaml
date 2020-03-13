@@ -62,6 +62,8 @@ metadata:
   labels:
     service: comment
     role: app
+  annotations:
+    contour.heptio.com/upstream-protocol.h2c: "8080"
 spec:
   type: ClusterIP
   ports:
