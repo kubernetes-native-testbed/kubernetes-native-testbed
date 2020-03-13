@@ -2,12 +2,12 @@ const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRe
 const {ProductAPIClient} = require('./protobuf/product_grpc_web_pb.js');
 const {Empty} = require('google-protobuf/google/protobuf/empty_pb.js');
 
-const defaultEndpoint = 'https://testbed.amsy.dev/product';
+const defaultEndpoint = 'https://34.84.105.184.nip.io';
 
 const product = new Vue({
   el: '#product',
   data: {
-    endpoint: defaultEndpoint,
+    endpoint: defaultEndpoint + "/product",
     form: {
       uuid: '',
       name: '',
@@ -120,7 +120,7 @@ const product = new Vue({
 const user = new Vue({
   el: '#user',
   data: {
-    endpoint: defaultEndpoint,
+    endpoint: defaultEndpoint + "/user",
     form: {
       uuid: '',
       username: '',
