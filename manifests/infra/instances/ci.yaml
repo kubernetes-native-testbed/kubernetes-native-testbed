@@ -119,6 +119,7 @@ apiVersion: tekton.dev/v1alpha1
 kind: Condition
 metadata:
   name: check-is-target-microservice
+  namespace: tekton-pipelines
 spec:
   params:
     - name: MICROSERVICE
@@ -127,14 +128,14 @@ spec:
     - name: source-repo
       type: git
   check:
-    image: alpine
     workingdir: /workspace/source-repo
+    image: k8stestbed/github-cli:latest
     env:
       - name: MICROSERVICE
         value: $(params.MICROSERVICE)
       - name: COMMIT_HASH
         value: $(params.COMMIT_HASH)
-    script: git fetch --unshallow; if [ -z "$(git diff --name-only `git show $(params.COMMIT_HASH) --pretty="MERGE: %P"| grep -e "^MERGE: " | sed -e 's|^MERGE: ||'` | grep -e "^microservices/$(params.MICROSERVICE)/")" ]; then exit 1; fi
+    script: git fetch --unshallow; IS_CHANGED=$(git diff --name-only `git show ${COMMIT_HASH} --pretty="%P"` | grep -e "^microservices/${MICROSERVICE}/"); if [ -z "${IS_CHANGED}" ]; then exit 1; fi
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
@@ -235,7 +236,6 @@ spec:
           - name: COMMIT_HASH
             value: $(params.COMMIT_HASH)
         resources:
-          inputs:
           - name: source-repo
             resource: source-repo
   - name: pull-request-manifest
