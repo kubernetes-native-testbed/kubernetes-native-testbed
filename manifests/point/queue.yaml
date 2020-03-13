@@ -1,3 +1,4 @@
+---
 apiVersion: kafka.strimzi.io/v1beta1
 kind: Kafka
 metadata:
@@ -25,13 +26,51 @@ spec:
         type: persistent-claim
         size: 10Gi
         deleteClaim: false
+        class: rook-ceph-block
   zookeeper:
     replicas: 3
     storage:
       type: persistent-claim
       size: 10Gi
       deleteClaim: false
+      class: rook-ceph-block
   entityOperator:
     topicOperator: {}
     userOperator: {}
-
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: point-topic
+  namespace: point
+  labels:
+    strimzi.io/cluster: point-queue
+spec:
+  partitions: 1
+  replicas: 1
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaUser
+metadata:
+  name: point-user
+  namespace: point
+  labels:
+    strimzi.io/cluster: point-queue
+spec:
+  authentication:
+    type: tls
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: point-topic
+          patternType: literal
+        operation: "*" # Read, Write, Describe, Create, etc.
+        host: "*"
+      - resource:
+          type: topic
+          name: test-topic
+          patternType: literal
+        operation: Read
+        host: "*"

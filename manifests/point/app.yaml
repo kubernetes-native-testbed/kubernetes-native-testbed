@@ -22,6 +22,20 @@ spec:
       containers:
         - name: point-app
           image: registry-harbor-core.infra.svc.cluster.local/library/point:5496e9e1d507f6a8e8a0782b798409b2492d6a7d
+          env:
+            - name: QUEUE_HOST
+              value: point-queue-kafka-bootstrap.point.svc.cluster.local
+            - name: QUEUE_PORT
+              value: "9092"
+            - name: QUEUE_TOPIC
+              value: point-topic
+            - name: QUEUE_USER
+              value: point-user
+            - name: QUEUE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: point-user
+                  key: user.password
           resources:
             requests:
               cpu: 100m
