@@ -1,3 +1,4 @@
+---
 apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
@@ -7,7 +8,11 @@ metadata:
     service: search
     role: db
 spec:
-  version: 7.5.2
+  version: 7.6.1
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
   nodeSets:
   - name: default
     count: 3
@@ -16,3 +21,61 @@ spec:
       node.data: true
       node.ingest: true
       node.store.allow_mmap: false
+    podTemplate:
+      metadata:
+        labels:
+          service: search
+          role: db
+      spec:
+        containers:
+        - name: elasticsearch
+          resources:
+            limits:
+              memory: 4Gi
+              cpu: 1
+          env:
+          - name: ES_JAVA_OPTS
+            value: "-Xms2g -Xmx2g"
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: rook-ceph-block
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: search-db
+  namespace: search
+  labels:
+    service: search
+    role: db
+spec:
+  version: 7.6.1
+  count: 1
+  elasticsearchRef:
+    name: search-db
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  podTemplate:
+    metadata:
+      labels:
+        service: search
+        role: db
+    spec:
+      containers:
+      - name: kibana
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 250m
+          limits:
+            memory: 1Gi
+            cpu: 1
