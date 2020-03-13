@@ -61,7 +61,7 @@ spec:
     - --dockerfile=$(inputs.params.DOCKERFILE)
     - --context=/workspace/source-repo/$(inputs.params.CONTEXT)
     - --destination=$(outputs.resources.image-repo.url)
-    - --cache=true
+    - --cache=false
     - --insecure
     - --skip-tls-verify
     resources:
@@ -77,18 +77,24 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pull-request-command
+  name: ci-scripts
   namespace: tekton-pipelines
 data:
-  entrypoint.sh: |-
+  check_target_microservice.sh: |-
     #!/bin/bash
     # Work around: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/issues/124
-    IS_CHANGED=$(git diff --name-only `git show ${COMMIT_HASH} | grep -e "^Merge: " | sed -e 's|^Merge: ||'` | grep -e "^microservices/${MICROSERVICE}/")
+    git fetch --unshallow
+    echo Changed file at commit ${COMMIT_HASH}
+    git diff --name-only `git show ${COMMIT_HASH} --pretty="MERGE: %P"| grep -e "^MERGE: " | sed -e 's|^MERGE: ||'`
+
+    IS_CHANGED=$(git diff --name-only `git show ${COMMIT_HASH} --pretty="MERGE: %P"| grep -e "^MERGE: " | sed -e 's|^MERGE: ||'` | grep -e "^microservices/${MICROSERVICE}/")
     if [ -z "${IS_CHANGED}" ]; then
       echo "commit ${COMMIT_HASH} is not for ${MICROSERVICE} microservices."
-      git diff --name-only `git show ${COMMIT_HASH} | grep -e "^Merge: " | sed -e 's|^Merge: ||'`
       exit 0;
     fi
+
+  upload_manifests.sh: |-
+    #!/bin/bash
 
     git checkout -b ${MICROSERVICE}-${COMMIT_HASH};
     git config --global user.email "${GITHUB_USER}@example.com";
@@ -108,6 +114,27 @@ data:
     git commit -m "[Update manifest] ${MICROSERVICE} for new image tag ${COMMIT_HASH}";
     git push origin ${MICROSERVICE}-${COMMIT_HASH};
     gh pr create --base develop --title "Update ${MICROSERVICE} manifest for new image tag ${COMMIT_HASH}" --body "RP is opened at $(date +%s)";
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Condition
+metadata:
+  name: check-is-target-microservice
+spec:
+  params:
+    - name: MICROSERVICE
+    - name: COMMIT_HASH
+  resources:
+    - name: source-repo
+      type: git
+  check:
+    image: alpine
+    workingdir: /workspace/source-repo
+    env:
+      - name: MICROSERVICE
+        value: $(params.MICROSERVICE)
+      - name: COMMIT_HASH
+        value: $(params.COMMIT_HASH)
+    script: git fetch --unshallow; if [ -z "$(git diff --name-only `git show $(params.COMMIT_HASH) --pretty="MERGE: %P"| grep -e "^MERGE: " | sed -e 's|^MERGE: ||'` | grep -e "^microservices/$(params.MICROSERVICE)/")" ]; then exit 1; fi
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
@@ -133,7 +160,7 @@ spec:
     command:
     - sh
     - -c
-    - /data/entrypoint.sh
+    - /data/upload_manifests.sh
     env:
       - name: MICROSERVICE
         value: $(inputs.params.MICROSERVICE)
@@ -166,7 +193,7 @@ spec:
   volumes:
     - name: entrypoint-cm
       configMap:
-        name: pull-request-command
+        name: ci-scripts
         defaultMode: 493 # mode 755
 ---
 apiVersion: tekton.dev/v1alpha1
@@ -200,6 +227,17 @@ spec:
       outputs:
       - name: image-repo
         resource: image-repo
+    conditions:
+      - conditionRef: check-is-target-microservice
+        params:
+          - name: MICROSERVICE
+            value: $(params.MICROSERVICE)
+          - name: COMMIT_HASH
+            value: $(params.COMMIT_HASH)
+        resources:
+          inputs:
+          - name: source-repo
+            resource: source-repo
   - name: pull-request-manifest
     taskRef:
       name: pull-request-manifest
