@@ -18,6 +18,10 @@ data:
   post_run.sh: |-
     echo "Check Configured seeds by bootstrap"
     grep "seeds:" /etc/cassandra/cassandra.yaml
+
+    # cqlsh -u cassandra -p cassandra -e "CREATE ROLE deliveryStatus WITH LOGIN = true AND PASSWORD = 'deliveryStatus';"
+    # cqlsh -u cassandra -p cassandra -e "CREATE KEYSPACE deliveryStatus WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 2};"
+
 ---  
 apiVersion: db.orange.com/v1alpha1
 kind: CassandraCluster

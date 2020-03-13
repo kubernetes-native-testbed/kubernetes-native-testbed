@@ -22,6 +22,21 @@ spec:
       containers:
         - name: delivery-status-app
           image: registry-harbor-core.infra.svc.cluster.local/library/delivery-status:5e63eb6068e70266fa92d2f90bb66f24f305fd2e
+          env:
+            - name: DB_HOST
+              value: delivery-status-db.delivery-status.svc.cluster.local
+              # value: delivery-status-db-dc1-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
+              # value: delivery-status-db-dc1-rack2-0.delivery-status-db.delivery-status.svc.cluster.local
+              # value: delivery-status-db-dc2-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
+              # value: delivery-status-db-dc2-rack2-0.delivery-status-db.delivery-status.svc.cluster.local
+            - name: DB_PORT
+              value: "9042"
+            - name: DB_USERNAME
+              value: cassandra
+            - name: DB_PASSWORD
+              value: cassandra
+            - name: DB_KEYSPACE
+              value: deliveryStatus
           resources:
             requests:
               cpu: 100m

@@ -11,7 +11,7 @@ data:
   check.sh: |-
     #!/bin/bash
     echo "check script running..."
-    # TODO
+    cqlsh -u ${DB_USERNAME} -p ${DB_PASSWORD} ${DB_HOST} ${DB_PORT} -e "LIST ROLES;"
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -43,24 +43,19 @@ spec:
             - /scripts/check.sh
             env:
             - name: DB_HOST
-              value: delivery-status-db-dc1-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
+              value: delivery-status-db.delivery-status.svc.cluster.local
+              # value: delivery-status-db-dc1-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
+              # value: delivery-status-db-dc1-rack2-0.delivery-status-db.delivery-status.svc.cluster.local
+              # value: delivery-status-db-dc2-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
+              # value: delivery-status-db-dc2-rack2-0.delivery-status-db.delivery-status.svc.cluster.local
             - name: DB_PORT
               value: "9042"
-            # - name: DB_USERNAME
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: delivery-status-db
-            #       key: USER
-            # - name: DB_PASSWORD
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: delivery-status-db
-            #       key: PASSWORD
-            # - name: DB_NAME
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: delivery-status-db
-            #       key: DATABASE
+            - name: DB_USERNAME
+              value: cassandra
+            - name: DB_PASSWORD
+              value: cassandra
+            - name: DB_KEYSPACE
+              value: deliveryStatus
             volumeMounts:
             - name: scripts-volume
               mountPath: /scripts
