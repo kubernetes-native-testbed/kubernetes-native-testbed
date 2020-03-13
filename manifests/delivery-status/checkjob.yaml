@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: check-scripts
+  namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: check
+data:
+  check.sh: |-
+    #!/bin/bash
+    echo "check script running..."
+    # TODO
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: check-job
+  namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: check
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 30
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  suspend: false
+  jobTemplate:
+    spec:
+      completions: 1
+      parallelism: 1
+      backoffLimit: 10
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: check-container
+            image: cassandra:3.11
+            command:
+            - /scripts/check.sh
+            # env:
+            # - name: DB_HOST
+            #   value: delivery-status-db.delivery-status.svc.cluster.local
+            # - name: DB_PORT
+            #   value: "8080"
+            # - name: DB_USERNAME
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: delivery-status-db
+            #       key: USER
+            # - name: DB_PASSWORD
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: delivery-status-db
+            #       key: PASSWORD
+            # - name: DB_NAME
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: delivery-status-db
+            #       key: DATABASE
+            volumeMounts:
+            - name: scripts-volume
+              mountPath: /scripts
+          volumes:
+            - name: scripts-volume
+              configMap:
+                name: check-scripts
+                defaultMode: 493 # mode 755
