@@ -41,11 +41,11 @@ spec:
             image: cassandra:3.11
             command:
             - /scripts/check.sh
-            # env:
-            # - name: DB_HOST
-            #   value: delivery-status-db.delivery-status.svc.cluster.local
-            # - name: DB_PORT
-            #   value: "8080"
+            env:
+            - name: DB_HOST
+              value: delivery-status-db-dc1-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
+            - name: DB_PORT
+              value: "9042"
             # - name: DB_USERNAME
             #   valueFrom:
             #     secretKeyRef:
