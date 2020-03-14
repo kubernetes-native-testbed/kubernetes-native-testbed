@@ -2,7 +2,7 @@
 #   helm2 repo add pingcap https://charts.pingcap.org/
 #   helm2 repo update
 #   helm2 fetch --version v1.0.6 pingcap/tidb-cluster
-#   helm2 template --name order-db --namespace order --set pd.storageClassName=rook-ceph-block --set tikv.storageClassName=rook-ceph-block --set tidb.passwordSecretName=order-db --set tidb.permitHost='%' --set tidb.initSqlConfigMapName=order-db-init-conf --set monitor.create=false --set enableConfigMapRollout=false tidb-cluster-v1.0.6.tgz > db.yaml
+#   helm2 template --name order-db --namespace order --set pd.storageClassName=rook-ceph-block --set tikv.storageClassName=rook-ceph-block --set tidb.passwordSecretName=order-db --set tidb.permitHost='%' --set tidb.initSql="CREATE DATABASE order;" --set monitor.create=false --set enableConfigMapRollout=false tidb-cluster-v1.0.6.tgz > db.yaml
 # add namespace order to each metadata
 ---
 apiVersion: v1
@@ -15,20 +15,7 @@ metadata:
     role: db
 stringData:
   root: order
-  order: order
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: order-db-init-conf
-  namespace: order
-  labels:
-    service: order
-    role: db
-data:
-  dbname: order
-  initSql: |-
-    CREATE DATABASE order;
+  orderuser: order
 ---
 # Source: tidb-cluster/templates/pd-configmap.yaml
 apiVersion: v1
@@ -143,7 +130,6 @@ data:
     level = "info"
     [replication]
     location-labels = ["region", "zone", "rack", "host"]
-    
 
 ---
 # Source: tidb-cluster/templates/tidb-configmap.yaml
@@ -216,6 +202,9 @@ data:
     [log]
     level = "info"
     
+  init-sql: |-
+    CREATE DATABASE IF NOT EXISTS orderdb;
+    GRANT ALL PRIVILEGES ON orderdb.* TO orderuser@'%';
 
 ---
 # Source: tidb-cluster/templates/tikv-configmap.yaml
@@ -499,6 +488,10 @@ spec:
                   conn.cursor().execute("set password for 'root'@'%%' = %s;", (password,))
               else:
                   conn.cursor().execute("create user %s@%s identified by %s;", (user, permit_host, password,))
+          with open('/data/init.sql', 'r') as sql:
+              for line in sql.readlines():
+                  conn.cursor().execute(line)
+                  conn.commit()
           if permit_host != '%%':
               conn.cursor().execute("update mysql.user set Host=%s where User='root';", (permit_host,))
           conn.cursor().execute("flush privileges;")
@@ -508,6 +501,9 @@ spec:
         - name: password
           mountPath: /etc/tidb/password
           readOnly: true
+        - name: init-sql
+          mountPath: /data
+          readOnly: true
         resources:
           {}
           
@@ -515,6 +511,12 @@ spec:
       - name: password
         secret:
           secretName: order-db
+      - name: init-sql
+        configMap:
+          name: order-db-tidb
+          items:
+          - key: init-sql
+            path: init.sql
 
 ---
 # Source: tidb-cluster/templates/tidb-cluster.yaml
@@ -598,7 +600,6 @@ spec:
       requests:
         cpu: 20m
         memory: 5Mi
-      
 
 ---
 # Source: tidb-cluster/templates/drainer-configmap-rollout.yaml
