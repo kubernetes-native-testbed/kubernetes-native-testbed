@@ -34,6 +34,7 @@
       <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
     </div>
 
+
     <!-- User -->
     <hr color="#ffffff" width="80%" size="3">
     <div id="user">
@@ -47,14 +48,14 @@
         PasswordHash: <input v-model="form.passwordHash" type="text" placeholder="PASSWORD"><br/>
         
         Addresses:
-        <span v-for="(address, index) in form.Addresses">
+        <span v-for="(address, index) in form.addresses">
           <br/>
-          <input v-model="address.zipCode" :key="index" type="text" placeholder="100-0000">
-          <input v-model="address.country" :key="index" type="text" placeholder="Japan">
-          <input v-model="address.state" :key="index" type="text" placeholder="Tokyo">
-          <input v-model="address.city" :key="index" type="text" placeholder="Shibuya-ku">
-          <input v-model="address.addressLine" :key="index" type="text" placeholder="1-2-3-100">
-          <input v-model="address.disabled" :key="index" type="text" placeholder="false">
+          <input v-model="address.zipCode" :key="`${index}-1`" type="text" placeholder="100-0000">
+          <input v-model="address.country" :key="`${index}-2`" type="text" placeholder="Japan">
+          <input v-model="address.state" :key="`${index}-3`" type="text" placeholder="Tokyo">
+          <input v-model="address.city" :key="`${index}-4`" type="text" placeholder="Shibuya-ku">
+          <input v-model="address.addressLine" :key="`${index}-5`" type="text" placeholder="1-2-3-100">
+          <input v-model="address.disabled" :key="`${index}-6`" type="text" placeholder="false">
         </span>
         <button v-on:click="addAddress">+</button>
         <br/>
