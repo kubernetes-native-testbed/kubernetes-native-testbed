@@ -144,6 +144,7 @@ func (s *userAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*emp
 	addresses := make([]Address, len(req.GetUser().GetAddresses()))
 	for i, address := range req.GetUser().GetAddresses() {
 		addresses[i] = Address{
+			UUID:        address.UUID,
 			ZipCode:     address.ZipCode,
 			Country:     address.Country,
 			State:       address.State,
