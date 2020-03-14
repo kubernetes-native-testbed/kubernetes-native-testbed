@@ -58,7 +58,7 @@ export const user = new Vue({
           u.lastName = resp.getUser().getLastname();
           u.age = resp.getUser().getAge();
           u.passwordHash = resp.getUser().getPasswordhash();
-          u.addresses = resp.getUser().getAddressList();
+          u.addresses = resp.getUser().getAddressesList();
           u.createdAt = resp.getUser().getCreatedat();
           u.updatedAt = resp.getUser().getUpdatedat();
           u.deletedAt = resp.getUser().getDeletedat();
@@ -107,11 +107,11 @@ export const user = new Vue({
       const req = new UpdateRequest();
       const u = new User();
       u.setUsername(this.form.username);
-      u.setFirstName(this.form.firstName);
-      u.setLastName(this.form.lastName);
+      u.setFirstname(this.form.firstName);
+      u.setLastname(this.form.lastName);
       u.setAge(this.form.age);
-      u.setPasswordHash(this.form.passwordHash);
-      u.setAddressesList(this.form.imageURLs);
+      u.setPasswordhash(this.form.passwordHash);
+      u.setAddressesList(this.form.addresses);
       req.setUser(u);
       this.client.update(req, {}, (err, resp) => {
         if (err) {
