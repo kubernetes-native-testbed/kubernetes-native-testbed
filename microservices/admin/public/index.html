@@ -55,7 +55,7 @@
           <input v-model="address.state" :key="`${index}-3`" type="text" placeholder="Tokyo">
           <input v-model="address.city" :key="`${index}-4`" type="text" placeholder="Shibuya-ku">
           <input v-model="address.addressLine" :key="`${index}-5`" type="text" placeholder="1-2-3-100">
-          <input v-model="address.disabled" :key="`${index}-6`" type="text" placeholder="false">
+          <input v-model="address.disabled" :key="`${index}-6`" type="text" placeholder="true">
         </span>
         <button v-on:click="addAddress">+</button>
         <br/>
@@ -67,7 +67,7 @@
         <span>|</span>
         <button v-on:click="clearForm">Clear</button>
       </p>
-      Response: {{ resp.product }}<br/>
+      Response: {{ resp.user }}<br/>
       <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
     </div>
 
