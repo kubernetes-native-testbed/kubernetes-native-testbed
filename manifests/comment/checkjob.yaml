@@ -60,7 +60,7 @@ spec:
                   key: password
             - name: DB_NAME
               valueFrom:
-                configMapRef:
+                configMapKeyRef:
                   name: comment-db-init-conf
                   key: dbname
             volumeMounts:
