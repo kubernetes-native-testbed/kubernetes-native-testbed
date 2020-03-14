@@ -1,5 +1,8 @@
-const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Product} = require('./protobuf/product_pb.js');
+// const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Product} = require('./protobuf/product_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, User, Address} = require('./protobuf/user_pb.js');
+
 const {ProductAPIClient} = require('./protobuf/product_grpc_web_pb.js');
+const {UserAPIClient} = require('./protobuf/user_grpc_web_pb.js');
 const {Empty} = require('google-protobuf/google/protobuf/empty_pb.js');
 
 const defaultEndpoint = 'https://testbed.34.84.105.184.nip.io';
@@ -140,8 +143,8 @@ const user = new Vue({
       this.client = new UserAPIClient(this.endpoint);
   },
   methods: {
-    addAddresses: function() {
-      this.form.addresses.push({value:''});
+    addAddress: function() {
+      this.form.addresses.push({zipCode:'', country: '', state: '', city: '', addressLine: '', disabled: null});
     },
     clearForm: function() {
       this.form.uuid = '',
@@ -187,14 +190,21 @@ const user = new Vue({
       const req = new SetRequest();
       const u = new User();
       u.setUsername(this.form.username);
-      u.setFirstName(this.form.firstName);
-      u.setLastName(this.form.lastName);
+      u.setFirstname(this.form.firstName);
+      u.setLastname(this.form.lastName);
       u.setAge(this.form.age);
-      u.setPasswordHash(this.form.passwordHash);
+      u.setPasswordhash(this.form.passwordHash);
 
       addresses = []
       this.form.addresses.forEach(function(v) {
-        addresses.push(v.value)
+        const a = new Address();
+        a.setZipcode(v.zipCode)
+        a.setCountry(v.country)
+        a.setState(v.state)
+        a.setCity(v.city)
+        a.setAddressline(v.addressLine)
+        a.setDisabled(v.disabled)
+        addresses.push(a)
       });
       u.setAddressesList(addresses);
       req.setUser(u);
