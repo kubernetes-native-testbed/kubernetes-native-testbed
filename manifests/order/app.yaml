@@ -36,7 +36,7 @@ spec:
                   key: order
             - name: DB_NAME
               valueFrom:
-                configMapRef:
+                configMapKeyRef:
                   name: order-db-init-conf
                   key: dbname
           resources:
