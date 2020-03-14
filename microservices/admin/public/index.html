@@ -1,17 +1,23 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!--link rel="stylesheet" href="index.css"-->
+ 
+    <link rel="stylesheet" href="index.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   </head>
   <body>
-    <h1>Client Page</h1>
+    <h1 align="center">Client Page</h1>
+    <hr class="setion">
 
-    <!-- Product -->
-    <hr color="#ffffff" width="80%" size="3">
+
+    <!-- 
+      ###########################################################################################
+      # Product
+      ###########################################################################################
+    -->
     <div id="product">
       <p>
-        <b>[Form]</b><br/>
+        <b>[Product]</b><br/>
         UUID: <input v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
         Name: <input v-model="form.name" type="text" placeholder="Sample Product"><br/>
         Price: <input v-model="form.price" type="text" placeholder="100"><br/>
@@ -30,16 +36,22 @@
         <span>|</span>
         <button v-on:click="clearForm">Clear</button>
       </p>
+      <div class="output">
       Response: {{ resp.product }}<br/>
       <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+      </div>
     </div>
+    <hr class="setion">
 
 
-    <!-- User -->
-    <hr color="#ffffff" width="80%" size="3">
+    <!-- 
+      ###########################################################################################
+      # User
+      ###########################################################################################
+    -->
     <div id="user">
       <p>
-        <b>[Form]</b><br/>
+        <b>[User]</b><br/>
         UUID: <input v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
         Username: <input v-model="form.username" type="text" placeholder="amsy810"><br/>
         FirstName: <input v-model="form.firstName" type="text" placeholder="Masaya"><br/>
@@ -67,10 +79,18 @@
         <span>|</span>
         <button v-on:click="clearForm">Clear</button>
       </p>
+      <div class="output">
       Response: {{ resp.user }}<br/>
       <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+      </div>
     </div>
+    <hr class="setion">
 
+    <!-- 
+      ###########################################################################################
+      # Utils
+      ###########################################################################################
+    -->
     <script src="./bundle.js"></script>
   </body>
 </html>

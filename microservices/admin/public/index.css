@@ -1,0 +1,11 @@
+.output {
+  font-family: Consolas;
+  font-size: 11px;
+}
+
+.section {
+    color: "#000000";
+    width: "100%";
+    size: "3";
+    align: "left";
+}
