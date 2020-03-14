@@ -33,9 +33,9 @@ func (rr *userRepositoryImpl) store(u *User) (string, error) {
 	}
 
 	u.UUID = uuid.New().String()
-	for _, address := range u.Addresses {
-		address.UUID = uuid.New().String()
-		address.UserUUID = u.UUID
+	for i := 0; i < len(u.Addresses); i++ {
+		u.Addresses[i].UUID = uuid.New().String()
+		u.Addresses[i].UserUUID = u.UUID
 	}
 	if err := rr.db.Create(u).Error; err != nil {
 		return "", fmt.Errorf("store error: %w (user: %v)", err, u)
