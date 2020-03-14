@@ -54,25 +54,25 @@ type productAPIServer struct {
 	productRepository productRepository
 }
 
-func (s *productAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (s *productAPIServer) Get(ctx context.Context, req *pb.ProductGetRequest) (*pb.ProductGetResponse, error) {
 	uuid := req.GetUUID()
 	log.Printf("{\"operation\":\"get\", \"uuid\":\"%s\"}", uuid)
 	p, err := s.productRepository.findByUUID(uuid)
 	if err != nil {
-		return &pb.GetResponse{}, err
+		return &pb.ProductGetResponse{}, err
 	}
 
-	var resp pb.GetResponse
+	var resp pb.ProductGetResponse
 	var cat, uat, dat *timestamp.Timestamp
 	if cat, err = ptypes.TimestampProto(p.CreatedAt); err != nil {
-		return &pb.GetResponse{}, err
+		return &pb.ProductGetResponse{}, err
 	}
 	if uat, err = ptypes.TimestampProto(p.UpdatedAt); err != nil {
-		return &pb.GetResponse{}, err
+		return &pb.ProductGetResponse{}, err
 	}
 	if p.DeletedAt != nil {
 		if dat, err = ptypes.TimestampProto(*p.DeletedAt); err != nil {
-			return &pb.GetResponse{}, err
+			return &pb.ProductGetResponse{}, err
 		}
 	}
 
@@ -94,7 +94,7 @@ func (s *productAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.Get
 	return &resp, nil
 }
 
-func (s *productAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
+func (s *productAPIServer) Set(ctx context.Context, req *pb.ProductSetRequest) (*pb.ProductSetResponse, error) {
 	urls := make([]ProductImage, len(req.GetProduct().GetImageURLs()))
 	for i, url := range req.GetProduct().GetImageURLs() {
 		urls[i] = ProductImage{URL: url}
@@ -109,13 +109,13 @@ func (s *productAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.Set
 
 	uuid, err := s.productRepository.store(p)
 	if err != nil {
-		return &pb.SetResponse{}, err
+		return &pb.ProductSetResponse{}, err
 	}
 
-	return &pb.SetResponse{UUID: uuid}, nil
+	return &pb.ProductSetResponse{UUID: uuid}, nil
 }
 
-func (s *productAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+func (s *productAPIServer) Update(ctx context.Context, req *pb.ProductUpdateRequest) (*empty.Empty, error) {
 	urls := make([]ProductImage, len(req.GetProduct().GetImageURLs()))
 	for i, url := range req.GetProduct().GetImageURLs() {
 		urls[i] = ProductImage{ProductUUID: req.GetProduct().GetUUID(), URL: url}
@@ -135,7 +135,7 @@ func (s *productAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*
 	return &empty.Empty{}, nil
 }
 
-func (s *productAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
+func (s *productAPIServer) Delete(ctx context.Context, req *pb.ProductDeleteRequest) (*empty.Empty, error) {
 	uuid := req.GetUUID()
 	log.Printf("{\"operation\":\"delete\", \"uuid\":\"%s\"}", uuid)
 

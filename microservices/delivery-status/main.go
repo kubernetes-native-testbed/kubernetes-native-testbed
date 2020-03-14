@@ -28,19 +28,19 @@ type deliveryStatusAPIServer struct {
 	deliveryStatusRepository deliveryStatusRepository
 }
 
-func (s *deliveryStatusAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (s *deliveryStatusAPIServer) Get(ctx context.Context, req *pb.DeliveryStatusGetRequest) (*pb.DeliveryStatusGetResponse, error) {
 	return nil, nil
 }
 
-func (s *deliveryStatusAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
+func (s *deliveryStatusAPIServer) Set(ctx context.Context, req *pb.DeliveryStatusSetRequest) (*pb.DeliveryStatusSetResponse, error) {
 	return nil, nil
 }
 
-func (s *deliveryStatusAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+func (s *deliveryStatusAPIServer) Update(ctx context.Context, req *pb.DeliveryStatusUpdateRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
-func (s *deliveryStatusAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
+func (s *deliveryStatusAPIServer) Delete(ctx context.Context, req *pb.DeliveryStatusDeleteRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 

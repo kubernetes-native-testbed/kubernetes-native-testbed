@@ -28,19 +28,19 @@ type paymentInfoAPIServer struct {
 	paymentInfoRepository paymentInfoRepository
 }
 
-func (s *paymentInfoAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (s *paymentInfoAPIServer) Get(ctx context.Context, req *pb.PaymentInfoGetRequest) (*pb.PaymentInfoGetResponse, error) {
 	return nil, nil
 }
 
-func (s *paymentInfoAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
+func (s *paymentInfoAPIServer) Set(ctx context.Context, req *pb.PaymentInfoSetRequest) (*pb.PaymentInfoSetResponse, error) {
 	return nil, nil
 }
 
-func (s *paymentInfoAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+func (s *paymentInfoAPIServer) Update(ctx context.Context, req *pb.PaymentInfoUpdateRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
-func (s *paymentInfoAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
+func (s *paymentInfoAPIServer) Delete(ctx context.Context, req *pb.PaymentInfoDeleteRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 

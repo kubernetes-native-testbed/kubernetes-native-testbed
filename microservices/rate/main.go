@@ -40,19 +40,19 @@ type rateAPIServer struct {
 	rateRepository rateRepository
 }
 
-func (s *rateAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (s *rateAPIServer) Get(ctx context.Context, req *pb.RateGetRequest) (*pb.RateGetResponse, error) {
 	return nil, nil
 }
 
-func (s *rateAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
+func (s *rateAPIServer) Set(ctx context.Context, req *pb.RateSetRequest) (*pb.RateSetResponse, error) {
 	return nil, nil
 }
 
-func (s *rateAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+func (s *rateAPIServer) Update(ctx context.Context, req *pb.RateUpdateRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
-func (s *rateAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
+func (s *rateAPIServer) Delete(ctx context.Context, req *pb.RateDeleteRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 

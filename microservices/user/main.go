@@ -54,25 +54,25 @@ type userAPIServer struct {
 	userRepository userRepository
 }
 
-func (s *userAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (s *userAPIServer) Get(ctx context.Context, req *pb.UserGetRequest) (*pb.UserGetResponse, error) {
 	uuid := req.GetUUID()
 	log.Printf("{\"operation\":\"get\", \"uuid\":\"%s\"}", uuid)
 	u, err := s.userRepository.findByUUID(uuid)
 	if err != nil {
-		return &pb.GetResponse{}, err
+		return &pb.UserGetResponse{}, err
 	}
 
-	var resp pb.GetResponse
+	var resp pb.UserGetResponse
 	var cat, uat, dat *timestamp.Timestamp
 	if cat, err = ptypes.TimestampProto(u.CreatedAt); err != nil {
-		return &pb.GetResponse{}, err
+		return &pb.UserGetResponse{}, err
 	}
 	if uat, err = ptypes.TimestampProto(u.UpdatedAt); err != nil {
-		return &pb.GetResponse{}, err
+		return &pb.UserGetResponse{}, err
 	}
 	if u.DeletedAt != nil {
 		if dat, err = ptypes.TimestampProto(*u.DeletedAt); err != nil {
-			return &pb.GetResponse{}, err
+			return &pb.UserGetResponse{}, err
 		}
 	}
 
@@ -107,7 +107,7 @@ func (s *userAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetRes
 	return &resp, nil
 }
 
-func (s *userAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
+func (s *userAPIServer) Set(ctx context.Context, req *pb.UserSetRequest) (*pb.UserSetResponse, error) {
 	addresses := make([]Address, len(req.GetUser().GetAddresses()))
 	for i, address := range req.GetUser().GetAddresses() {
 		addresses[i] = Address{
@@ -134,13 +134,13 @@ func (s *userAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRes
 
 	uuid, err := s.userRepository.store(u)
 	if err != nil {
-		return &pb.SetResponse{}, err
+		return &pb.UserSetResponse{}, err
 	}
 
-	return &pb.SetResponse{UUID: uuid}, nil
+	return &pb.UserSetResponse{UUID: uuid}, nil
 }
 
-func (s *userAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+func (s *userAPIServer) Update(ctx context.Context, req *pb.UserUpdateRequest) (*empty.Empty, error) {
 	addresses := make([]Address, len(req.GetUser().GetAddresses()))
 	for i, address := range req.GetUser().GetAddresses() {
 		addresses[i] = Address{
@@ -172,7 +172,7 @@ func (s *userAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*emp
 	return &empty.Empty{}, nil
 }
 
-func (s *userAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
+func (s *userAPIServer) Delete(ctx context.Context, req *pb.UserDeleteRequest) (*empty.Empty, error) {
 	uuid := req.GetUUID()
 	log.Printf("{\"operation\":\"delete\", \"uuid\":\"%s\"}", uuid)
 

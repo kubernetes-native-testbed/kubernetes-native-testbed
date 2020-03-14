@@ -28,19 +28,19 @@ type commentAPIServer struct {
 	commentRepository commentRepository
 }
 
-func (s *commentAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (s *commentAPIServer) Get(ctx context.Context, req *pb.CommentGetRequest) (*pb.CommentGetResponse, error) {
 	return nil, nil
 }
 
-func (s *commentAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
+func (s *commentAPIServer) Set(ctx context.Context, req *pb.CommentSetRequest) (*pb.CommentSetResponse, error) {
 	return nil, nil
 }
 
-func (s *commentAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+func (s *commentAPIServer) Update(ctx context.Context, req *pb.CommentUpdateRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
-func (s *commentAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
+func (s *commentAPIServer) Delete(ctx context.Context, req *pb.CommentDeleteRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 

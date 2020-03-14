@@ -28,19 +28,19 @@ type pointAPIServer struct {
 	pointRepository pointRepository
 }
 
-func (s *pointAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (s *pointAPIServer) Get(ctx context.Context, req *pb.PointGetRequest) (*pb.PointGetResponse, error) {
 	return nil, nil
 }
 
-func (s *pointAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
+func (s *pointAPIServer) Set(ctx context.Context, req *pb.PointSetRequest) (*pb.PointSetResponse, error) {
 	return nil, nil
 }
 
-func (s *pointAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+func (s *pointAPIServer) Update(ctx context.Context, req *pb.PointUpdateRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
-func (s *pointAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
+func (s *pointAPIServer) Delete(ctx context.Context, req *pb.PointDeleteRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 

@@ -28,19 +28,19 @@ type cartAPIServer struct {
 	cartRepository cartRepository
 }
 
-func (s *cartAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (s *cartAPIServer) Get(ctx context.Context, req *pb.CartGetRequest) (*pb.CartGetResponse, error) {
 	return nil, nil
 }
 
-func (s *cartAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
+func (s *cartAPIServer) Set(ctx context.Context, req *pb.CartSetRequest) (*pb.CartSetResponse, error) {
 	return nil, nil
 }
 
-func (s *cartAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+func (s *cartAPIServer) Update(ctx context.Context, req *pb.CartUpdateRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
-func (s *cartAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
+func (s *cartAPIServer) Delete(ctx context.Context, req *pb.CartDeleteRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 

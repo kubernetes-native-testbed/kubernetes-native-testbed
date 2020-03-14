@@ -28,19 +28,19 @@ type orderAPIServer struct {
 	orderRepository orderRepository
 }
 
-func (s *orderAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (s *orderAPIServer) Get(ctx context.Context, req *pb.OrderGetRequest) (*pb.OrderGetResponse, error) {
 	return nil, nil
 }
 
-func (s *orderAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
+func (s *orderAPIServer) Set(ctx context.Context, req *pb.OrderSetRequest) (*pb.OrderSetResponse, error) {
 	return nil, nil
 }
 
-func (s *orderAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+func (s *orderAPIServer) Update(ctx context.Context, req *pb.OrderUpdateRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
-func (s *orderAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
+func (s *orderAPIServer) Delete(ctx context.Context, req *pb.OrderDeleteRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
