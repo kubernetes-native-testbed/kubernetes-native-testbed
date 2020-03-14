@@ -12,4 +12,9 @@ spec:
     - services:
         - name: cart
           port: 8080
+      conditions:
+        - prefix: /cart
+      pathRewritePolicy:
+        replacePrefix:
+          - replacement: /cart
       permitInsecure: true

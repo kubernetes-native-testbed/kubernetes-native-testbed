@@ -12,4 +12,9 @@ spec:
     - services:
         - name: delivery-status
           port: 8080
+      conditions:
+        - prefix: /delivery-status
+      pathRewritePolicy:
+        replacePrefix:
+          - replacement: /delivery-status
       permitInsecure: true
