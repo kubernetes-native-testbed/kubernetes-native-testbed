@@ -43,5 +43,6 @@ telepresence \
   --namespace ${MICROSERVICE} \
   --swap-deployment ${MICROSERVICE} \
   --expose 8080:80 \
-  --logfile /dev/null
+  --logfile /dev/null \
+  --run sleep infinity
 
