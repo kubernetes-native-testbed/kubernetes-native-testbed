@@ -2,6 +2,10 @@
 
 OS_TYPE=$(uname | tr '[A-Z]' '[a-z]')
 
+# install developmen tools
+brew install protobuf
+go get -u github.com/golang/protobuf/protoc-gen-go
+
 # install skaffold
 if ! which skaffold; then
   SKAFFOLD_VERSION=1.5.0
