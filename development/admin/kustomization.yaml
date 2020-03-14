@@ -1,0 +1,6 @@
+bases:
+- ../../manifests/admin/app.yaml
+images:
+- name: registry-harbor-core.infra.svc.cluster.local/library/admin
+  newName: local-admin
+

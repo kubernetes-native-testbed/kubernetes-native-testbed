@@ -1,0 +1,25 @@
+---
+apiVersion: skaffold/v2alpha3
+kind: Config
+build:
+  artifacts:
+  - image: local-delivery-status
+    docker:
+      dockerfile: ./Dockerfile
+  tagPolicy:
+    envTemplate:
+      template: "local-delivery-status:latest"
+  local:
+    push: false
+deploy:
+  kustomize:
+    paths:
+    - ../../development/delivery-status
+    buildArgs:
+    - --load_restrictor
+    - LoadRestrictionsNone
+    flags:
+      delete:
+      - --force
+      - --grace-period=0
+      - --wait

@@ -1,0 +1,6 @@
+bases:
+- ../../manifests/order/app.yaml
+images:
+- name: registry-harbor-core.infra.svc.cluster.local/library/order
+  newName: local-order
+
