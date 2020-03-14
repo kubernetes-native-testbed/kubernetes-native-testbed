@@ -357,9 +357,12 @@ proto.pointpb.Point.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.pointpb.Point} returns this
+ */
 proto.pointpb.Point.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -372,9 +375,12 @@ proto.pointpb.Point.prototype.getUseruuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.pointpb.Point} returns this
+ */
 proto.pointpb.Point.prototype.setUseruuid = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -387,9 +393,12 @@ proto.pointpb.Point.prototype.getBalance = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.pointpb.Point} returns this
+ */
 proto.pointpb.Point.prototype.setBalance = function(value) {
-  jspb.Message.setProto3IntField(this, 3, value);
+  return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
@@ -403,17 +412,21 @@ proto.pointpb.Point.prototype.getCreatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.pointpb.Point} returns this
+*/
 proto.pointpb.Point.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 4, value);
+  return jspb.Message.setWrapperField(this, 4, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.pointpb.Point} returns this
  */
 proto.pointpb.Point.prototype.clearCreatedat = function() {
-  this.setCreatedat(undefined);
+  return this.setCreatedat(undefined);
 };
 
 
@@ -436,17 +449,21 @@ proto.pointpb.Point.prototype.getUpdatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.pointpb.Point} returns this
+*/
 proto.pointpb.Point.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 5, value);
+  return jspb.Message.setWrapperField(this, 5, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.pointpb.Point} returns this
  */
 proto.pointpb.Point.prototype.clearUpdatedat = function() {
-  this.setUpdatedat(undefined);
+  return this.setUpdatedat(undefined);
 };
 
 
@@ -469,17 +486,21 @@ proto.pointpb.Point.prototype.getDeletedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.pointpb.Point} returns this
+*/
 proto.pointpb.Point.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 6, value);
+  return jspb.Message.setWrapperField(this, 6, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.pointpb.Point} returns this
  */
 proto.pointpb.Point.prototype.clearDeletedat = function() {
-  this.setDeletedat(undefined);
+  return this.setDeletedat(undefined);
 };
 
 
@@ -613,9 +634,12 @@ proto.pointpb.GetRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.pointpb.GetRequest} returns this
+ */
 proto.pointpb.GetRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -743,17 +767,21 @@ proto.pointpb.GetResponse.prototype.getPoint = function() {
 };
 
 
-/** @param {?proto.pointpb.Point|undefined} value */
+/**
+ * @param {?proto.pointpb.Point|undefined} value
+ * @return {!proto.pointpb.GetResponse} returns this
+*/
 proto.pointpb.GetResponse.prototype.setPoint = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.pointpb.GetResponse} returns this
  */
 proto.pointpb.GetResponse.prototype.clearPoint = function() {
-  this.setPoint(undefined);
+  return this.setPoint(undefined);
 };
 
 
@@ -890,17 +918,21 @@ proto.pointpb.SetRequest.prototype.getPoint = function() {
 };
 
 
-/** @param {?proto.pointpb.Point|undefined} value */
+/**
+ * @param {?proto.pointpb.Point|undefined} value
+ * @return {!proto.pointpb.SetRequest} returns this
+*/
 proto.pointpb.SetRequest.prototype.setPoint = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.pointpb.SetRequest} returns this
  */
 proto.pointpb.SetRequest.prototype.clearPoint = function() {
-  this.setPoint(undefined);
+  return this.setPoint(undefined);
 };
 
 
@@ -1034,9 +1066,12 @@ proto.pointpb.SetResponse.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.pointpb.SetResponse} returns this
+ */
 proto.pointpb.SetResponse.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1164,17 +1199,21 @@ proto.pointpb.UpdateRequest.prototype.getPoint = function() {
 };
 
 
-/** @param {?proto.pointpb.Point|undefined} value */
+/**
+ * @param {?proto.pointpb.Point|undefined} value
+ * @return {!proto.pointpb.UpdateRequest} returns this
+*/
 proto.pointpb.UpdateRequest.prototype.setPoint = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.pointpb.UpdateRequest} returns this
  */
 proto.pointpb.UpdateRequest.prototype.clearPoint = function() {
-  this.setPoint(undefined);
+  return this.setPoint(undefined);
 };
 
 
@@ -1308,9 +1347,12 @@ proto.pointpb.DeleteRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.pointpb.DeleteRequest} returns this
+ */
 proto.pointpb.DeleteRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

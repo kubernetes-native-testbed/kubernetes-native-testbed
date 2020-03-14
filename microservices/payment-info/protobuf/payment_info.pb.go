@@ -365,7 +365,9 @@ func init() {
 	proto.RegisterType((*DeleteRequest)(nil), "paymentinfopb.DeleteRequest")
 }
 
-func init() { proto.RegisterFile("payment_info.proto", fileDescriptor_60ad0eadf34cbae7) }
+func init() {
+	proto.RegisterFile("payment_info.proto", fileDescriptor_60ad0eadf34cbae7)
+}
 
 var fileDescriptor_60ad0eadf34cbae7 = []byte{
 	// 394 bytes of a gzipped FileDescriptorProto
@@ -398,11 +400,11 @@ var fileDescriptor_60ad0eadf34cbae7 = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConn
+var _ grpc.ClientConnInterface
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
+const _ = grpc.SupportPackageIsVersion6
 
 // PaymentInfoAPIClient is the client API for PaymentInfoAPI service.
 //
@@ -415,10 +417,10 @@ type PaymentInfoAPIClient interface {
 }
 
 type paymentInfoAPIClient struct {
-	cc *grpc.ClientConn
+	cc grpc.ClientConnInterface
 }
 
-func NewPaymentInfoAPIClient(cc *grpc.ClientConn) PaymentInfoAPIClient {
+func NewPaymentInfoAPIClient(cc grpc.ClientConnInterface) PaymentInfoAPIClient {
 	return &paymentInfoAPIClient{cc}
 }
 

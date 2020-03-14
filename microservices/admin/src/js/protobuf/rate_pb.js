@@ -381,9 +381,12 @@ proto.ratepb.Rate.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.ratepb.Rate} returns this
+ */
 proto.ratepb.Rate.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -396,9 +399,12 @@ proto.ratepb.Rate.prototype.getRating = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.ratepb.Rate} returns this
+ */
 proto.ratepb.Rate.prototype.setRating = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -411,9 +417,12 @@ proto.ratepb.Rate.prototype.getUseruuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.ratepb.Rate} returns this
+ */
 proto.ratepb.Rate.prototype.setUseruuid = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -426,9 +435,12 @@ proto.ratepb.Rate.prototype.getCommentuuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.ratepb.Rate} returns this
+ */
 proto.ratepb.Rate.prototype.setCommentuuid = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -441,9 +453,12 @@ proto.ratepb.Rate.prototype.getProductuuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.ratepb.Rate} returns this
+ */
 proto.ratepb.Rate.prototype.setProductuuid = function(value) {
-  jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -457,17 +472,21 @@ proto.ratepb.Rate.prototype.getCreatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.ratepb.Rate} returns this
+*/
 proto.ratepb.Rate.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 6, value);
+  return jspb.Message.setWrapperField(this, 6, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.ratepb.Rate} returns this
  */
 proto.ratepb.Rate.prototype.clearCreatedat = function() {
-  this.setCreatedat(undefined);
+  return this.setCreatedat(undefined);
 };
 
 
@@ -490,17 +509,21 @@ proto.ratepb.Rate.prototype.getUpdatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.ratepb.Rate} returns this
+*/
 proto.ratepb.Rate.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 7, value);
+  return jspb.Message.setWrapperField(this, 7, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.ratepb.Rate} returns this
  */
 proto.ratepb.Rate.prototype.clearUpdatedat = function() {
-  this.setUpdatedat(undefined);
+  return this.setUpdatedat(undefined);
 };
 
 
@@ -523,17 +546,21 @@ proto.ratepb.Rate.prototype.getDeletedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.ratepb.Rate} returns this
+*/
 proto.ratepb.Rate.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 8, value);
+  return jspb.Message.setWrapperField(this, 8, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.ratepb.Rate} returns this
  */
 proto.ratepb.Rate.prototype.clearDeletedat = function() {
-  this.setDeletedat(undefined);
+  return this.setDeletedat(undefined);
 };
 
 
@@ -667,9 +694,12 @@ proto.ratepb.GetRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.ratepb.GetRequest} returns this
+ */
 proto.ratepb.GetRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -797,17 +827,21 @@ proto.ratepb.GetResponse.prototype.getRate = function() {
 };
 
 
-/** @param {?proto.ratepb.Rate|undefined} value */
+/**
+ * @param {?proto.ratepb.Rate|undefined} value
+ * @return {!proto.ratepb.GetResponse} returns this
+*/
 proto.ratepb.GetResponse.prototype.setRate = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.ratepb.GetResponse} returns this
  */
 proto.ratepb.GetResponse.prototype.clearRate = function() {
-  this.setRate(undefined);
+  return this.setRate(undefined);
 };
 
 
@@ -944,17 +978,21 @@ proto.ratepb.SetRequest.prototype.getRate = function() {
 };
 
 
-/** @param {?proto.ratepb.Rate|undefined} value */
+/**
+ * @param {?proto.ratepb.Rate|undefined} value
+ * @return {!proto.ratepb.SetRequest} returns this
+*/
 proto.ratepb.SetRequest.prototype.setRate = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.ratepb.SetRequest} returns this
  */
 proto.ratepb.SetRequest.prototype.clearRate = function() {
-  this.setRate(undefined);
+  return this.setRate(undefined);
 };
 
 
@@ -1088,9 +1126,12 @@ proto.ratepb.SetResponse.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.ratepb.SetResponse} returns this
+ */
 proto.ratepb.SetResponse.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1218,17 +1259,21 @@ proto.ratepb.UpdateRequest.prototype.getRate = function() {
 };
 
 
-/** @param {?proto.ratepb.Rate|undefined} value */
+/**
+ * @param {?proto.ratepb.Rate|undefined} value
+ * @return {!proto.ratepb.UpdateRequest} returns this
+*/
 proto.ratepb.UpdateRequest.prototype.setRate = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.ratepb.UpdateRequest} returns this
  */
 proto.ratepb.UpdateRequest.prototype.clearRate = function() {
-  this.setRate(undefined);
+  return this.setRate(undefined);
 };
 
 
@@ -1362,9 +1407,12 @@ proto.ratepb.DeleteRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.ratepb.DeleteRequest} returns this
+ */
 proto.ratepb.DeleteRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

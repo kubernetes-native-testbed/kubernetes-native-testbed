@@ -365,7 +365,9 @@ func init() {
 	proto.RegisterType((*DeleteRequest)(nil), "ratepb.DeleteRequest")
 }
 
-func init() { proto.RegisterFile("rate.proto", fileDescriptor_426335fde4cae2d1) }
+func init() {
+	proto.RegisterFile("rate.proto", fileDescriptor_426335fde4cae2d1)
+}
 
 var fileDescriptor_426335fde4cae2d1 = []byte{
 	// 370 bytes of a gzipped FileDescriptorProto
@@ -397,11 +399,11 @@ var fileDescriptor_426335fde4cae2d1 = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConn
+var _ grpc.ClientConnInterface
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
+const _ = grpc.SupportPackageIsVersion6
 
 // RateAPIClient is the client API for RateAPI service.
 //
@@ -414,10 +416,10 @@ type RateAPIClient interface {
 }
 
 type rateAPIClient struct {
-	cc *grpc.ClientConn
+	cc grpc.ClientConnInterface
 }
 
-func NewRateAPIClient(cc *grpc.ClientConn) RateAPIClient {
+func NewRateAPIClient(cc grpc.ClientConnInterface) RateAPIClient {
 	return &rateAPIClient{cc}
 }
 

@@ -369,9 +369,12 @@ proto.deliverystatuspb.DeliveryStatus.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.deliverystatuspb.DeliveryStatus} returns this
+ */
 proto.deliverystatuspb.DeliveryStatus.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -384,9 +387,12 @@ proto.deliverystatuspb.DeliveryStatus.prototype.getOrderuuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.deliverystatuspb.DeliveryStatus} returns this
+ */
 proto.deliverystatuspb.DeliveryStatus.prototype.setOrderuuid = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -399,9 +405,12 @@ proto.deliverystatuspb.DeliveryStatus.prototype.getStatus = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.deliverystatuspb.DeliveryStatus} returns this
+ */
 proto.deliverystatuspb.DeliveryStatus.prototype.setStatus = function(value) {
-  jspb.Message.setProto3IntField(this, 3, value);
+  return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
@@ -414,9 +423,12 @@ proto.deliverystatuspb.DeliveryStatus.prototype.getInquirynumber = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.deliverystatuspb.DeliveryStatus} returns this
+ */
 proto.deliverystatuspb.DeliveryStatus.prototype.setInquirynumber = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -430,17 +442,21 @@ proto.deliverystatuspb.DeliveryStatus.prototype.getCreatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.deliverystatuspb.DeliveryStatus} returns this
+*/
 proto.deliverystatuspb.DeliveryStatus.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 5, value);
+  return jspb.Message.setWrapperField(this, 5, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.deliverystatuspb.DeliveryStatus} returns this
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.clearCreatedat = function() {
-  this.setCreatedat(undefined);
+  return this.setCreatedat(undefined);
 };
 
 
@@ -463,17 +479,21 @@ proto.deliverystatuspb.DeliveryStatus.prototype.getUpdatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.deliverystatuspb.DeliveryStatus} returns this
+*/
 proto.deliverystatuspb.DeliveryStatus.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 6, value);
+  return jspb.Message.setWrapperField(this, 6, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.deliverystatuspb.DeliveryStatus} returns this
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.clearUpdatedat = function() {
-  this.setUpdatedat(undefined);
+  return this.setUpdatedat(undefined);
 };
 
 
@@ -496,17 +516,21 @@ proto.deliverystatuspb.DeliveryStatus.prototype.getDeletedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.deliverystatuspb.DeliveryStatus} returns this
+*/
 proto.deliverystatuspb.DeliveryStatus.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 7, value);
+  return jspb.Message.setWrapperField(this, 7, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.deliverystatuspb.DeliveryStatus} returns this
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.clearDeletedat = function() {
-  this.setDeletedat(undefined);
+  return this.setDeletedat(undefined);
 };
 
 
@@ -640,9 +664,12 @@ proto.deliverystatuspb.GetRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.deliverystatuspb.GetRequest} returns this
+ */
 proto.deliverystatuspb.GetRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -770,17 +797,21 @@ proto.deliverystatuspb.GetResponse.prototype.getDeliverystatus = function() {
 };
 
 
-/** @param {?proto.deliverystatuspb.DeliveryStatus|undefined} value */
+/**
+ * @param {?proto.deliverystatuspb.DeliveryStatus|undefined} value
+ * @return {!proto.deliverystatuspb.GetResponse} returns this
+*/
 proto.deliverystatuspb.GetResponse.prototype.setDeliverystatus = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.deliverystatuspb.GetResponse} returns this
  */
 proto.deliverystatuspb.GetResponse.prototype.clearDeliverystatus = function() {
-  this.setDeliverystatus(undefined);
+  return this.setDeliverystatus(undefined);
 };
 
 
@@ -917,17 +948,21 @@ proto.deliverystatuspb.SetRequest.prototype.getDeliverystatus = function() {
 };
 
 
-/** @param {?proto.deliverystatuspb.DeliveryStatus|undefined} value */
+/**
+ * @param {?proto.deliverystatuspb.DeliveryStatus|undefined} value
+ * @return {!proto.deliverystatuspb.SetRequest} returns this
+*/
 proto.deliverystatuspb.SetRequest.prototype.setDeliverystatus = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.deliverystatuspb.SetRequest} returns this
  */
 proto.deliverystatuspb.SetRequest.prototype.clearDeliverystatus = function() {
-  this.setDeliverystatus(undefined);
+  return this.setDeliverystatus(undefined);
 };
 
 
@@ -1061,9 +1096,12 @@ proto.deliverystatuspb.SetResponse.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.deliverystatuspb.SetResponse} returns this
+ */
 proto.deliverystatuspb.SetResponse.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1191,17 +1229,21 @@ proto.deliverystatuspb.UpdateRequest.prototype.getDeliverystatus = function() {
 };
 
 
-/** @param {?proto.deliverystatuspb.DeliveryStatus|undefined} value */
+/**
+ * @param {?proto.deliverystatuspb.DeliveryStatus|undefined} value
+ * @return {!proto.deliverystatuspb.UpdateRequest} returns this
+*/
 proto.deliverystatuspb.UpdateRequest.prototype.setDeliverystatus = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.deliverystatuspb.UpdateRequest} returns this
  */
 proto.deliverystatuspb.UpdateRequest.prototype.clearDeliverystatus = function() {
-  this.setDeliverystatus(undefined);
+  return this.setDeliverystatus(undefined);
 };
 
 
@@ -1335,9 +1377,12 @@ proto.deliverystatuspb.DeleteRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.deliverystatuspb.DeleteRequest} returns this
+ */
 proto.deliverystatuspb.DeleteRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

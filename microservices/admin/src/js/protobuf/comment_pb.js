@@ -369,9 +369,12 @@ proto.commentpb.Comment.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.commentpb.Comment} returns this
+ */
 proto.commentpb.Comment.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -384,9 +387,12 @@ proto.commentpb.Comment.prototype.getMessage = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.commentpb.Comment} returns this
+ */
 proto.commentpb.Comment.prototype.setMessage = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -399,9 +405,12 @@ proto.commentpb.Comment.prototype.getUseruuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.commentpb.Comment} returns this
+ */
 proto.commentpb.Comment.prototype.setUseruuid = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -414,9 +423,12 @@ proto.commentpb.Comment.prototype.getParentcommentuuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.commentpb.Comment} returns this
+ */
 proto.commentpb.Comment.prototype.setParentcommentuuid = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -430,17 +442,21 @@ proto.commentpb.Comment.prototype.getCreatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.commentpb.Comment} returns this
+*/
 proto.commentpb.Comment.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 5, value);
+  return jspb.Message.setWrapperField(this, 5, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.commentpb.Comment} returns this
  */
 proto.commentpb.Comment.prototype.clearCreatedat = function() {
-  this.setCreatedat(undefined);
+  return this.setCreatedat(undefined);
 };
 
 
@@ -463,17 +479,21 @@ proto.commentpb.Comment.prototype.getUpdatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.commentpb.Comment} returns this
+*/
 proto.commentpb.Comment.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 6, value);
+  return jspb.Message.setWrapperField(this, 6, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.commentpb.Comment} returns this
  */
 proto.commentpb.Comment.prototype.clearUpdatedat = function() {
-  this.setUpdatedat(undefined);
+  return this.setUpdatedat(undefined);
 };
 
 
@@ -496,17 +516,21 @@ proto.commentpb.Comment.prototype.getDeletedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.commentpb.Comment} returns this
+*/
 proto.commentpb.Comment.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 7, value);
+  return jspb.Message.setWrapperField(this, 7, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.commentpb.Comment} returns this
  */
 proto.commentpb.Comment.prototype.clearDeletedat = function() {
-  this.setDeletedat(undefined);
+  return this.setDeletedat(undefined);
 };
 
 
@@ -640,9 +664,12 @@ proto.commentpb.GetRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.commentpb.GetRequest} returns this
+ */
 proto.commentpb.GetRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -770,17 +797,21 @@ proto.commentpb.GetResponse.prototype.getComment = function() {
 };
 
 
-/** @param {?proto.commentpb.Comment|undefined} value */
+/**
+ * @param {?proto.commentpb.Comment|undefined} value
+ * @return {!proto.commentpb.GetResponse} returns this
+*/
 proto.commentpb.GetResponse.prototype.setComment = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.commentpb.GetResponse} returns this
  */
 proto.commentpb.GetResponse.prototype.clearComment = function() {
-  this.setComment(undefined);
+  return this.setComment(undefined);
 };
 
 
@@ -917,17 +948,21 @@ proto.commentpb.SetRequest.prototype.getComment = function() {
 };
 
 
-/** @param {?proto.commentpb.Comment|undefined} value */
+/**
+ * @param {?proto.commentpb.Comment|undefined} value
+ * @return {!proto.commentpb.SetRequest} returns this
+*/
 proto.commentpb.SetRequest.prototype.setComment = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.commentpb.SetRequest} returns this
  */
 proto.commentpb.SetRequest.prototype.clearComment = function() {
-  this.setComment(undefined);
+  return this.setComment(undefined);
 };
 
 
@@ -1061,9 +1096,12 @@ proto.commentpb.SetResponse.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.commentpb.SetResponse} returns this
+ */
 proto.commentpb.SetResponse.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1191,17 +1229,21 @@ proto.commentpb.UpdateRequest.prototype.getComment = function() {
 };
 
 
-/** @param {?proto.commentpb.Comment|undefined} value */
+/**
+ * @param {?proto.commentpb.Comment|undefined} value
+ * @return {!proto.commentpb.UpdateRequest} returns this
+*/
 proto.commentpb.UpdateRequest.prototype.setComment = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.commentpb.UpdateRequest} returns this
  */
 proto.commentpb.UpdateRequest.prototype.clearComment = function() {
-  this.setComment(undefined);
+  return this.setComment(undefined);
 };
 
 
@@ -1335,9 +1377,12 @@ proto.commentpb.DeleteRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.commentpb.DeleteRequest} returns this
+ */
 proto.commentpb.DeleteRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

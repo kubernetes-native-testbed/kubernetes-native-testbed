@@ -381,9 +381,12 @@ proto.paymentinfopb.PaymentInfo.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
 proto.paymentinfopb.PaymentInfo.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -396,9 +399,12 @@ proto.paymentinfopb.PaymentInfo.prototype.getUseruuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
 proto.paymentinfopb.PaymentInfo.prototype.setUseruuid = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -411,9 +417,12 @@ proto.paymentinfopb.PaymentInfo.prototype.getCardnumber = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
 proto.paymentinfopb.PaymentInfo.prototype.setCardnumber = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -426,9 +435,12 @@ proto.paymentinfopb.PaymentInfo.prototype.getCommentuuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
 proto.paymentinfopb.PaymentInfo.prototype.setCommentuuid = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -441,9 +453,12 @@ proto.paymentinfopb.PaymentInfo.prototype.getProductuuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
 proto.paymentinfopb.PaymentInfo.prototype.setProductuuid = function(value) {
-  jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -457,17 +472,21 @@ proto.paymentinfopb.PaymentInfo.prototype.getCreatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+*/
 proto.paymentinfopb.PaymentInfo.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 6, value);
+  return jspb.Message.setWrapperField(this, 6, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
  */
 proto.paymentinfopb.PaymentInfo.prototype.clearCreatedat = function() {
-  this.setCreatedat(undefined);
+  return this.setCreatedat(undefined);
 };
 
 
@@ -490,17 +509,21 @@ proto.paymentinfopb.PaymentInfo.prototype.getUpdatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+*/
 proto.paymentinfopb.PaymentInfo.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 7, value);
+  return jspb.Message.setWrapperField(this, 7, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
  */
 proto.paymentinfopb.PaymentInfo.prototype.clearUpdatedat = function() {
-  this.setUpdatedat(undefined);
+  return this.setUpdatedat(undefined);
 };
 
 
@@ -523,17 +546,21 @@ proto.paymentinfopb.PaymentInfo.prototype.getDeletedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+*/
 proto.paymentinfopb.PaymentInfo.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 8, value);
+  return jspb.Message.setWrapperField(this, 8, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
  */
 proto.paymentinfopb.PaymentInfo.prototype.clearDeletedat = function() {
-  this.setDeletedat(undefined);
+  return this.setDeletedat(undefined);
 };
 
 
@@ -667,9 +694,12 @@ proto.paymentinfopb.GetRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.GetRequest} returns this
+ */
 proto.paymentinfopb.GetRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -797,17 +827,21 @@ proto.paymentinfopb.GetResponse.prototype.getPaymentinfo = function() {
 };
 
 
-/** @param {?proto.paymentinfopb.PaymentInfo|undefined} value */
+/**
+ * @param {?proto.paymentinfopb.PaymentInfo|undefined} value
+ * @return {!proto.paymentinfopb.GetResponse} returns this
+*/
 proto.paymentinfopb.GetResponse.prototype.setPaymentinfo = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.GetResponse} returns this
  */
 proto.paymentinfopb.GetResponse.prototype.clearPaymentinfo = function() {
-  this.setPaymentinfo(undefined);
+  return this.setPaymentinfo(undefined);
 };
 
 
@@ -944,17 +978,21 @@ proto.paymentinfopb.SetRequest.prototype.getPaymentinfo = function() {
 };
 
 
-/** @param {?proto.paymentinfopb.PaymentInfo|undefined} value */
+/**
+ * @param {?proto.paymentinfopb.PaymentInfo|undefined} value
+ * @return {!proto.paymentinfopb.SetRequest} returns this
+*/
 proto.paymentinfopb.SetRequest.prototype.setPaymentinfo = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.SetRequest} returns this
  */
 proto.paymentinfopb.SetRequest.prototype.clearPaymentinfo = function() {
-  this.setPaymentinfo(undefined);
+  return this.setPaymentinfo(undefined);
 };
 
 
@@ -1088,9 +1126,12 @@ proto.paymentinfopb.SetResponse.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.SetResponse} returns this
+ */
 proto.paymentinfopb.SetResponse.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1218,17 +1259,21 @@ proto.paymentinfopb.UpdateRequest.prototype.getPaymentinfo = function() {
 };
 
 
-/** @param {?proto.paymentinfopb.PaymentInfo|undefined} value */
+/**
+ * @param {?proto.paymentinfopb.PaymentInfo|undefined} value
+ * @return {!proto.paymentinfopb.UpdateRequest} returns this
+*/
 proto.paymentinfopb.UpdateRequest.prototype.setPaymentinfo = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.UpdateRequest} returns this
  */
 proto.paymentinfopb.UpdateRequest.prototype.clearPaymentinfo = function() {
-  this.setPaymentinfo(undefined);
+  return this.setPaymentinfo(undefined);
 };
 
 
@@ -1362,9 +1407,12 @@ proto.paymentinfopb.DeleteRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.DeleteRequest} returns this
+ */
 proto.paymentinfopb.DeleteRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

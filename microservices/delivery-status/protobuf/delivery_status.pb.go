@@ -357,7 +357,9 @@ func init() {
 	proto.RegisterType((*DeleteRequest)(nil), "deliverystatuspb.DeleteRequest")
 }
 
-func init() { proto.RegisterFile("delivery_status.proto", fileDescriptor_0bce9cfbc17985f1) }
+func init() {
+	proto.RegisterFile("delivery_status.proto", fileDescriptor_0bce9cfbc17985f1)
+}
 
 var fileDescriptor_0bce9cfbc17985f1 = []byte{
 	// 388 bytes of a gzipped FileDescriptorProto
@@ -390,11 +392,11 @@ var fileDescriptor_0bce9cfbc17985f1 = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConn
+var _ grpc.ClientConnInterface
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
+const _ = grpc.SupportPackageIsVersion6
 
 // DeliveryStatusAPIClient is the client API for DeliveryStatusAPI service.
 //
@@ -407,10 +409,10 @@ type DeliveryStatusAPIClient interface {
 }
 
 type deliveryStatusAPIClient struct {
-	cc *grpc.ClientConn
+	cc grpc.ClientConnInterface
 }
 
-func NewDeliveryStatusAPIClient(cc *grpc.ClientConn) DeliveryStatusAPIClient {
+func NewDeliveryStatusAPIClient(cc grpc.ClientConnInterface) DeliveryStatusAPIClient {
 	return &deliveryStatusAPIClient{cc}
 }
 

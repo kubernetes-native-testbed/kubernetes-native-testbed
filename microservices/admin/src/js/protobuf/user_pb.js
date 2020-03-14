@@ -449,9 +449,12 @@ proto.userpb.User.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.User} returns this
+ */
 proto.userpb.User.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -464,9 +467,12 @@ proto.userpb.User.prototype.getUsername = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.User} returns this
+ */
 proto.userpb.User.prototype.setUsername = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -479,9 +485,12 @@ proto.userpb.User.prototype.getFirstname = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.User} returns this
+ */
 proto.userpb.User.prototype.setFirstname = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -494,9 +503,12 @@ proto.userpb.User.prototype.getLastname = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.User} returns this
+ */
 proto.userpb.User.prototype.setLastname = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -509,9 +521,12 @@ proto.userpb.User.prototype.getAge = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.userpb.User} returns this
+ */
 proto.userpb.User.prototype.setAge = function(value) {
-  jspb.Message.setProto3IntField(this, 5, value);
+  return jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
@@ -525,9 +540,12 @@ proto.userpb.User.prototype.getAddressesList = function() {
 };
 
 
-/** @param {!Array<!proto.userpb.Address>} value */
+/**
+ * @param {!Array<!proto.userpb.Address>} value
+ * @return {!proto.userpb.User} returns this
+*/
 proto.userpb.User.prototype.setAddressesList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 6, value);
+  return jspb.Message.setRepeatedWrapperField(this, 6, value);
 };
 
 
@@ -543,9 +561,10 @@ proto.userpb.User.prototype.addAddresses = function(opt_value, opt_index) {
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.userpb.User} returns this
  */
 proto.userpb.User.prototype.clearAddressesList = function() {
-  this.setAddressesList([]);
+  return this.setAddressesList([]);
 };
 
 
@@ -558,9 +577,12 @@ proto.userpb.User.prototype.getPasswordhash = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.User} returns this
+ */
 proto.userpb.User.prototype.setPasswordhash = function(value) {
-  jspb.Message.setProto3StringField(this, 7, value);
+  return jspb.Message.setProto3StringField(this, 7, value);
 };
 
 
@@ -573,9 +595,12 @@ proto.userpb.User.prototype.getDefaultpaymentinfouuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.User} returns this
+ */
 proto.userpb.User.prototype.setDefaultpaymentinfouuid = function(value) {
-  jspb.Message.setProto3StringField(this, 8, value);
+  return jspb.Message.setProto3StringField(this, 8, value);
 };
 
 
@@ -589,17 +614,21 @@ proto.userpb.User.prototype.getCreatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.userpb.User} returns this
+*/
 proto.userpb.User.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 9, value);
+  return jspb.Message.setWrapperField(this, 9, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.userpb.User} returns this
  */
 proto.userpb.User.prototype.clearCreatedat = function() {
-  this.setCreatedat(undefined);
+  return this.setCreatedat(undefined);
 };
 
 
@@ -622,17 +651,21 @@ proto.userpb.User.prototype.getUpdatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.userpb.User} returns this
+*/
 proto.userpb.User.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 10, value);
+  return jspb.Message.setWrapperField(this, 10, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.userpb.User} returns this
  */
 proto.userpb.User.prototype.clearUpdatedat = function() {
-  this.setUpdatedat(undefined);
+  return this.setUpdatedat(undefined);
 };
 
 
@@ -655,17 +688,21 @@ proto.userpb.User.prototype.getDeletedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.userpb.User} returns this
+*/
 proto.userpb.User.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 11, value);
+  return jspb.Message.setWrapperField(this, 11, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.userpb.User} returns this
  */
 proto.userpb.User.prototype.clearDeletedat = function() {
-  this.setDeletedat(undefined);
+  return this.setDeletedat(undefined);
 };
 
 
@@ -883,9 +920,12 @@ proto.userpb.Address.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.Address} returns this
+ */
 proto.userpb.Address.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -898,9 +938,12 @@ proto.userpb.Address.prototype.getUseruuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.Address} returns this
+ */
 proto.userpb.Address.prototype.setUseruuid = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -913,9 +956,12 @@ proto.userpb.Address.prototype.getZipcode = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.Address} returns this
+ */
 proto.userpb.Address.prototype.setZipcode = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -928,9 +974,12 @@ proto.userpb.Address.prototype.getCountry = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.Address} returns this
+ */
 proto.userpb.Address.prototype.setCountry = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -943,9 +992,12 @@ proto.userpb.Address.prototype.getState = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.Address} returns this
+ */
 proto.userpb.Address.prototype.setState = function(value) {
-  jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -958,9 +1010,12 @@ proto.userpb.Address.prototype.getCity = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.Address} returns this
+ */
 proto.userpb.Address.prototype.setCity = function(value) {
-  jspb.Message.setProto3StringField(this, 6, value);
+  return jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
@@ -973,9 +1028,12 @@ proto.userpb.Address.prototype.getAddressline = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.Address} returns this
+ */
 proto.userpb.Address.prototype.setAddressline = function(value) {
-  jspb.Message.setProto3StringField(this, 7, value);
+  return jspb.Message.setProto3StringField(this, 7, value);
 };
 
 
@@ -988,9 +1046,12 @@ proto.userpb.Address.prototype.getDisabled = function() {
 };
 
 
-/** @param {boolean} value */
+/**
+ * @param {boolean} value
+ * @return {!proto.userpb.Address} returns this
+ */
 proto.userpb.Address.prototype.setDisabled = function(value) {
-  jspb.Message.setProto3BooleanField(this, 8, value);
+  return jspb.Message.setProto3BooleanField(this, 8, value);
 };
 
 
@@ -1115,9 +1176,12 @@ proto.userpb.GetRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.GetRequest} returns this
+ */
 proto.userpb.GetRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1245,17 +1309,21 @@ proto.userpb.GetResponse.prototype.getUser = function() {
 };
 
 
-/** @param {?proto.userpb.User|undefined} value */
+/**
+ * @param {?proto.userpb.User|undefined} value
+ * @return {!proto.userpb.GetResponse} returns this
+*/
 proto.userpb.GetResponse.prototype.setUser = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.userpb.GetResponse} returns this
  */
 proto.userpb.GetResponse.prototype.clearUser = function() {
-  this.setUser(undefined);
+  return this.setUser(undefined);
 };
 
 
@@ -1392,17 +1460,21 @@ proto.userpb.SetRequest.prototype.getUser = function() {
 };
 
 
-/** @param {?proto.userpb.User|undefined} value */
+/**
+ * @param {?proto.userpb.User|undefined} value
+ * @return {!proto.userpb.SetRequest} returns this
+*/
 proto.userpb.SetRequest.prototype.setUser = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.userpb.SetRequest} returns this
  */
 proto.userpb.SetRequest.prototype.clearUser = function() {
-  this.setUser(undefined);
+  return this.setUser(undefined);
 };
 
 
@@ -1536,9 +1608,12 @@ proto.userpb.SetResponse.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.SetResponse} returns this
+ */
 proto.userpb.SetResponse.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1666,17 +1741,21 @@ proto.userpb.UpdateRequest.prototype.getUser = function() {
 };
 
 
-/** @param {?proto.userpb.User|undefined} value */
+/**
+ * @param {?proto.userpb.User|undefined} value
+ * @return {!proto.userpb.UpdateRequest} returns this
+*/
 proto.userpb.UpdateRequest.prototype.setUser = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.userpb.UpdateRequest} returns this
  */
 proto.userpb.UpdateRequest.prototype.clearUser = function() {
-  this.setUser(undefined);
+  return this.setUser(undefined);
 };
 
 
@@ -1810,9 +1889,12 @@ proto.userpb.DeleteRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.userpb.DeleteRequest} returns this
+ */
 proto.userpb.DeleteRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

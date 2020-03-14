@@ -357,7 +357,9 @@ func init() {
 	proto.RegisterType((*DeleteRequest)(nil), "commentpb.DeleteRequest")
 }
 
-func init() { proto.RegisterFile("comment.proto", fileDescriptor_749aee09ea917828) }
+func init() {
+	proto.RegisterFile("comment.proto", fileDescriptor_749aee09ea917828)
+}
 
 var fileDescriptor_749aee09ea917828 = []byte{
 	// 365 bytes of a gzipped FileDescriptorProto
@@ -388,11 +390,11 @@ var fileDescriptor_749aee09ea917828 = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConn
+var _ grpc.ClientConnInterface
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
+const _ = grpc.SupportPackageIsVersion6
 
 // CommentAPIClient is the client API for CommentAPI service.
 //
@@ -405,10 +407,10 @@ type CommentAPIClient interface {
 }
 
 type commentAPIClient struct {
-	cc *grpc.ClientConn
+	cc grpc.ClientConnInterface
 }
 
-func NewCommentAPIClient(cc *grpc.ClientConn) CommentAPIClient {
+func NewCommentAPIClient(cc grpc.ClientConnInterface) CommentAPIClient {
 	return &commentAPIClient{cc}
 }
 

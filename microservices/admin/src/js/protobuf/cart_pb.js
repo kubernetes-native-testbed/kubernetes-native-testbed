@@ -255,7 +255,7 @@ proto.cartpb.Cart.deserializeBinaryFromReader = function(msg, reader) {
     case 3:
       var value = msg.getCartproductsmapMap();
       reader.readMessage(value, function(message, reader) {
-        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readInt32, null, "");
+        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readInt32, null, "", 0);
          });
       break;
     case 4:
@@ -356,9 +356,12 @@ proto.cartpb.Cart.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.cartpb.Cart} returns this
+ */
 proto.cartpb.Cart.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -371,9 +374,12 @@ proto.cartpb.Cart.prototype.getUseruuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.cartpb.Cart} returns this
+ */
 proto.cartpb.Cart.prototype.setUseruuid = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -392,10 +398,11 @@ proto.cartpb.Cart.prototype.getCartproductsmapMap = function(opt_noLazyCreate) {
 
 /**
  * Clears values from the map. The map will be non-null.
+ * @return {!proto.cartpb.Cart} returns this
  */
 proto.cartpb.Cart.prototype.clearCartproductsmapMap = function() {
   this.getCartproductsmapMap().clear();
-};
+  return this;};
 
 
 /**
@@ -408,17 +415,21 @@ proto.cartpb.Cart.prototype.getCreatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.cartpb.Cart} returns this
+*/
 proto.cartpb.Cart.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 4, value);
+  return jspb.Message.setWrapperField(this, 4, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.cartpb.Cart} returns this
  */
 proto.cartpb.Cart.prototype.clearCreatedat = function() {
-  this.setCreatedat(undefined);
+  return this.setCreatedat(undefined);
 };
 
 
@@ -441,17 +452,21 @@ proto.cartpb.Cart.prototype.getUpdatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.cartpb.Cart} returns this
+*/
 proto.cartpb.Cart.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 5, value);
+  return jspb.Message.setWrapperField(this, 5, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.cartpb.Cart} returns this
  */
 proto.cartpb.Cart.prototype.clearUpdatedat = function() {
-  this.setUpdatedat(undefined);
+  return this.setUpdatedat(undefined);
 };
 
 
@@ -474,17 +489,21 @@ proto.cartpb.Cart.prototype.getDeletedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.cartpb.Cart} returns this
+*/
 proto.cartpb.Cart.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 6, value);
+  return jspb.Message.setWrapperField(this, 6, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.cartpb.Cart} returns this
  */
 proto.cartpb.Cart.prototype.clearDeletedat = function() {
-  this.setDeletedat(undefined);
+  return this.setDeletedat(undefined);
 };
 
 
@@ -618,9 +637,12 @@ proto.cartpb.GetRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.cartpb.GetRequest} returns this
+ */
 proto.cartpb.GetRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -748,17 +770,21 @@ proto.cartpb.GetResponse.prototype.getCart = function() {
 };
 
 
-/** @param {?proto.cartpb.Cart|undefined} value */
+/**
+ * @param {?proto.cartpb.Cart|undefined} value
+ * @return {!proto.cartpb.GetResponse} returns this
+*/
 proto.cartpb.GetResponse.prototype.setCart = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.cartpb.GetResponse} returns this
  */
 proto.cartpb.GetResponse.prototype.clearCart = function() {
-  this.setCart(undefined);
+  return this.setCart(undefined);
 };
 
 
@@ -895,17 +921,21 @@ proto.cartpb.SetRequest.prototype.getCart = function() {
 };
 
 
-/** @param {?proto.cartpb.Cart|undefined} value */
+/**
+ * @param {?proto.cartpb.Cart|undefined} value
+ * @return {!proto.cartpb.SetRequest} returns this
+*/
 proto.cartpb.SetRequest.prototype.setCart = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.cartpb.SetRequest} returns this
  */
 proto.cartpb.SetRequest.prototype.clearCart = function() {
-  this.setCart(undefined);
+  return this.setCart(undefined);
 };
 
 
@@ -1039,9 +1069,12 @@ proto.cartpb.SetResponse.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.cartpb.SetResponse} returns this
+ */
 proto.cartpb.SetResponse.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1169,17 +1202,21 @@ proto.cartpb.UpdateRequest.prototype.getCart = function() {
 };
 
 
-/** @param {?proto.cartpb.Cart|undefined} value */
+/**
+ * @param {?proto.cartpb.Cart|undefined} value
+ * @return {!proto.cartpb.UpdateRequest} returns this
+*/
 proto.cartpb.UpdateRequest.prototype.setCart = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.cartpb.UpdateRequest} returns this
  */
 proto.cartpb.UpdateRequest.prototype.clearCart = function() {
-  this.setCart(undefined);
+  return this.setCart(undefined);
 };
 
 
@@ -1313,9 +1350,12 @@ proto.cartpb.DeleteRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.cartpb.DeleteRequest} returns this
+ */
 proto.cartpb.DeleteRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

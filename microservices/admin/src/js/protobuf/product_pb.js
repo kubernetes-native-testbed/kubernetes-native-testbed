@@ -376,9 +376,12 @@ proto.productpb.Product.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.productpb.Product} returns this
+ */
 proto.productpb.Product.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -391,9 +394,12 @@ proto.productpb.Product.prototype.getName = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.productpb.Product} returns this
+ */
 proto.productpb.Product.prototype.setName = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -406,9 +412,12 @@ proto.productpb.Product.prototype.getPrice = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.productpb.Product} returns this
+ */
 proto.productpb.Product.prototype.setPrice = function(value) {
-  jspb.Message.setProto3IntField(this, 3, value);
+  return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
@@ -421,26 +430,31 @@ proto.productpb.Product.prototype.getImageurlsList = function() {
 };
 
 
-/** @param {!Array<string>} value */
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.productpb.Product} returns this
+ */
 proto.productpb.Product.prototype.setImageurlsList = function(value) {
-  jspb.Message.setField(this, 4, value || []);
+  return jspb.Message.setField(this, 4, value || []);
 };
 
 
 /**
  * @param {string} value
  * @param {number=} opt_index
+ * @return {!proto.productpb.Product} returns this
  */
 proto.productpb.Product.prototype.addImageurls = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+  return jspb.Message.addToRepeatedField(this, 4, value, opt_index);
 };
 
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.productpb.Product} returns this
  */
 proto.productpb.Product.prototype.clearImageurlsList = function() {
-  this.setImageurlsList([]);
+  return this.setImageurlsList([]);
 };
 
 
@@ -454,17 +468,21 @@ proto.productpb.Product.prototype.getCreatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.productpb.Product} returns this
+*/
 proto.productpb.Product.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 5, value);
+  return jspb.Message.setWrapperField(this, 5, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.productpb.Product} returns this
  */
 proto.productpb.Product.prototype.clearCreatedat = function() {
-  this.setCreatedat(undefined);
+  return this.setCreatedat(undefined);
 };
 
 
@@ -487,17 +505,21 @@ proto.productpb.Product.prototype.getUpdatedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.productpb.Product} returns this
+*/
 proto.productpb.Product.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 6, value);
+  return jspb.Message.setWrapperField(this, 6, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.productpb.Product} returns this
  */
 proto.productpb.Product.prototype.clearUpdatedat = function() {
-  this.setUpdatedat(undefined);
+  return this.setUpdatedat(undefined);
 };
 
 
@@ -520,17 +542,21 @@ proto.productpb.Product.prototype.getDeletedat = function() {
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.productpb.Product} returns this
+*/
 proto.productpb.Product.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 7, value);
+  return jspb.Message.setWrapperField(this, 7, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.productpb.Product} returns this
  */
 proto.productpb.Product.prototype.clearDeletedat = function() {
-  this.setDeletedat(undefined);
+  return this.setDeletedat(undefined);
 };
 
 
@@ -664,9 +690,12 @@ proto.productpb.GetRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.productpb.GetRequest} returns this
+ */
 proto.productpb.GetRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -794,17 +823,21 @@ proto.productpb.GetResponse.prototype.getProduct = function() {
 };
 
 
-/** @param {?proto.productpb.Product|undefined} value */
+/**
+ * @param {?proto.productpb.Product|undefined} value
+ * @return {!proto.productpb.GetResponse} returns this
+*/
 proto.productpb.GetResponse.prototype.setProduct = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.productpb.GetResponse} returns this
  */
 proto.productpb.GetResponse.prototype.clearProduct = function() {
-  this.setProduct(undefined);
+  return this.setProduct(undefined);
 };
 
 
@@ -941,17 +974,21 @@ proto.productpb.SetRequest.prototype.getProduct = function() {
 };
 
 
-/** @param {?proto.productpb.Product|undefined} value */
+/**
+ * @param {?proto.productpb.Product|undefined} value
+ * @return {!proto.productpb.SetRequest} returns this
+*/
 proto.productpb.SetRequest.prototype.setProduct = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.productpb.SetRequest} returns this
  */
 proto.productpb.SetRequest.prototype.clearProduct = function() {
-  this.setProduct(undefined);
+  return this.setProduct(undefined);
 };
 
 
@@ -1085,9 +1122,12 @@ proto.productpb.SetResponse.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.productpb.SetResponse} returns this
+ */
 proto.productpb.SetResponse.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1215,17 +1255,21 @@ proto.productpb.UpdateRequest.prototype.getProduct = function() {
 };
 
 
-/** @param {?proto.productpb.Product|undefined} value */
+/**
+ * @param {?proto.productpb.Product|undefined} value
+ * @return {!proto.productpb.UpdateRequest} returns this
+*/
 proto.productpb.UpdateRequest.prototype.setProduct = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.productpb.UpdateRequest} returns this
  */
 proto.productpb.UpdateRequest.prototype.clearProduct = function() {
-  this.setProduct(undefined);
+  return this.setProduct(undefined);
 };
 
 
@@ -1359,9 +1403,12 @@ proto.productpb.DeleteRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.productpb.DeleteRequest} returns this
+ */
 proto.productpb.DeleteRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
