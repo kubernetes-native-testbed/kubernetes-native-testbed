@@ -31,17 +31,25 @@ if [ -z "${LOCAL_CONTEXT}" ]; then
   exit 1;
 fi
 
-# watch files and run applications on local kubernetes by skaffold
-skaffold dev \
-  --kube-context ${LOCAL_CONTEXT} \
-  --filename ../../development/${MICROSERVICE}/skaffold.yaml \
-  --port-forward &
-
 # connect remote kubernetes and local kubernetes by telepresence
 telepresence \
   --context ${REMOTE_CONTEXT} \
   --namespace ${MICROSERVICE} \
   --swap-deployment ${MICROSERVICE} \
   --expose 8080:80 \
-  --logfile /dev/null
+  --logfile /dev/null \
+  --run sleep 10000 &
+
+# watch files and run applications on local kubernetes by skaffold
+while true; do
+  skaffold dev \
+    --kube-context ${LOCAL_CONTEXT} \
+    --filename ../../development/${MICROSERVICE}/skaffold.yaml \
+    --port-forward 
+done;
+
+wait
+
+echo Finished development mode
+
 
