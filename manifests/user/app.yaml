@@ -51,6 +51,14 @@ spec:
               path: /healthz
               port: 8080
               scheme: HTTP
+          readinessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+            initialDelaySeconds: 5
+          livenessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+            initialDelaySeconds: 10
           ports:
             - containerPort: 8080
 ---
