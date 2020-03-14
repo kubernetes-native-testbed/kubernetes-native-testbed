@@ -23,6 +23,21 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 * presslabs-mysql-operator
 * oracle-mysql-operator
 
+# Local development
+
+```
+# initializing
+source ./development/initialize.sh
+
+# start local development for admin
+./development/local-development.sh adminE
+
+# access service with  whole system or only local check
+https://testbed.xxx.xxx.xxx.xxx.nip.io/admin/index.html
+  or
+http://localhost:8080/
+```
+
 # Memo
 
 https://docs.google.com/spreadsheets/d/18Pza74gohErR-58ib8nUFeJcMJaTr65Jalh7EKAVc7g/edit#gid=0
