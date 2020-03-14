@@ -1,6 +1,5 @@
 *tls.key
 *tls.crt
 *cert.yaml
-/microservices/product/product
 *.DS_Store
-
+*telepresence.log

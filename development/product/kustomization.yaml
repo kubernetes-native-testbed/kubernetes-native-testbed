@@ -1,0 +1,6 @@
+bases:
+- ../../manifests/product/app.yaml
+images:
+- name: registry-harbor-core.infra.svc.cluster.local/library/product
+  newName: local-product
+

@@ -1,0 +1,6 @@
+bases:
+- ../../manifests/payment-info/app.yaml
+images:
+- name: registry-harbor-core.infra.svc.cluster.local/library/payment-info
+  newName: local-payment-info
+

@@ -1,0 +1,6 @@
+bases:
+- ../../manifests/rate/app.yaml
+images:
+- name: registry-harbor-core.infra.svc.cluster.local/library/rate
+  newName: local-rate
+

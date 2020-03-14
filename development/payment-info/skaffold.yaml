@@ -1,0 +1,25 @@
+---
+apiVersion: skaffold/v2alpha3
+kind: Config
+build:
+  artifacts:
+  - image: local-payment-info
+    docker:
+      dockerfile: ./Dockerfile
+  tagPolicy:
+    envTemplate:
+      template: "local-payment-info:latest"
+  local:
+    push: false
+deploy:
+  kustomize:
+    paths:
+    - ../../development/payment-info
+    buildArgs:
+    - --load_restrictor
+    - LoadRestrictionsNone
+    flags:
+      delete:
+      - --force
+      - --grace-period=0
+      - --wait

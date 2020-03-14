@@ -1,0 +1,6 @@
+bases:
+- ../../manifests/cart/app.yaml
+images:
+- name: registry-harbor-core.infra.svc.cluster.local/library/cart
+  newName: local-cart
+
