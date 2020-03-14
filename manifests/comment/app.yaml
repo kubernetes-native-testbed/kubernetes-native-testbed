@@ -39,7 +39,7 @@ spec:
                   key: password
             - name: DB_NAME
               valueFrom:
-                configMapRef:
+                configMapKeyRef:
                   name: comment-db-init-conf
                   key: dbname
           resources:
@@ -47,10 +47,13 @@ spec:
               cpu: 100m
               memory: 512Mi
           readinessProbe:
-            httpGet:
-              path: /healthz
-              port: 8080
-              scheme: HTTP
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+            initialDelaySeconds: 5
+          livenessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+            initialDelaySeconds: 10
           ports:
             - containerPort: 8080
 ---
