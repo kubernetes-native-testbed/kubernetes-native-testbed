@@ -13,7 +13,7 @@ spec:
       recurse: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: infra
+    namespace: monitoring
   syncPolicy:
     automated:
       prune: true
