@@ -49,10 +49,10 @@ export const order = new Vue({
         } else {
           let o = new Object();
           o.uuid = resp.getOrder().getUuid();
-          o.userUUID = resp.getOrder().getUserUuid();
-          o.paymentInfoUUID = resp.getOrder().getPaymentInfoUuid();
-          o.addressUUID = resp.getOrder().getAddressUuid();
-          o.orderedProducts = resp.getOrder().getOrderedProductsList();
+          o.userUUID = resp.getOrder().getUseruuid();
+          o.paymentInfoUUID = resp.getOrder().getPaymentinfouuid();
+          o.addressUUID = resp.getOrder().getAddressuuid();
+          o.orderedProducts = resp.getOrder().getOrderedproductsList();
           o.createdAt = resp.getOrder().getCreatedat();
           o.updatedAt = resp.getOrder().getUpdatedat();
           o.deletedAt = resp.getOrder().getDeletedat();
@@ -65,18 +65,18 @@ export const order = new Vue({
       this.clearResponseField();
       const req = new SetRequest();
       const o = new Order();
-      o.setUserUuid(this.form.userUUID);
-      o.setPaymentInfoUuid(this.form.paymentInfoUUID);
-      o.setAddressUuid(this.form.addressUUID);
+      o.setUseruuid(this.form.userUUID);
+      o.setPaymentinfouuid(this.form.paymentInfoUUID);
+      o.setAddressuuid(this.form.addressUUID);
       var orderedProducts = []
       this.form.orderedProducts.forEach(function(v) {
         const op = new OrderedProduct();
-        op.setProductUuid(v.productUUID);
+        op.setProductuuid(v.productUUID);
         op.setCount(v.count);
         op.setPrice(v.price);
         orderedProducts.push(op)
       });
-      o.setOrderedProducts(orderedProducts);
+      o.setOrderedproductsList(orderedProducts);
       req.setOrder(o);
       this.client.set(req, {}, (err, resp) => {
         if (err) {
@@ -95,10 +95,10 @@ export const order = new Vue({
       const req = new UpdateRequest();
       const o = new Order();
       o.setUuid(this.form.uuid);
-      o.setUserUuid(this.form.userUUID);
-      o.setPaymentInfoUuid(this.form.paymentInfoUUID);
-      o.setAddressUuid(this.form.addressUUID);
-      o.setOrderedProducts(this.form.orderedProducts);
+      o.setUseruuid(this.form.userUUID);
+      o.setPaymentinfouuid(this.form.paymentInfoUUID);
+      o.setAddressuuid(this.form.addressUUID);
+      o.setOrderedproductsList(this.form.orderedProducts);
       req.setOrder(o);
       this.client.update(req, {}, (err, resp) => {
         if (err) {
