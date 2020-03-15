@@ -13,7 +13,8 @@ spec:
   pod:
     enableConfigReload: true
   auth:
-    enableServiceAccounts: true
+    #    clientsAuthSecret: "nats-clients-auth"
+    #    enableServiceAccounts: true
 
 # The ServiceAccount and NatsServiceRole definitions
 # are required to have the same name in the namespace.
@@ -65,3 +66,28 @@ spec:
     publish: [">"]
     subscribe: [">"]
 
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nats-clients-auth
+  namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: queue
+stringData:
+  clients-auth.json: |-
+    {
+      "users": [
+        { "username": "order", "password": "order",
+          "permissions": {
+            "publish": [">"],
+            "subscribe": [">"]
+          }
+        }
+      ],
+      "default_permissions": {
+        "publish": ["SANDBOX.*"],
+        "subscribe": ["PUBLIC.>"]
+      }
+    }
