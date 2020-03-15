@@ -1,6 +1,6 @@
-export const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, User, Address} = require('./protobuf/user_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, User, Address} = require('./protobuf/user_pb.js');
 
-export const {UserAPIClient} = require('./protobuf/user_grpc_web_pb.js');
+const {UserAPIClient} = require('./protobuf/user_grpc_web_pb.js');
 
 export const user = new Vue({
   el: '#user',
