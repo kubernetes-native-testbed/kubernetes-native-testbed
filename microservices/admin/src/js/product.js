@@ -1,6 +1,6 @@
-export const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Product} = require('./protobuf/product_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Product} = require('./protobuf/product_pb.js');
 
-export const {ProductAPIClient} = require('./protobuf/product_grpc_web_pb.js');
+const {ProductAPIClient} = require('./protobuf/product_grpc_web_pb.js');
 
 export const product = new Vue({
   el: '#product',
