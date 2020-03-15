@@ -87,10 +87,10 @@ metadata:
     role: check
 data:
   check.sh: |-
-    #!/bin/bash
+    #!/bin/sh
     echo "check script running..."
-    (echo "set checkjob-key 0 40 6"; echo "value1"; sleep 1;) | telnet point-kvs-memcached.point.svc.cluster.local 11211
-    (echo "get checkjob-key"; sleep 1;) | telnet point-kvs-memcached.point.svc.cluster.local 11211
+    (echo "set checkjob-key 0 40 6"; echo "value1"; sleep 1;) | telnet ${KVS_HOST} ${KVS_PORT}
+    (echo "get checkjob-key"; sleep 1;) | telnet ${KVS_HOST} ${KVS_PORT}
     exit 0
 ---
 apiVersion: batch/v1beta1
@@ -118,23 +118,14 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: check-container
-            image: ubuntu:18.04
+            image: busybox
             command:
             - /scripts/check.sh
             env:
-            - name: QUEUE_HOST
-              value: point-queue-kafka-bootstrap.point.svc.cluster.local
-            - name: QUEUE_PORT
-              value: "9092"
-            - name: QUEUE_TOPIC
-              value: test-topic
-            - name: QUEUE_USER
-              value: point-user
-            - name: QUEUE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: point-user
-                  key: user.password
+            - name: KVS_HOST
+              value: point-kvs-memcached.point.svc.cluster.local
+            - name: KVS_PORT
+              value: "11211"
             volumeMounts:
             - name: scripts-volume
               mountPath: /scripts

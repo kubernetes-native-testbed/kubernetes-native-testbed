@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: prometheus-operator-cd
+  name: weave-scope-cd
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed.git
     targetRevision: develop
-    path: manifests/infra/prometheus-operator
+    path: manifests/infra/weave-scope
     directory:
       recurse: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring
+    namespace: weave
   syncPolicy:
     automated:
       prune: true

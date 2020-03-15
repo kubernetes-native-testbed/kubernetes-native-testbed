@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: prometheus-operator-cd
+  name: loki-cd
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed.git
     targetRevision: develop
-    path: manifests/infra/prometheus-operator
+    path: manifests/infra/loki
     directory:
       recurse: true
   destination:
