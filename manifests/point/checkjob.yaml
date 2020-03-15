@@ -14,7 +14,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: check-scripts
+  name: check-scripts-queue
   namespace: point
   labels:
     service: point
@@ -29,7 +29,7 @@ data:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: check-job
+  name: check-job-queue
   namespace: point
   labels:
     service: point
@@ -74,5 +74,73 @@ spec:
           volumes:
             - name: scripts-volume
               configMap:
-                name: check-scripts
+                name: check-scripts-queue
                 defaultMode: 493 # mode 755
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: check-scripts-kvs
+  namespace: point
+  labels:
+    service: point
+    role: check
+data:
+  check.sh: |-
+    #!/bin/bash
+    echo "check script running..."
+    (echo "set checkjob-key 0 40 6"; echo "value1"; sleep 1;) | telnet point-kvs-memcached.point.svc.cluster.local 11211
+    (echo "get checkjob-key"; sleep 1;) | telnet point-kvs-memcached.point.svc.cluster.local 11211
+    exit 0
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: check-job-kvs
+  namespace: point
+  labels:
+    service: point
+    role: check
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 30
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  suspend: false
+  jobTemplate:
+    spec:
+      completions: 1
+      parallelism: 1
+      backoffLimit: 10
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: check-container
+            image: ubuntu:18.04
+            command:
+            - /scripts/check.sh
+            env:
+            - name: QUEUE_HOST
+              value: point-queue-kafka-bootstrap.point.svc.cluster.local
+            - name: QUEUE_PORT
+              value: "9092"
+            - name: QUEUE_TOPIC
+              value: test-topic
+            - name: QUEUE_USER
+              value: point-user
+            - name: QUEUE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: point-user
+                  key: user.password
+            volumeMounts:
+            - name: scripts-volume
+              mountPath: /scripts
+          volumes:
+            - name: scripts-volume
+              configMap:
+                name: check-scripts-kvs
+                defaultMode: 493 # mode 755
+---
