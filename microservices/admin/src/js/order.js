@@ -38,7 +38,7 @@ export const order = new Vue({
       this.resp.errorCode = 0;
       this.errorMsg = '';
     },
-    getProduct: function() {
+    getOrder: function() {
       this.clearResponseField();
       const req = new GetRequest();
       req.setUuid(this.form.uuid);
@@ -61,7 +61,7 @@ export const order = new Vue({
         }
       });
     },
-    setProduct: function() {
+    setOrder: function() {
       this.clearResponseField();
       const req = new SetRequest();
       const o = new Order();
@@ -90,7 +90,7 @@ export const order = new Vue({
         }
       });
     },
-    updateProduct: function() {
+    updateOrder: function() {
       this.clearResponseField();
       const req = new UpdateRequest();
       const o = new Order();
@@ -109,7 +109,7 @@ export const order = new Vue({
         }
       });
     },
-    deleteProduct: function() {
+    deleteOrder: function() {
       this.clearResponseField();
       const req = new DeleteRequest();
       req.setUuid(this.form.uuid);
