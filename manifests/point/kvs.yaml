@@ -1,0 +1,13 @@
+---
+apiVersion: mcrouter.example.com/v1alpha3
+kind: Mcrouter
+metadata:
+  name: point-kvs
+  namespace: point
+  labels:
+    service: point
+    role: kvs
+spec:
+  memcached_pool_size: 3
+  pool_setup: replicated
+
