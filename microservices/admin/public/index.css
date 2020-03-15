@@ -1,9 +1,9 @@
 .output {
   font-family: Consolas;
-  font-size: 11px;
+  font-size: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #333333;
+  /*border: 1px solid #333333;*/
 }
 
 .section {
@@ -12,3 +12,18 @@
     size: "3";
     align: "left";
 }
+
+body {
+  margin: 10px 50px;
+}
+
+input {
+  margin: 4px 0px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 120%;
+  text-align: center;
+}
+
