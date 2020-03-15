@@ -36,4 +36,5 @@ spec:
   - prometheus.34.84.105.184.nip.io
   - grafana.34.84.105.184.nip.io
   - alertmanager.34.84.105.184.nip.io
+  - weave-scope.34.84.105.184.nip.io
   commonName: testbed.34.84.105.184.nip.io

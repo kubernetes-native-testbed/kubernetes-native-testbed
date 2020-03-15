@@ -1,0 +1,15 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: weave-scope
+  namespace: weave
+  labels:
+    service: weave-scope
+    role: proxy
+spec:
+  routes:
+    - services:
+        - name: weave-scope-app
+          port: 80
+      permitInsecure: true
