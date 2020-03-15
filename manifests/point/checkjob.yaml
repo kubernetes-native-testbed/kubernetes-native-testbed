@@ -118,7 +118,7 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: check-container
-            image: ubuntu:18.04
+            image: busybox
             command:
             - /scripts/check.sh
             env:
