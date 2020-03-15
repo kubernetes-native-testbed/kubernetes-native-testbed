@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: check-scripts
+  name: check-scripts-db
   namespace: comment
   labels:
     service: comment
@@ -18,7 +18,7 @@ data:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: check-job
+  name: check-job-db
   namespace: comment
   labels:
     service: comment
@@ -69,5 +69,5 @@ spec:
           volumes:
             - name: scripts-volume
               configMap:
-                name: check-scripts
+                name: check-scripts-db
                 defaultMode: 493 # mode 755
