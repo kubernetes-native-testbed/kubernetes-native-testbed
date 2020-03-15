@@ -86,6 +86,44 @@
     </div>
     <hr class="setion">
 
+
+    <!-- 
+      ###########################################################################################
+      # Order
+      ###########################################################################################
+    -->
+    <div id="order">
+      <p>
+        <b>[Order]</b><br/>
+        UUID: <input v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
+        UserUUID: <input v-model="form.userUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
+        PaymentInfoUUID: <input v-model="form.paymentInfoUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
+        AddressUUID: <input v-model="form.addressUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
+        OrderedProducts:
+        <span v-for="(orderedProduct, index) in form.orderedProducts">
+          <br/>
+          <input v-model="orderedProduct.productUUID" :key="`${index}-1`" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+          <input v-model="orderedProduct.count" :key="`${index}-2`" type="text" placeholder="10">
+          <input v-model="orderedProduct.price" :key="`${index}-1`" type="text" placeholder="100">
+        </span>
+        <button v-on:click="addOrderProduct">+</button>
+        <br/>
+
+        <button v-on:click="getOrder">Get</button>
+        <button v-on:click="setOrder">Set</button>
+        <button v-on:click="updateOrder">Update</button>
+        <button v-on:click="deleteOrder">Delete</button>
+        <span>|</span>
+        <button v-on:click="clearForm">Clear</button>
+      </p>
+      <div class="output">
+      Response: {{ resp.order }}<br/>
+      <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+      </div>
+    </div>
+    <hr class="setion">
+
+
     <!-- 
       ###########################################################################################
       # Utils
