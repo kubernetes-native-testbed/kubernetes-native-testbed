@@ -1,0 +1,45 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: prometheus
+  namespace: monitoring
+  labels:
+    service: prometheus
+    role: proxy
+spec:
+  routes:
+    - services:
+        - name: prometheus-k8s
+          port: 9090
+      permitInsecure: true
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: grafana
+  namespace: monitoring
+  labels:
+    service: prometheus
+    role: proxy
+spec:
+  routes:
+    - services:
+        - name: grafana
+          port: 3000
+      permitInsecure: true
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: alertmanager
+  namespace: monitoring
+  labels:
+    service: prometheus
+    role: proxy
+spec:
+  routes:
+    - services:
+        - name: alertmanager-main
+          port: 9093
+      permitInsecure: true

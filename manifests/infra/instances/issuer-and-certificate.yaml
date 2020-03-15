@@ -33,4 +33,7 @@ spec:
   - notary.34.84.105.184.nip.io
   - dashboard.34.84.105.184.nip.io
   - rook.34.84.105.184.nip.io
+  - prometheus.34.84.105.184.nip.io
+  - grafana.34.84.105.184.nip.io
+  - alertmanager.34.84.105.184.nip.io
   commonName: testbed.34.84.105.184.nip.io

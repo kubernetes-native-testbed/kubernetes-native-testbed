@@ -226,6 +226,84 @@ spec:
           port: 80
       permitInsecure: true
 ---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: prometheus-httpproxy
+  namespace: infra
+  labels:
+    service: infra
+    role: proxy
+spec:
+  virtualhost:
+    fqdn: prometheus.34.84.105.184.nip.io
+    tls:
+      secretName: testbed-cert
+  includes:
+  - name: prometheus
+    namespace: monitoring
+    conditions:
+    - prefix: /
+  routes:
+    - conditions:
+      - prefix: /.well-known/acme-challenge
+      services:
+        - name: infra-nginx-ingress-controller
+          port: 80
+      permitInsecure: true
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: grafana-httpproxy
+  namespace: infra
+  labels:
+    service: infra
+    role: proxy
+spec:
+  virtualhost:
+    fqdn: grafana.34.84.105.184.nip.io
+    tls:
+      secretName: testbed-cert
+  includes:
+  - name: grafana
+    namespace: monitoring
+    conditions:
+    - prefix: /
+  routes:
+    - conditions:
+      - prefix: /.well-known/acme-challenge
+      services:
+        - name: infra-nginx-ingress-controller
+          port: 80
+      permitInsecure: true
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: alertmanager-httpproxy
+  namespace: infra
+  labels:
+    service: infra
+    role: proxy
+spec:
+  virtualhost:
+    fqdn: alertmanager.34.84.105.184.nip.io
+    tls:
+      secretName: testbed-cert
+  includes:
+  - name: alertmanager
+    namespace: monitoring
+    conditions:
+    - prefix: /
+  routes:
+    - conditions:
+      - prefix: /.well-known/acme-challenge
+      services:
+        - name: infra-nginx-ingress-controller
+          port: 80
+      permitInsecure: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
