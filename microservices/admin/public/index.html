@@ -3,11 +3,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="uikit.min.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   </head>
-  <body>
+  <body class="uk-padding">
     <h1 align="center">Client Page</h1>
-    <hr class="setion">
+    <hr>
 
 
     <!-- 
@@ -15,33 +16,59 @@
       # Product
       ###########################################################################################
     -->
+    <hr>
     <div id="product">
-      <p>
-        <b>[Product]</b><br/>
-        UUID: <input v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
-        Name: <input v-model="form.name" type="text" placeholder="Sample Product"><br/>
-        Price: <input v-model="form.price" type="text" placeholder="100"><br/>
-        ImageURLs:
-        <span v-for="(url, index) in form.imageURLs">
-          <br/>
-          <input v-model="url.value" :key="index" type="text" placeholder="http://example.com/image.png">
-        </span>
-        <button v-on:click="addImageURL">+</button>
-        <br/>
+      <div>
+        <h2>Product</h2>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+          </div>
+        </div>
+        </br>
 
-        <button v-on:click="getProduct">Get</button>
-        <button v-on:click="setProduct">Set</button>
-        <button v-on:click="updateProduct">Update</button>
-        <button v-on:click="deleteProduct">Delete</button>
-        <span>|</span>
-        <button v-on:click="clearForm">Clear</button>
-      </p>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Name:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.name" type="text" placeholder="Sample Product"><br/>
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Price:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.price" type="text" placeholder="100"><br/>
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">ImageURLs:</label></div>
+          <div class="uk-width-3-4">
+            <span v-for="(url, index) in form.imageURLs">
+              <label>{{ index }}</label>
+              <input class="uk-input" v-model="url.value" :key="index" type="text" placeholder="http://example.com/image.png">
+            </span>
+            <button class="uk-button" v-on:click="addImageURL">+</button>
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="getProduct">Get</button>
+        <button class="uk-button uk-button-primary" v-on:click="setProduct">Set</button>
+        <button class="uk-button uk-button-primary" v-on:click="updateProduct">Update</button>
+        <button class="uk-button uk-button-primary" v-on:click="deleteProduct">Delete</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+      </div>
+      <hr class="uk-divider-small">
+      <label>Response</label><br/>
       <div class="output">
-      Response: {{ resp.product }}<br/>
-      <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+        <textarea class="uk-textarea" rows=5>{{ resp.product }}</textarea>
+        <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
       </div>
     </div>
-    <hr class="setion">
 
 
     <!-- 
@@ -49,42 +76,88 @@
       # User
       ###########################################################################################
     -->
+    <hr>
     <div id="user">
-      <p>
-        <b>[User]</b><br/>
-        UUID: <input v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
-        Username: <input v-model="form.username" type="text" placeholder="amsy810"><br/>
-        FirstName: <input v-model="form.firstName" type="text" placeholder="Masaya"><br/>
-        LastName: <input v-model="form.lastName" type="text" placeholder="Aoyama"><br/>
-        Age: <input v-model="form.age" type="text" placeholder="27"><br/>
-        PasswordHash: <input v-model="form.passwordHash" type="text" placeholder="PASSWORD"><br/>
-        
-        Addresses:
-        <span v-for="(address, index) in form.addresses">
-          <br/>
-          <input v-model="address.zipCode" :key="`${index}-1`" type="text" placeholder="100-0000">
-          <input v-model="address.country" :key="`${index}-2`" type="text" placeholder="Japan">
-          <input v-model="address.state" :key="`${index}-3`" type="text" placeholder="Tokyo">
-          <input v-model="address.city" :key="`${index}-4`" type="text" placeholder="Shibuya-ku">
-          <input v-model="address.addressLine" :key="`${index}-5`" type="text" placeholder="1-2-3-100">
-          <input v-model="address.disabled" :key="`${index}-6`" type="text" placeholder="true">
-        </span>
-        <button v-on:click="addAddress">+</button>
-        <br/>
+      <div>
+        <h2>User</h2>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+          </div>
+        </div>
+        </br>
 
-        <button v-on:click="getUser">Get</button>
-        <button v-on:click="setUser">Set</button>
-        <button v-on:click="updateUser">Update</button>
-        <button v-on:click="deleteUser">Delete</button>
-        <span>|</span>
-        <button v-on:click="clearForm">Clear</button>
-      </p>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Username:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.username" type="text" placeholder="amsy810">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">FirstName:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.firstName" type="text" placeholder="Masaya">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">LastName:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.lastName" type="text" placeholder="Aoyama">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Age:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.age" type="text" placeholder="27">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">PasswordHash:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.passwordHash" type="text" placeholder="PASSWORD">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Addresses:</label></div>
+          <div class="uk-width-3-4">
+            <span v-for="(address, index) in form.addresses">
+              <label>{{ index }}</label>
+              <input class="uk-input" v-model="address.zipCode" :key="`${index}-1`" type="text" placeholder="100-0000">
+              <input class="uk-input" v-model="address.country" :key="`${index}-2`" type="text" placeholder="Japan">
+              <input class="uk-input" v-model="address.state" :key="`${index}-3`" type="text" placeholder="Tokyo">
+              <input class="uk-input" v-model="address.city" :key="`${index}-4`" type="text" placeholder="Shibuya-ku">
+              <input class="uk-input" v-model="address.addressLine" :key="`${index}-5`" type="text" placeholder="1-2-3-100">
+              <input class="uk-input" v-model="address.disabled" :key="`${index}-6`" type="text" placeholder="true">
+            </span>
+            <button class="uk-button" v-on:click="addAddress">+</button>
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="getUser">Get</button>
+        <button class="uk-button uk-button-primary" v-on:click="setUser">Set</button>
+        <button class="uk-button uk-button-primary" v-on:click="updateUser">Update</button>
+        <button class="uk-button uk-button-primary" v-on:click="deleteUser">Delete</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+      </div>
+      <hr class="uk-divider-small">
+      <label>Response</label><br/>
       <div class="output">
-      Response: {{ resp.user }}<br/>
-      <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+        <textarea class="uk-textarea" rows=5>{{ resp.user }}</textarea>
+        <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
       </div>
     </div>
-    <hr class="setion">
 
 
     <!-- 
@@ -92,36 +165,69 @@
       # Order
       ###########################################################################################
     -->
+    <hr>
     <div id="order">
-      <p>
-        <b>[Order]</b><br/>
-        UUID: <input v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
-        UserUUID: <input v-model="form.userUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
-        PaymentInfoUUID: <input v-model="form.paymentInfoUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
-        AddressUUID: <input v-model="form.addressUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b"><br/>
-        OrderedProducts:
-        <span v-for="(orderedProduct, index) in form.orderedProducts">
-          <br/>
-          <input v-model="orderedProduct.productUUID" :key="`${index}-1`" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
-          <input v-model="orderedProduct.count" :key="`${index}-2`" type="text" placeholder="10">
-          <input v-model="orderedProduct.price" :key="`${index}-3`" type="text" placeholder="100">
-        </span>
-        <button v-on:click="addOrderedProduct">+</button>
-        <br/>
+      <div>
+        <h2>Order</h2>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+          </div>
+        </div>
+        </br>
 
-        <button v-on:click="getOrder">Get</button>
-        <button v-on:click="setOrder">Set</button>
-        <button v-on:click="updateOrder">Update</button>
-        <button v-on:click="deleteOrder">Delete</button>
-        <span>|</span>
-        <button v-on:click="clearForm">Clear</button>
-      </p>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">PaymentInfoUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.paymentInfoUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">AddressUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.addressUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">OrderedProducts:</label></div>
+          <div class="uk-width-3-4">
+            <span v-for="(orderedProduct, index) in form.orderedProducts">
+              <label>{{ index }}</label>
+              <input class="uk-input" v-model="orderedProduct.productUUID" :key="`${index}-1`" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+              <input class="uk-input" v-model="orderedProduct.count" :key="`${index}-2`" type="text" placeholder="10">
+              <input class="uk-input" v-model="orderedProduct.price" :key="`${index}-3`" type="text" placeholder="100">
+            </span>
+            <button class="uk-button" v-on:click="addOrderedProduct">+</button>
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="getOrder">Get</button>
+        <button class="uk-button uk-button-primary" v-on:click="setOrder">Set</button>
+        <button class="uk-button uk-button-primary" v-on:click="updateOrder">Update</button>
+        <button class="uk-button uk-button-primary" v-on:click="deleteOrder">Delete</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+      </div>
+      <hr class="uk-divider-small">
+      <label>Response</label><br/>
       <div class="output">
-      Response: {{ resp.order }}<br/>
-      <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+        <textarea class="uk-textarea" rows=5>{{ resp.order }}</textarea>
+        <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
       </div>
     </div>
-    <hr class="setion">
 
 
     <!-- 
