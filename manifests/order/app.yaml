@@ -1,4 +1,15 @@
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: order-queue-cred
+  namespace: order
+  labels:
+    service: order
+    role: app
+data:
+  password: b3JkZXI=
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -36,15 +47,31 @@ spec:
                   key: orderuser
             - name: DB_NAME
               value: orderdb
+            - name: DELIVERY_STATUS_USERNAME
+              value: order
+            - name: DELIVERY_STATUS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: order-queue-cred
+                  key: password
+            - name: DELIVERY_STATUS_HOST
+              value: delivery-status-queue.delivery-status.svc.cluster.local
+            - name: DELIVERY_STATUS_PORT
+              value: "4222"
+            - name: DELIVERY_STATUS_SUBJECT
+              value: order
           resources:
             requests:
               cpu: 100m
               memory: 512Mi
           readinessProbe:
-            httpGet:
-              path: /healthz
-              port: 8080
-              scheme: HTTP
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+            initialDelaySeconds: 5
+          livenessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+            initialDelaySeconds: 10
           ports:
             - containerPort: 8080
 ---
