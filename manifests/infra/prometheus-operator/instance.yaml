@@ -102,12 +102,27 @@ spec:
 ---
 apiVersion: v1
 data:
-  datasources.yaml: ewogICAgImFwaVZlcnNpb24iOiAxLAogICAgImRhdGFzb3VyY2VzIjogWwogICAgICAgIHsKICAgICAgICAgICAgImFjY2VzcyI6ICJwcm94eSIsCiAgICAgICAgICAgICJlZGl0YWJsZSI6IGZhbHNlLAogICAgICAgICAgICAibmFtZSI6ICJwcm9tZXRoZXVzIiwKICAgICAgICAgICAgIm9yZ0lkIjogMSwKICAgICAgICAgICAgInR5cGUiOiAicHJvbWV0aGV1cyIsCiAgICAgICAgICAgICJ1cmwiOiAiaHR0cDovL3Byb21ldGhldXMtazhzLm1vbml0b3Jpbmcuc3ZjOjkwOTAiLAogICAgICAgICAgICAidmVyc2lvbiI6IDEKICAgICAgICB9CiAgICBdCn0=
-kind: Secret
+  datasources.yaml: |-
+    {
+        "apiVersion": 1,
+        "datasources": [
+            {
+                "access": "proxy",
+                "editable": false,
+                "name": "prometheus",
+                "orgId": 1,
+                "type": "prometheus",
+                "url": "http://prometheus-k8s.monitoring.svc:9090",
+                "version": 1
+            }
+        ]
+    }
+kind: ConfigMap
 metadata:
   name: grafana-datasources
   namespace: monitoring
-type: Opaque
+  labels:
+    grafana_datasource: "1"
 ---
 apiVersion: v1
 data:
@@ -33769,6 +33784,21 @@ spec:
       labels:
         app: grafana
     spec:
+      initContainers:
+      - name: grafana-sc-datasources
+        image: "kiwigrid/k8s-sidecar:0.0.11"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: METHOD
+            value: LIST
+          - name: LABEL
+            value: "grafana_datasource"
+          - name: FOLDER
+            value: "/etc/grafana/provisioning/datasources"
+        volumeMounts:
+          - name: grafana-datasources
+            mountPath: "/etc/grafana/provisioning/datasources"
+            readOnly: false
       containers:
       - image: grafana/grafana:6.6.0
         name: grafana
@@ -33878,8 +33908,10 @@ spec:
       - emptyDir: {}
         name: grafana-storage
       - name: grafana-datasources
-        secret:
-          secretName: grafana-datasources
+        emptyDir: {}
+      - name: loki-datasources
+        configMap:
+          name: loki-stack
       - configMap:
           name: grafana-dashboards
         name: grafana-dashboards
@@ -34674,6 +34706,13 @@ metadata:
   name: k8s
   namespace: monitoring
 spec:
+  storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: rook-ceph-block
+        resources:
+          requests:
+            storage: 40Gi
   alerting:
     alertmanagers:
     - name: alertmanager-main
