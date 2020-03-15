@@ -259,7 +259,11 @@ func main() {
 	s := grpc.NewServer()
 	api := &orderAPIServer{
 		orderRepository: &orderRepositoryImpl{db: db},
-		orderSender:     &orderSenderImpl{conn: qconn},
+		orderSender: &orderSenderImpl{
+			conn:    qconn,
+			subject: deliveryStatusSubject,
+			retry:   5,
+		},
 	}
 	pb.RegisterOrderAPIServer(s, api)
 
