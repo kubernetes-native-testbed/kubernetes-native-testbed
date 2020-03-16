@@ -356,6 +356,32 @@ spec:
           port: 80
       permitInsecure: true
 ---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: minio-httpproxy
+  namespace: infra
+  labels:
+    service: infra
+    role: proxy
+spec:
+  virtualhost:
+    fqdn: minio.34.84.105.184.nip.io
+    tls:
+      secretName: testbed-cert
+  includes:
+  - name: minio
+    namespace: infra
+    conditions:
+    - prefix: /
+  routes:
+    - conditions:
+      - prefix: /.well-known/acme-challenge
+      services:
+        - name: infra-nginx-ingress-controller
+          port: 80
+      permitInsecure: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
