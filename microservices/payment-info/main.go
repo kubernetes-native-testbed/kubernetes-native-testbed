@@ -2,10 +2,15 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
+	"os"
 
+	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"
+	"github.com/golang/protobuf/ptypes/timestamp"
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/paymentInfo/protobuf"
 	"google.golang.org/grpc"
@@ -13,15 +18,41 @@ import (
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
-var ()
+var (
+	dbUser     string
+	dbPassword string
+	dbName     string
+	dbHost     string
+	dbPort     string
+)
 
 const (
 	defaultBindAddr = ":8080"
 
-	componentName = "paymentInfo"
+	componentName     = "paymentInfo"
+	defaultDBUser     = componentName
+	defaultDBPassword = componentName
+	defaultDBName     = componentName
+	defaultDBHost     = componentName
+	defaultDBHPort    = componentName
 )
 
 func init() {
+	if dbUser = os.Getenv("DB_USER"); dbUser == "" {
+		dbUser = defaultDBUser
+	}
+	if dbPassword = os.Getenv("DB_PASSWORD"); dbPassword == "" {
+		dbPassword = defaultDBPassword
+	}
+	if dbName = os.Getenv("DB_NAME"); dbName == "" {
+		dbName = defaultDBName
+	}
+	if dbHost = os.Getenv("DB_HOST"); dbHost == "" {
+		dbHost = defaultDBHost
+	}
+	if dbPort = os.Getenv("DB_PORT"); dbPort == "" {
+		dbPort = defaultDBHPort
+	}
 }
 
 type paymentInfoAPIServer struct {
@@ -29,18 +60,83 @@ type paymentInfoAPIServer struct {
 }
 
 func (s *paymentInfoAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
-	return nil, nil
+	uuid := req.GetUUID()
+	log.Printf("{\"operation\":\"get\", \"uuid\":\"%s\"}", uuid)
+	pi, err := s.paymentInfoRepository.findByUUID(uuid)
+	if err != nil {
+		return &pb.GetResponse{}, err
+	}
+
+	var resp pb.GetResponse
+	var cat, uat, dat *timestamp.Timestamp
+	if cat, err = ptypes.TimestampProto(pi.CreatedAt); err != nil {
+		return &pb.GetResponse{}, err
+	}
+	if uat, err = ptypes.TimestampProto(pi.UpdatedAt); err != nil {
+		return &pb.GetResponse{}, err
+	}
+	if pi.DeletedAt != nil {
+		if dat, err = ptypes.TimestampProto(*pi.DeletedAt); err != nil {
+			return &pb.GetResponse{}, err
+		}
+	}
+
+	resp.PaymentInfo = &pb.PaymentInfo{
+		UUID:        pi.UUID,
+		UserUUID:    pi.UserUUID,
+		CardNumber:  pi.CardNumber,
+		CommentUUID: pi.CommentUUID,
+		ProductUUID: pi.ProductUUID,
+		CreatedAt:   cat,
+		UpdatedAt:   uat,
+		DeletedAt:   dat,
+	}
+
+	return &resp, nil
 }
 
 func (s *paymentInfoAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
-	return nil, nil
+	pi := &PaymentInfo{
+		UserUUID:    req.GetPaymentInfo().GetUserUUID(),
+		CardNumber:  req.GetPaymentInfo().GetCardNumber(),
+		CommentUUID: req.GetPaymentInfo().GetCommentUUID(),
+		ProductUUID: req.GetPaymentInfo().GetProductUUID(),
+	}
+	log.Printf("{\"operation\":\"set\", \"uuid\":\"%s\", \"user_uuid\":\"%s\",\"card_number\":\"%s\", \"comment_uuid\":\"%s\", \"product_uuid\":\"%s\"}", pi.UserUUID, pi.CardNumber, pi.CommentUUID, pi.ProductUUID)
+
+	uuid, err := s.paymentInfoRepository.store(pi)
+	if err != nil {
+		return &pb.SetResponse{}, err
+	}
+
+	return &pb.SetResponse{UUID: uuid}, nil
 }
 
 func (s *paymentInfoAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
+	pi := &PaymentInfo{
+		UUID:        req.GetPaymentInfo().GetUUID(),
+		UserUUID:    req.GetPaymentInfo().GetUserUUID(),
+		CardNumber:  req.GetPaymentInfo().GetCardNumber(),
+		CommentUUID: req.GetPaymentInfo().GetCommentUUID(),
+		ProductUUID: req.GetPaymentInfo().GetProductUUID(),
+	}
+	log.Printf("{\"operation\":\"set\", \"uuid\":\"%s\", \"user_uuid\":\"%s\",\"card_number\":\"%s\", \"comment_uuid\":\"%s\", \"product_uuid\":\"%s\"}", pi.UserUUID, pi.CardNumber, pi.CommentUUID, pi.ProductUUID)
+
+	if err := s.paymentInfoRepository.update(pi); err != nil {
+		return &empty.Empty{}, err
+	}
+
 	return &empty.Empty{}, nil
 }
 
 func (s *paymentInfoAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
+	uuid := req.GetUUID()
+	log.Printf("{\"operation\":\"delete\", \"uuid\":\"%s\"}", uuid)
+
+	if err := s.paymentInfoRepository.deleteByUUID(uuid); err != nil {
+		return &empty.Empty{}, err
+	}
+
 	return &empty.Empty{}, nil
 }
 
@@ -51,13 +147,36 @@ func main() {
 	}
 	log.Printf("listen on %s", defaultBindAddr)
 
+	db, err := gorm.Open(
+		"postgres",
+		fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s",
+			dbHost,
+			dbPort,
+			dbUser,
+			dbPassword,
+			dbName,
+		),
+	)
+	if err != nil {
+		log.Fatalf("failed to open database: %v", err)
+	}
+	defer db.Close()
+	log.Printf("success for connection to %s:%s@tcp(%s)/%s", dbUser, dbPassword, dbHost, dbName)
+
 	s := grpc.NewServer()
 	api := &paymentInfoAPIServer{
-		paymentInfoRepository: &paymentInfoRepositoryImpl{},
+		paymentInfoRepository: &paymentInfoRepositoryImpl{
+			db: db,
+		},
 	}
 	pb.RegisterPaymentInfoAPIServer(s, api)
 
 	healthpb.RegisterHealthServer(s, health.NewServer())
+
+	log.Printf("setup database")
+	if err := api.paymentInfoRepository.initDB(); err != nil {
+		log.Fatalf("failed to init database: %v", err)
+	}
 
 	log.Printf("start paymentInfo API server")
 	if err := s.Serve(lis); err != nil {
