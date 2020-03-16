@@ -11,7 +11,7 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/paymentInfo/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
