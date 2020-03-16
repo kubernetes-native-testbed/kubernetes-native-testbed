@@ -82,14 +82,15 @@ func (s *paymentInfoAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb
 	}
 
 	resp.PaymentInfo = &pb.PaymentInfo{
-		UUID:        pi.UUID,
-		UserUUID:    pi.UserUUID,
-		CardNumber:  pi.CardNumber,
-		CommentUUID: pi.CommentUUID,
-		ProductUUID: pi.ProductUUID,
-		CreatedAt:   cat,
-		UpdatedAt:   uat,
-		DeletedAt:   dat,
+		UUID:           pi.UUID,
+		UserUUID:       pi.UserUUID,
+		Name:           pi.Name,
+		CardNumber:     pi.CardNumber,
+		SecurityCode:   pi.SecurityCode,
+		ExpirationDate: pi.ExpirationDate,
+		CreatedAt:      cat,
+		UpdatedAt:      uat,
+		DeletedAt:      dat,
 	}
 
 	return &resp, nil
@@ -97,12 +98,13 @@ func (s *paymentInfoAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb
 
 func (s *paymentInfoAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
 	pi := &PaymentInfo{
-		UserUUID:    req.GetPaymentInfo().GetUserUUID(),
-		CardNumber:  req.GetPaymentInfo().GetCardNumber(),
-		CommentUUID: req.GetPaymentInfo().GetCommentUUID(),
-		ProductUUID: req.GetPaymentInfo().GetProductUUID(),
+		UserUUID:       req.GetPaymentInfo().GetUserUUID(),
+		Name:           req.GetPaymentInfo().GetName(),
+		CardNumber:     req.GetPaymentInfo().GetCardNumber(),
+		SecurityCode:   req.GetPaymentInfo().GetSecurityCode(),
+		ExpirationDate: req.GetPaymentInfo().GetExpirationDate(),
 	}
-	log.Printf("{\"operation\":\"set\", \"uuid\":\"%s\", \"user_uuid\":\"%s\",\"card_number\":\"%s\", \"comment_uuid\":\"%s\", \"product_uuid\":\"%s\"}", pi.UserUUID, pi.CardNumber, pi.CommentUUID, pi.ProductUUID)
+	log.Printf("{\"operation\":\"set\", \"uuid\":\"%s\", \"user_uuid\":\"%s\",\"name\":\"%s\", \"card_number\":\"%s\", \"security_code\":\"%s\", \"expiration_date\":\"%s\"}", pi.Name, pi.UserUUID, pi.CardNumber, pi.SecurityCode, pi.ExpirationDate)
 
 	uuid, err := s.paymentInfoRepository.store(pi)
 	if err != nil {
@@ -114,13 +116,14 @@ func (s *paymentInfoAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb
 
 func (s *paymentInfoAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
 	pi := &PaymentInfo{
-		UUID:        req.GetPaymentInfo().GetUUID(),
-		UserUUID:    req.GetPaymentInfo().GetUserUUID(),
-		CardNumber:  req.GetPaymentInfo().GetCardNumber(),
-		CommentUUID: req.GetPaymentInfo().GetCommentUUID(),
-		ProductUUID: req.GetPaymentInfo().GetProductUUID(),
+		UUID:           req.GetPaymentInfo().GetUUID(),
+		Name:           req.GetPaymentInfo().GetName(),
+		UserUUID:       req.GetPaymentInfo().GetUserUUID(),
+		CardNumber:     req.GetPaymentInfo().GetCardNumber(),
+		SecurityCode:   req.GetPaymentInfo().GetSecurityCode(),
+		ExpirationDate: req.GetPaymentInfo().GetExpirationDate(),
 	}
-	log.Printf("{\"operation\":\"set\", \"uuid\":\"%s\", \"user_uuid\":\"%s\",\"card_number\":\"%s\", \"comment_uuid\":\"%s\", \"product_uuid\":\"%s\"}", pi.UserUUID, pi.CardNumber, pi.CommentUUID, pi.ProductUUID)
+	log.Printf("{\"operation\":\"update\", \"uuid\":\"%s\", \"user_uuid\":\"%s\",\"name\":\"%s\", \"card_number\":\"%s\", \"security_code\":\"%s\", \"expiration_date\":\"%s\"}", pi.Name, pi.UserUUID, pi.CardNumber, pi.SecurityCode, pi.ExpirationDate)
 
 	if err := s.paymentInfoRepository.update(pi); err != nil {
 		return &empty.Empty{}, err
