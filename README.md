@@ -81,6 +81,20 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 ./init.sh
 ```
 
+# Directory structure
+
+* manifests/
+  * Kubernetes manifests
+  * infra/: system or infrastructure manifests
+    * ci-manifests/: tekton pipelines manifests
+    * cd-manifests/: argocd pipelines manifests
+* microservices/
+  * microservice application source code
+* development/
+  * development manifests (skaffold, kustomization patch file)
+* tools/
+  * tools and scripts
+
 # Local development
 
 ```
@@ -88,7 +102,7 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 source ./development/initialize.sh
 
 # start local development for admin
-./development/local-development.sh adminE
+./development/local-development.sh admin
 
 # access service with  whole system or only local check
 https://testbed.xxx.xxx.xxx.xxx.nip.io/admin/index.html

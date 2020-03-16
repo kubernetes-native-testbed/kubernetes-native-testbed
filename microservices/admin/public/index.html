@@ -11,7 +11,7 @@
     <hr>
 
 
-    <!-- 
+    <!--
       ###########################################################################################
       # Product
       ###########################################################################################
@@ -71,7 +71,7 @@
     </div>
 
 
-    <!-- 
+    <!--
       ###########################################################################################
       # User
       ###########################################################################################
@@ -160,7 +160,7 @@
     </div>
 
 
-    <!-- 
+    <!--
       ###########################################################################################
       # Order
       ###########################################################################################
@@ -225,6 +225,77 @@
       <label>Response</label><br/>
       <div class="output">
         <textarea class="uk-textarea" rows=5>{{ resp.order }}</textarea>
+        <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+      </div>
+    </div>
+
+    <!--
+      ###########################################################################################
+      # PaymentInfo
+      ###########################################################################################
+    -->
+    <hr>
+    <div id="paymentInfo">
+      <div>
+        <h2>Payment Info</h2>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Name:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.name" type="text" placeholder="Main credit card">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">CardNumber:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.carNumber" type="text" placeholder="1234-5678-9012-3456">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">SecurityCode:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.securityCode" type="text" placeholder="123">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">ExpirationDate:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.expirationDate" type="text" placeholder="2025/01">
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="getPaymentInfo">Get</button>
+        <button class="uk-button uk-button-primary" v-on:click="setPaymentInfo">Set</button>
+        <button class="uk-button uk-button-primary" v-on:click="updatePaymentInfo">Update</button>
+        <button class="uk-button uk-button-primary" v-on:click="deletePaymentInfo">Delete</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+      </div>
+      <hr class="uk-divider-small">
+      <label>Response</label><br/>
+      <div class="output">
+        <textarea class="uk-textarea" rows=5>{{ resp.paymentInfo }}</textarea>
         <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
       </div>
     </div>

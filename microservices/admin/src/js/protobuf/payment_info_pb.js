@@ -204,9 +204,10 @@ proto.paymentinfopb.PaymentInfo.toObject = function(includeInstance, msg) {
   var f, obj = {
     uuid: jspb.Message.getFieldWithDefault(msg, 1, ""),
     useruuid: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    cardnumber: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    commentuuid: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    productuuid: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    name: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    cardnumber: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    securitycode: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    expirationdate: jspb.Message.getFieldWithDefault(msg, 6, ""),
     createdat: (f = msg.getCreatedat()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     updatedat: (f = msg.getUpdatedat()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     deletedat: (f = msg.getDeletedat()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
@@ -256,27 +257,31 @@ proto.paymentinfopb.PaymentInfo.deserializeBinaryFromReader = function(msg, read
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setCardnumber(value);
+      msg.setName(value);
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.setCommentuuid(value);
+      msg.setCardnumber(value);
       break;
     case 5:
       var value = /** @type {string} */ (reader.readString());
-      msg.setProductuuid(value);
+      msg.setSecuritycode(value);
       break;
     case 6:
-      var value = new google_protobuf_timestamp_pb.Timestamp;
-      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
-      msg.setCreatedat(value);
+      var value = /** @type {string} */ (reader.readString());
+      msg.setExpirationdate(value);
       break;
     case 7:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
-      msg.setUpdatedat(value);
+      msg.setCreatedat(value);
       break;
     case 8:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setUpdatedat(value);
+      break;
+    case 9:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setDeletedat(value);
@@ -324,36 +329,35 @@ proto.paymentinfopb.PaymentInfo.serializeBinaryToWriter = function(message, writ
       f
     );
   }
-  f = message.getCardnumber();
+  f = message.getName();
   if (f.length > 0) {
     writer.writeString(
       3,
       f
     );
   }
-  f = message.getCommentuuid();
+  f = message.getCardnumber();
   if (f.length > 0) {
     writer.writeString(
       4,
       f
     );
   }
-  f = message.getProductuuid();
+  f = message.getSecuritycode();
   if (f.length > 0) {
     writer.writeString(
       5,
       f
     );
   }
-  f = message.getCreatedat();
-  if (f != null) {
-    writer.writeMessage(
+  f = message.getExpirationdate();
+  if (f.length > 0) {
+    writer.writeString(
       6,
-      f,
-      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+      f
     );
   }
-  f = message.getUpdatedat();
+  f = message.getCreatedat();
   if (f != null) {
     writer.writeMessage(
       7,
@@ -361,10 +365,18 @@ proto.paymentinfopb.PaymentInfo.serializeBinaryToWriter = function(message, writ
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
-  f = message.getDeletedat();
+  f = message.getUpdatedat();
   if (f != null) {
     writer.writeMessage(
       8,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
+  f = message.getDeletedat();
+  if (f != null) {
+    writer.writeMessage(
+      9,
       f,
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
@@ -381,9 +393,12 @@ proto.paymentinfopb.PaymentInfo.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
 proto.paymentinfopb.PaymentInfo.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -396,78 +411,112 @@ proto.paymentinfopb.PaymentInfo.prototype.getUseruuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
 proto.paymentinfopb.PaymentInfo.prototype.setUseruuid = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
 /**
- * optional string cardNumber = 3;
+ * optional string Name = 3;
  * @return {string}
  */
-proto.paymentinfopb.PaymentInfo.prototype.getCardnumber = function() {
+proto.paymentinfopb.PaymentInfo.prototype.getName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
-/** @param {string} value */
-proto.paymentinfopb.PaymentInfo.prototype.setCardnumber = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
+proto.paymentinfopb.PaymentInfo.prototype.setName = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * optional string commentUUID = 4;
+ * optional string cardNumber = 4;
  * @return {string}
  */
-proto.paymentinfopb.PaymentInfo.prototype.getCommentuuid = function() {
+proto.paymentinfopb.PaymentInfo.prototype.getCardnumber = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
-/** @param {string} value */
-proto.paymentinfopb.PaymentInfo.prototype.setCommentuuid = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
+proto.paymentinfopb.PaymentInfo.prototype.setCardnumber = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
 /**
- * optional string productUUID = 5;
+ * optional string securityCode = 5;
  * @return {string}
  */
-proto.paymentinfopb.PaymentInfo.prototype.getProductuuid = function() {
+proto.paymentinfopb.PaymentInfo.prototype.getSecuritycode = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
-/** @param {string} value */
-proto.paymentinfopb.PaymentInfo.prototype.setProductuuid = function(value) {
-  jspb.Message.setProto3StringField(this, 5, value);
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
+proto.paymentinfopb.PaymentInfo.prototype.setSecuritycode = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
 /**
- * optional google.protobuf.Timestamp createdAt = 6;
+ * optional string ExpirationDate = 6;
+ * @return {string}
+ */
+proto.paymentinfopb.PaymentInfo.prototype.getExpirationdate = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+ */
+proto.paymentinfopb.PaymentInfo.prototype.setExpirationdate = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
+};
+
+
+/**
+ * optional google.protobuf.Timestamp createdAt = 7;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.paymentinfopb.PaymentInfo.prototype.getCreatedat = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 6));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 7));
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+*/
 proto.paymentinfopb.PaymentInfo.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 6, value);
+  return jspb.Message.setWrapperField(this, 7, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
  */
 proto.paymentinfopb.PaymentInfo.prototype.clearCreatedat = function() {
-  this.setCreatedat(undefined);
+  return this.setCreatedat(undefined);
 };
 
 
@@ -476,31 +525,35 @@ proto.paymentinfopb.PaymentInfo.prototype.clearCreatedat = function() {
  * @return {boolean}
  */
 proto.paymentinfopb.PaymentInfo.prototype.hasCreatedat = function() {
-  return jspb.Message.getField(this, 6) != null;
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
 /**
- * optional google.protobuf.Timestamp updatedAt = 7;
+ * optional google.protobuf.Timestamp updatedAt = 8;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.paymentinfopb.PaymentInfo.prototype.getUpdatedat = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 7));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 8));
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+*/
 proto.paymentinfopb.PaymentInfo.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 7, value);
+  return jspb.Message.setWrapperField(this, 8, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
  */
 proto.paymentinfopb.PaymentInfo.prototype.clearUpdatedat = function() {
-  this.setUpdatedat(undefined);
+  return this.setUpdatedat(undefined);
 };
 
 
@@ -509,31 +562,35 @@ proto.paymentinfopb.PaymentInfo.prototype.clearUpdatedat = function() {
  * @return {boolean}
  */
 proto.paymentinfopb.PaymentInfo.prototype.hasUpdatedat = function() {
-  return jspb.Message.getField(this, 7) != null;
+  return jspb.Message.getField(this, 8) != null;
 };
 
 
 /**
- * optional google.protobuf.Timestamp deletedAt = 8;
+ * optional google.protobuf.Timestamp deletedAt = 9;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.paymentinfopb.PaymentInfo.prototype.getDeletedat = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 8));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 9));
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
+*/
 proto.paymentinfopb.PaymentInfo.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 8, value);
+  return jspb.Message.setWrapperField(this, 9, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.PaymentInfo} returns this
  */
 proto.paymentinfopb.PaymentInfo.prototype.clearDeletedat = function() {
-  this.setDeletedat(undefined);
+  return this.setDeletedat(undefined);
 };
 
 
@@ -542,7 +599,7 @@ proto.paymentinfopb.PaymentInfo.prototype.clearDeletedat = function() {
  * @return {boolean}
  */
 proto.paymentinfopb.PaymentInfo.prototype.hasDeletedat = function() {
-  return jspb.Message.getField(this, 8) != null;
+  return jspb.Message.getField(this, 9) != null;
 };
 
 
@@ -667,9 +724,12 @@ proto.paymentinfopb.GetRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.GetRequest} returns this
+ */
 proto.paymentinfopb.GetRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -797,17 +857,21 @@ proto.paymentinfopb.GetResponse.prototype.getPaymentinfo = function() {
 };
 
 
-/** @param {?proto.paymentinfopb.PaymentInfo|undefined} value */
+/**
+ * @param {?proto.paymentinfopb.PaymentInfo|undefined} value
+ * @return {!proto.paymentinfopb.GetResponse} returns this
+*/
 proto.paymentinfopb.GetResponse.prototype.setPaymentinfo = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.GetResponse} returns this
  */
 proto.paymentinfopb.GetResponse.prototype.clearPaymentinfo = function() {
-  this.setPaymentinfo(undefined);
+  return this.setPaymentinfo(undefined);
 };
 
 
@@ -944,17 +1008,21 @@ proto.paymentinfopb.SetRequest.prototype.getPaymentinfo = function() {
 };
 
 
-/** @param {?proto.paymentinfopb.PaymentInfo|undefined} value */
+/**
+ * @param {?proto.paymentinfopb.PaymentInfo|undefined} value
+ * @return {!proto.paymentinfopb.SetRequest} returns this
+*/
 proto.paymentinfopb.SetRequest.prototype.setPaymentinfo = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.SetRequest} returns this
  */
 proto.paymentinfopb.SetRequest.prototype.clearPaymentinfo = function() {
-  this.setPaymentinfo(undefined);
+  return this.setPaymentinfo(undefined);
 };
 
 
@@ -1088,9 +1156,12 @@ proto.paymentinfopb.SetResponse.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.SetResponse} returns this
+ */
 proto.paymentinfopb.SetResponse.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1218,17 +1289,21 @@ proto.paymentinfopb.UpdateRequest.prototype.getPaymentinfo = function() {
 };
 
 
-/** @param {?proto.paymentinfopb.PaymentInfo|undefined} value */
+/**
+ * @param {?proto.paymentinfopb.PaymentInfo|undefined} value
+ * @return {!proto.paymentinfopb.UpdateRequest} returns this
+*/
 proto.paymentinfopb.UpdateRequest.prototype.setPaymentinfo = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.paymentinfopb.UpdateRequest} returns this
  */
 proto.paymentinfopb.UpdateRequest.prototype.clearPaymentinfo = function() {
-  this.setPaymentinfo(undefined);
+  return this.setPaymentinfo(undefined);
 };
 
 
@@ -1362,9 +1437,12 @@ proto.paymentinfopb.DeleteRequest.prototype.getUuid = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.paymentinfopb.DeleteRequest} returns this
+ */
 proto.paymentinfopb.DeleteRequest.prototype.setUuid = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
