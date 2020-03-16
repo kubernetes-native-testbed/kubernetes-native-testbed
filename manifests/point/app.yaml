@@ -36,6 +36,20 @@ spec:
                 secretKeyRef:
                   name: point-user
                   key: user.password
+
+            - name: KVS_HOST
+              value: point-kvs-memcached.point.svc.cluster.local
+            - name: KVS_PORT
+              value: "11211"
+
+            - name: DB_HOST
+              value: yb-tserver-point-db-0.yb-tservers-point-db.point.svc.cluster.local
+            - name: DB_PORT_YPOSTGRES
+              value: "5433"
+            - name: DB_PORT_YCASSANDRA
+              value: "9042"
+            - name: DB_PORT_YREDIS
+              value: "6379"
           resources:
             requests:
               cpu: 100m

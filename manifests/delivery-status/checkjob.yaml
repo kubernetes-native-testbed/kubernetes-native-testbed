@@ -12,6 +12,7 @@ data:
     #!/bin/bash
     echo "check script running..."
     cqlsh -u ${DB_USERNAME} -p ${DB_PASSWORD} ${DB_HOST} ${DB_PORT} -e "LIST ROLES;"
+    cqlsh -u ${DB_USERNAME} -p ${DB_PASSWORD} ${DB_HOST} ${DB_PORT} -e "DESCRIBE TABLES;"
 ---
 apiVersion: batch/v1beta1
 kind: CronJob

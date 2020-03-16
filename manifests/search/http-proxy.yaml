@@ -26,4 +26,7 @@ spec:
           port: 5601
       conditions:
       - prefix: /kibana
+      pathRewritePolicy:
+        replacePrefix:
+          - replacement: /
       permitInsecure: true
