@@ -76,4 +76,4 @@ data:
   init.js: |-
     use comment-db;
     db.createCollection('comment-collection');
-
+  dbname: comment-db

@@ -61,7 +61,7 @@ spec:
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: comment-db-init-conf
+                  name: comment-db-init-script
                   key: dbname
             volumeMounts:
             - name: scripts-volume
