@@ -135,3 +135,75 @@ spec:
                 name: check-scripts-kvs
                 defaultMode: 493 # mode 755
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: check-scripts-db
+  namespace: point
+  labels:
+    service: point
+    role: check
+data:
+  check.sh: |-
+    #!/bin/sh
+    echo "check script running..."
+
+    # postgres compatible
+    /home/yugabyte/bin/ysqlsh -h ${DB_HOST} -p ${DB_PORT_YPOSTGRES} -d ${DB_NAME} -c "\l"
+    /home/yugabyte/bin/ysqlsh -h ${DB_HOST} -p ${DB_PORT_YPOSTGRES} -d ${DB_NAME} -c "\dt"
+
+    # cassandra compatible
+    /home/yugabyte/bin/cqlsh ${DB_HOST} ${DB_PORT_YCASSANDRA} -e "DESCRIBE TABLES;"
+
+    # redis compatible
+    /home/yugabyte/bin/redis-cli -h ${DB_HOST} -p ${DB_PORT_YREDIS} -r 10 ping
+    /home/yugabyte/bin/redis-cli -h ${DB_HOST} -p ${DB_PORT_YREDIS} info
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: check-job-db
+  namespace: point
+  labels:
+    service: point
+    role: check
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 30
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  suspend: false
+  jobTemplate:
+    spec:
+      completions: 1
+      parallelism: 1
+      backoffLimit: 10
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: check-container
+            image: yugabytedb/yugabyte:2.0.10.0-b4
+            command:
+            - /scripts/check.sh
+            env:
+            - name: DB_HOST
+              value: yb-tserver-point-db-0.yb-tservers-point-db.point.svc.cluster.local
+            - name: DB_PORT_YPOSTGRES
+              value: "5433"
+            - name: DB_PORT_YCASSANDRA
+              value: "9042"
+            - name: DB_PORT_YREDIS
+              value: "6379"
+            - name: DB_NAME
+              value: yugabyte
+            volumeMounts:
+            - name: scripts-volume
+              mountPath: /scripts
+          volumes:
+            - name: scripts-volume
+              configMap:
+                name: check-scripts-kvs
+                defaultMode: 493 # mode 755
+---

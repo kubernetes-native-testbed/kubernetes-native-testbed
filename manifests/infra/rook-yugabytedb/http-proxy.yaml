@@ -1,0 +1,19 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: yugabyte
+  namespace: rook-yugabytedb-system
+  labels:
+    service: yugabyte
+    role: proxy
+spec:
+  includes:
+  - name: yugabyte
+    namespace: point
+    conditions:
+    - prefix: /point
+    pathRewritePolicy:
+      replacePrefix:
+        - replacement: /
+---
