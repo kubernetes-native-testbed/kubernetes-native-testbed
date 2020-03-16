@@ -1,0 +1,15 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: minio
+  namespace: infra
+  labels:
+    service: minio
+    role: proxy
+spec:
+  routes:
+    - services:
+        - name: minio-hl-svc
+          port: 9000
+      permitInsecure: true

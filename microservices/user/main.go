@@ -23,6 +23,7 @@ var (
 	dbPassword string
 	dbName     string
 	dbHost     string
+	dbPort     string
 )
 
 const (
@@ -33,6 +34,7 @@ const (
 	defaultDBPassword = componentName
 	defaultDBName     = componentName
 	defaultDBHost     = componentName
+	defaultDBHPort    = componentName
 )
 
 func init() {
@@ -47,6 +49,9 @@ func init() {
 	}
 	if dbHost = os.Getenv("DB_HOST"); dbHost == "" {
 		dbHost = defaultDBHost
+	}
+	if dbPort = os.Getenv("DB_PORT"); dbPort == "" {
+		dbPort = defaultDBHPort
 	}
 }
 
@@ -193,10 +198,11 @@ func main() {
 
 	db, err := gorm.Open(
 		"mysql",
-		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 			dbUser,
 			dbPassword,
 			dbHost,
+			dbPort,
 			dbName,
 		),
 	)

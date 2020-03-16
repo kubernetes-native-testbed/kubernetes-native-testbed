@@ -14,6 +14,20 @@ stringData:
   USER: product
   PASSWORD: product
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-s3-credentials
+  namespace: product
+  labels:
+    service: product
+    role: db
+type: Opaque
+stringData:
+  AWS_ACCESS_KEY_ID: minio
+  AWS_SECRET_ACCESS_KEY: miniosecret
+  S3_ENDPOINT: http://minio-hl-svc.infra.svc.cluster.local:9000
+---
 apiVersion: mysql.presslabs.org/v1alpha1
 kind: MysqlCluster
 metadata:
@@ -32,11 +46,11 @@ spec:
   minAvailable: "10%"
 
   ## For recurrent backups set backupSchedule with a cronjob expression
-  # backupSchedule:
-  # backupURL: s3://bucket_name/
-  # backupSecretName:
-  # backupScheduleJobsHistoryLimit:
-  # backupRemoteDeletePolicy:
+  backupSchedule: "0 0 */2 * *"
+  backupURL: s3://product-db/
+  backupSecretName: minio-s3-credentials
+  backupScheduleJobsHistoryLimit: 3
+  backupRemoteDeletePolicy: delete
 
   # mysqlConf:
   #   innodb-buffer-size: "128M"

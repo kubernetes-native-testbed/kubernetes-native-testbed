@@ -38,4 +38,5 @@ spec:
   - alertmanager.34.84.105.184.nip.io
   - weave-scope.34.84.105.184.nip.io
   - yugabyte.34.84.105.184.nip.io
+  - minio.34.84.105.184.nip.io
   commonName: testbed.34.84.105.184.nip.io

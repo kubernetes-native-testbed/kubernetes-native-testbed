@@ -44,4 +44,10 @@ spec:
     retry_timeout: 10
     maximum_lag_on_failover: 33554432
 
-
+  logical_backup:
+    enableLogicalBackup: true
+    logical_backup_schedule: "0 0 */2 * *"
+    logical_backup_s3_bucket: payment-info-db
+    logical_backup_s3_endpoint: http://minio-hl-svc.infra.svc.cluster.local:9000
+    logical_backup_s3_access_key_id: minio
+    logical_backup_s3_secret_access_key: miniosecret
