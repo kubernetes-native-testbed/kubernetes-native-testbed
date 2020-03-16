@@ -46,7 +46,7 @@ spec:
   minAvailable: "10%"
 
   ## For recurrent backups set backupSchedule with a cronjob expression
-  backupSchedule: "0 */2 * * *"
+  backupSchedule: "0 0 */2 * *"
   backupURL: s3://product-db/
   backupSecretName: minio-s3-credentials
   backupScheduleJobsHistoryLimit: 3

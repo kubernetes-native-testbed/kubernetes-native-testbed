@@ -42,7 +42,7 @@ spec:
   mysqlVersion: "5.7"
   minAvailable: "10%"
 
-  backupSchedule: "0 */2 * * *"
+  backupSchedule: "0 0 */2 * *"
   backupURL: s3://user-db/
   backupSecretName: minio-s3-credentials
   backupScheduleJobsHistoryLimit: 3
