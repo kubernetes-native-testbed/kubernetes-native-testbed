@@ -15,10 +15,10 @@ service PaymentInfoAPI {
 message PaymentInfo {
 	string UUID = 1;
 	string userUUID = 2;
-	string Name = 3;
+	string name = 3;
 	string cardNumber = 4;
 	string securityCode = 5;
-	string ExpirationDate = 6;
+	string expirationDate = 6;
 	google.protobuf.Timestamp createdAt = 7;
 	google.protobuf.Timestamp updatedAt = 8;
 	google.protobuf.Timestamp deletedAt = 9;

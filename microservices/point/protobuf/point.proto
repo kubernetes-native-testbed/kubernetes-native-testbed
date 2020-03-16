@@ -15,10 +15,11 @@ service PointAPI {
 message Point {
 	string UUID = 1;
 	string userUUID = 2;
-	int32 Balance = 3;
-	google.protobuf.Timestamp createdAt = 4;
-	google.protobuf.Timestamp updatedAt = 5;
-	google.protobuf.Timestamp deletedAt = 6;
+	int32 balance = 3;
+	string description = 4;
+	google.protobuf.Timestamp createdAt = 5;
+	google.protobuf.Timestamp updatedAt = 6;
+	google.protobuf.Timestamp deletedAt = 7;
 }
 
 message GetRequest {
