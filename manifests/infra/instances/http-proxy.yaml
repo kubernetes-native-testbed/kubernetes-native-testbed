@@ -21,7 +21,7 @@ spec:
   - name: payment-info
     namespace: payment-info
     conditions:
-    - prefix: /payment-info
+    - prefix: /paymentinfo
   - name: user
     namespace: user
     conditions:
@@ -29,7 +29,7 @@ spec:
   - name: delivery-status
     namespace: delivery-status
     conditions:
-    - prefix: /delivery-status
+    - prefix: /deliverystatus
   - name: comment
     namespace: comment
     conditions:
