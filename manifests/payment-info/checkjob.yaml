@@ -61,6 +61,8 @@ spec:
                   key: password
             - name: DB_NAME
               value: payment_info_db
+            - name: DB_SSL
+              value: disable
             volumeMounts:
             - name: scripts-volume
               mountPath: /scripts
