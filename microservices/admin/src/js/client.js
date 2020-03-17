@@ -8,4 +8,6 @@ const user = require('./user.js');
 const order = require('./order.js');
 const payment_info = require('./payment_info.js');
 const point = require('./point.js');
+const delivery_status = require('./delivery_status.js');
+const cart = require('./cart.js');
 

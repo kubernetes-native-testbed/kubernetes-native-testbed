@@ -410,6 +410,50 @@
     </div>
 
 
+    <!--
+      ###########################################################################################
+      # Cart
+      ###########################################################################################
+    -->
+    <hr>
+    <div id="cart">
+      <div>
+        <h2>Cart</h2>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">CartProducts:</label></div>
+          <div class="uk-width-3-4">
+            <span v-for="(cartProduct, index) in form.cartProducts">
+              <label>{{ index }}</label>
+              <input class="uk-input" v-model="cartProduct.productUUID" :key="`${index}-1`" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+              <input class="uk-input" v-model="cartProduct.count" :key="`${index}-2`" type="text" placeholder="10">
+            </span>
+            <button class="uk-button" v-on:click="addCartProduct">+</button>
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="showCart">Show</button>
+        <button class="uk-button uk-button-primary" v-on:click="addCart">Add</button>
+        <button class="uk-button uk-button-primary" v-on:click="deleteOrder">Delete</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+      </div>
+      <hr class="uk-divider-small">
+      <label>Response</label><br/>
+      <div class="output">
+        <textarea class="uk-textarea" rows=5>{{ resp.cart }}</textarea>
+        <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+      </div>
+    </div>
+
+
     <!-- 
       ###########################################################################################
       # Utils
