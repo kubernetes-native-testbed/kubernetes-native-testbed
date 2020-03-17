@@ -24,6 +24,7 @@ var (
 	dbName     string
 	dbHost     string
 	dbPort     string
+	dbSSL      string
 )
 
 const (
@@ -35,6 +36,7 @@ const (
 	defaultDBName     = componentName
 	defaultDBHost     = componentName
 	defaultDBHPort    = componentName
+	defaultDBSSL      = "enable"
 )
 
 func init() {
@@ -52,6 +54,9 @@ func init() {
 	}
 	if dbPort = os.Getenv("DB_PORT"); dbPort == "" {
 		dbPort = defaultDBHPort
+	}
+	if dbSSL = os.Getenv("DB_SSL"); dbSSL == "" {
+		dbSSL = defaultDBHPort
 	}
 }
 
@@ -152,12 +157,13 @@ func main() {
 
 	db, err := gorm.Open(
 		"postgres",
-		fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s",
+		fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 			dbHost,
 			dbPort,
 			dbUser,
 			dbPassword,
 			dbName,
+			dbSSL,
 		),
 	)
 	if err != nil {
