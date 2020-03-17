@@ -5,7 +5,7 @@ const {PaymentInfoAPIClient} = require('./protobuf/payment_info_grpc_web_pb.js')
 export const paymentInfo = new Vue({
   el: '#paymentInfo',
   data: {
-    endpoint: window.location.protocol + '//' + window.location.host + "/payment-info",
+    endpoint: window.location.protocol + '//' + window.location.host + "/paymentinfo",
     form: {
       uuid: '',
       userUUID: '',

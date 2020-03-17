@@ -13,8 +13,8 @@ spec:
         - name: payment-info
           port: 8080
       conditions:
-        - prefix: /payment-info
+        - prefix: /paymentinfo
       pathRewritePolicy:
         replacePrefix:
-          - replacement: /payment-info
+          - replacement: /paymentinfo
       permitInsecure: true
