@@ -421,7 +421,7 @@ proto.paymentinfopb.PaymentInfo.prototype.setUseruuid = function(value) {
 
 
 /**
- * optional string Name = 3;
+ * optional string name = 3;
  * @return {string}
  */
 proto.paymentinfopb.PaymentInfo.prototype.getName = function() {
@@ -475,7 +475,7 @@ proto.paymentinfopb.PaymentInfo.prototype.setSecuritycode = function(value) {
 
 
 /**
- * optional string ExpirationDate = 6;
+ * optional string expirationDate = 6;
  * @return {string}
  */
 proto.paymentinfopb.PaymentInfo.prototype.getExpirationdate = function() {

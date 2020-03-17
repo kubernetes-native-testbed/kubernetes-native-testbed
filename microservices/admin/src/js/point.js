@@ -1,42 +1,39 @@
-const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Product} = require('./protobuf/product_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Point} = require('./protobuf/point_pb.js');
 
-const {ProductAPIClient} = require('./protobuf/product_grpc_web_pb.js');
+const {PointAPIClient} = require('./protobuf/point_grpc_web_pb.js');
 
-export const product = new Vue({
-  el: '#product',
+export const point = new Vue({
+  el: '#point',
   data: {
-    endpoint: window.location.protocol + '//' + window.location.host + "/product",
+    endpoint: window.location.protocol + '//' + window.location.host + "/point",
     form: {
       uuid: '',
-      name: '',
-      price: null,
-      imageURLs: [],
+      userUUID: '',
+      balance: null,
+      description: '',
     },
     resp: {
-      product: [],
+      point: [],
       errorCode: 0,
       errorMsg: '',
     }
   },
   created: function() {
-      this.client = new ProductAPIClient(this.endpoint);
+      this.client = new PointAPIClient(this.endpoint);
   },
   methods: {
-    addImageURL: function() {
-      this.form.imageURLs.push({value:''});
-    },
     clearForm: function() {
       this.form.uuid = '';
-      this.form.name = '';
-      this.form.price = null;
-      this.form.imageURLs = [];
+      this.form.userUUID = '';
+      this.form.balance = null;
+      this.form.description = '';
     },
     clearResponseField: function() {
-      this.resp.product = [];
+      this.resp.point = [];
       this.resp.errorCode = 0;
       this.errorMsg = '';
     },
-    getProduct: function() {
+    getPoint: function() {
       this.clearResponseField();
       const req = new GetRequest();
       req.setUuid(this.form.uuid);
@@ -46,29 +43,27 @@ export const product = new Vue({
           this.resp.errorMsg = err.message;
         } else {
           let p = new Object();
-          p.uuid = resp.getProduct().getUuid();
-          p.price = resp.getProduct().getPrice();
-          p.imageURLs = resp.getProduct().getImageurlsList();
-          p.createdAt = resp.getProduct().getCreatedat();
-          p.updatedAt = resp.getProduct().getUpdatedat();
-          p.deletedAt = resp.getProduct().getDeletedat();
-          this.resp.product.push(p);
+          p.uuid = resp.getPoint().getUuid();
+          p.userUUID = resp.getPoint().getUseruuid();
+          p.balance = resp.getPoint().getBalance();
+          p.description = resp.getPoint().getDescription();
+          p.createdAt = resp.getPoint().getCreatedat();
+          p.updatedAt = resp.getPoint().getUpdatedat();
+          p.deletedAt = resp.getPoint().getDeletedat();
+          this.resp.point.push(p);
           this.resp.errorCode = err.code;
         }
       });
     },
-    setProduct: function() {
+    setPoint: function() {
       this.clearResponseField();
       const req = new SetRequest();
-      const p = new Product();
-      p.setName(this.form.name);
-      p.setPrice(this.form.price);
-      var urls = []
-      this.form.imageURLs.forEach(function(v) {
-        urls.push(v.value)
-      });
-      p.setImageurlsList(urls);
-      req.setProduct(p);
+      const p = new Point();
+      p.setUseruuid(this.form.userUUID);
+      p.setBalance(this.form.balance);
+      p.setDescription(this.form.description);
+
+      req.setPoint(p);
       this.client.set(req, {}, (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
@@ -76,20 +71,19 @@ export const product = new Vue({
         } else {
           let p = new Object();
           p.uuid = resp.getUuid();
-          this.resp.product.push(p);
+          this.resp.point.push(p);
           this.resp.errorCode = err.code;
         }
       });
     },
-    updateProduct: function() {
+    updatePoint: function() {
       this.clearResponseField();
       const req = new UpdateRequest();
-      const p = new Product();
-      p.setUuid(this.form.uuid);
-      p.setName(this.form.name);
-      p.setPrice(this.form.price);
-      p.setImageurlsList(this.form.imageURLs);
-      req.setProduct(p);
+      const p = new Point();
+      p.setUseruuid(this.form.userUUID);
+      p.setBalance(this.form.balance);
+      p.setDescription(this.form.description);
+      req.setPoint(p);
       this.client.update(req, {}, (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
@@ -99,7 +93,7 @@ export const product = new Vue({
         }
       });
     },
-    deleteProduct: function() {
+    deletePoint: function() {
       this.clearResponseField();
       const req = new DeleteRequest();
       req.setUuid(this.form.uuid);

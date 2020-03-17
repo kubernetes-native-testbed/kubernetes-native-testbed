@@ -23,7 +23,7 @@
         <div uk-grid>
           <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
           <div class="uk-width-3-4">
-            <input class="uk-input" v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
           </div>
         </div>
         </br>
@@ -83,7 +83,7 @@
         <div uk-grid>
           <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
           <div class="uk-width-3-4">
-            <input class="uk-input" v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
           </div>
         </div>
         </br>
@@ -172,7 +172,7 @@
         <div uk-grid>
           <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
           <div class="uk-width-3-4">
-            <input class="uk-input" v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
           </div>
         </div>
         </br>
@@ -180,7 +180,7 @@
         <div uk-grid>
           <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
           <div class="uk-width-3-4">
-            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
           </div>
         </div>
         </br>
@@ -188,7 +188,7 @@
         <div uk-grid>
           <div class="uk-width-1-4"><label class="uk-align-right">PaymentInfoUUID:</label></div>
           <div class="uk-width-3-4">
-            <input class="uk-input" v-model="form.paymentInfoUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+            <input class="uk-input" v-model="form.paymentInfoUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
           </div>
         </div>
         </br>
@@ -196,7 +196,7 @@
         <div uk-grid>
           <div class="uk-width-1-4"><label class="uk-align-right">AddressUUID:</label></div>
           <div class="uk-width-3-4">
-            <input class="uk-input" v-model="form.addressUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+            <input class="uk-input" v-model="form.addressUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
           </div>
         </div>
         </br>
@@ -206,7 +206,7 @@
           <div class="uk-width-3-4">
             <span v-for="(orderedProduct, index) in form.orderedProducts">
               <label>{{ index }}</label>
-              <input class="uk-input" v-model="orderedProduct.productUUID" :key="`${index}-1`" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+              <input class="uk-input" v-model="orderedProduct.productUUID" :key="`${index}-1`" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
               <input class="uk-input" v-model="orderedProduct.count" :key="`${index}-2`" type="text" placeholder="10">
               <input class="uk-input" v-model="orderedProduct.price" :key="`${index}-3`" type="text" placeholder="100">
             </span>
@@ -241,7 +241,7 @@
         <div uk-grid>
           <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
           <div class="uk-width-3-4">
-            <input class="uk-input" v-model="form.uuid" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
           </div>
         </div>
         </br>
@@ -257,7 +257,7 @@
         <div uk-grid>
           <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
           <div class="uk-width-3-4">
-            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="ba0547b9-b1a7-4058-a845-464a82cf677b">
+            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
           </div>
         </div>
         </br>
@@ -296,6 +296,62 @@
       <label>Response</label><br/>
       <div class="output">
         <textarea class="uk-textarea" rows=5>{{ resp.paymentInfo }}</textarea>
+        <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+      </div>
+    </div>
+
+
+    <!--
+      ###########################################################################################
+      # Point
+      ###########################################################################################
+    -->
+    <hr>
+    <div id="point">
+      <div>
+        <h2>Point</h2>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Balance:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.balance" type="text" placeholder="100">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Description:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.description" type="text" placeholder="shopping service point at 2020/01/01 10:00:00">
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="getPoint">Get</button>
+        <button class="uk-button uk-button-primary" v-on:click="setPoint">Set</button>
+        <button class="uk-button uk-button-primary" v-on:click="updatePoint">Update</button>
+        <button class="uk-button uk-button-primary" v-on:click="deletePoint">Delete</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+      </div>
+      <hr class="uk-divider-small">
+      <label>Response</label><br/>
+      <div class="output">
+        <textarea class="uk-textarea" rows=5>{{ resp.point }}</textarea>
         <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
       </div>
     </div>
