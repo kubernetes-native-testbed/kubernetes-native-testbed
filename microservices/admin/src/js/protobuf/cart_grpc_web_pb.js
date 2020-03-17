@@ -13,8 +13,6 @@ grpc.web = require('grpc-web');
 
 
 var google_protobuf_empty_pb = require('google-protobuf/google/protobuf/empty_pb.js')
-
-var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js')
 const proto = {};
 proto.cartpb = require('./cart_pb.js');
 
@@ -73,176 +71,96 @@ proto.cartpb.CartAPIPromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.cartpb.GetRequest,
- *   !proto.cartpb.GetResponse>}
+ *   !proto.cartpb.ShowRequest,
+ *   !proto.cartpb.ShowResponse>}
  */
-const methodDescriptor_CartAPI_Get = new grpc.web.MethodDescriptor(
-  '/cartpb.CartAPI/Get',
+const methodDescriptor_CartAPI_Show = new grpc.web.MethodDescriptor(
+  '/cartpb.CartAPI/Show',
   grpc.web.MethodType.UNARY,
-  proto.cartpb.GetRequest,
-  proto.cartpb.GetResponse,
+  proto.cartpb.ShowRequest,
+  proto.cartpb.ShowResponse,
   /**
-   * @param {!proto.cartpb.GetRequest} request
+   * @param {!proto.cartpb.ShowRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.cartpb.GetResponse.deserializeBinary
+  proto.cartpb.ShowResponse.deserializeBinary
 );
 
 
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.cartpb.GetRequest,
- *   !proto.cartpb.GetResponse>}
+ *   !proto.cartpb.ShowRequest,
+ *   !proto.cartpb.ShowResponse>}
  */
-const methodInfo_CartAPI_Get = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.cartpb.GetResponse,
+const methodInfo_CartAPI_Show = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.cartpb.ShowResponse,
   /**
-   * @param {!proto.cartpb.GetRequest} request
+   * @param {!proto.cartpb.ShowRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.cartpb.GetResponse.deserializeBinary
+  proto.cartpb.ShowResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.cartpb.GetRequest} request The
+ * @param {!proto.cartpb.ShowRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.cartpb.GetResponse)}
+ * @param {function(?grpc.web.Error, ?proto.cartpb.ShowResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.cartpb.GetResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.cartpb.ShowResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.cartpb.CartAPIClient.prototype.get =
+proto.cartpb.CartAPIClient.prototype.show =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/cartpb.CartAPI/Get',
+      '/cartpb.CartAPI/Show',
       request,
       metadata || {},
-      methodDescriptor_CartAPI_Get,
+      methodDescriptor_CartAPI_Show,
       callback);
 };
 
 
 /**
- * @param {!proto.cartpb.GetRequest} request The
+ * @param {!proto.cartpb.ShowRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.cartpb.GetResponse>}
+ * @return {!Promise<!proto.cartpb.ShowResponse>}
  *     A native promise that resolves to the response
  */
-proto.cartpb.CartAPIPromiseClient.prototype.get =
+proto.cartpb.CartAPIPromiseClient.prototype.show =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/cartpb.CartAPI/Get',
+      '/cartpb.CartAPI/Show',
       request,
       metadata || {},
-      methodDescriptor_CartAPI_Get);
+      methodDescriptor_CartAPI_Show);
 };
 
 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.cartpb.SetRequest,
- *   !proto.cartpb.SetResponse>}
- */
-const methodDescriptor_CartAPI_Set = new grpc.web.MethodDescriptor(
-  '/cartpb.CartAPI/Set',
-  grpc.web.MethodType.UNARY,
-  proto.cartpb.SetRequest,
-  proto.cartpb.SetResponse,
-  /**
-   * @param {!proto.cartpb.SetRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.cartpb.SetResponse.deserializeBinary
-);
-
-
-/**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.cartpb.SetRequest,
- *   !proto.cartpb.SetResponse>}
- */
-const methodInfo_CartAPI_Set = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.cartpb.SetResponse,
-  /**
-   * @param {!proto.cartpb.SetRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.cartpb.SetResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.cartpb.SetRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.Error, ?proto.cartpb.SetResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.cartpb.SetResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.cartpb.CartAPIClient.prototype.set =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/cartpb.CartAPI/Set',
-      request,
-      metadata || {},
-      methodDescriptor_CartAPI_Set,
-      callback);
-};
-
-
-/**
- * @param {!proto.cartpb.SetRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.cartpb.SetResponse>}
- *     A native promise that resolves to the response
- */
-proto.cartpb.CartAPIPromiseClient.prototype.set =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/cartpb.CartAPI/Set',
-      request,
-      metadata || {},
-      methodDescriptor_CartAPI_Set);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.cartpb.UpdateRequest,
+ *   !proto.cartpb.AddRequest,
  *   !proto.google.protobuf.Empty>}
  */
-const methodDescriptor_CartAPI_Update = new grpc.web.MethodDescriptor(
-  '/cartpb.CartAPI/Update',
+const methodDescriptor_CartAPI_Add = new grpc.web.MethodDescriptor(
+  '/cartpb.CartAPI/Add',
   grpc.web.MethodType.UNARY,
-  proto.cartpb.UpdateRequest,
+  proto.cartpb.AddRequest,
   google_protobuf_empty_pb.Empty,
   /**
-   * @param {!proto.cartpb.UpdateRequest} request
+   * @param {!proto.cartpb.AddRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
@@ -255,13 +173,13 @@ const methodDescriptor_CartAPI_Update = new grpc.web.MethodDescriptor(
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.cartpb.UpdateRequest,
+ *   !proto.cartpb.AddRequest,
  *   !proto.google.protobuf.Empty>}
  */
-const methodInfo_CartAPI_Update = new grpc.web.AbstractClientBase.MethodInfo(
+const methodInfo_CartAPI_Add = new grpc.web.AbstractClientBase.MethodInfo(
   google_protobuf_empty_pb.Empty,
   /**
-   * @param {!proto.cartpb.UpdateRequest} request
+   * @param {!proto.cartpb.AddRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
@@ -272,7 +190,7 @@ const methodInfo_CartAPI_Update = new grpc.web.AbstractClientBase.MethodInfo(
 
 
 /**
- * @param {!proto.cartpb.UpdateRequest} request The
+ * @param {!proto.cartpb.AddRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
@@ -281,48 +199,48 @@ const methodInfo_CartAPI_Update = new grpc.web.AbstractClientBase.MethodInfo(
  * @return {!grpc.web.ClientReadableStream<!proto.google.protobuf.Empty>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.cartpb.CartAPIClient.prototype.update =
+proto.cartpb.CartAPIClient.prototype.add =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/cartpb.CartAPI/Update',
+      '/cartpb.CartAPI/Add',
       request,
       metadata || {},
-      methodDescriptor_CartAPI_Update,
+      methodDescriptor_CartAPI_Add,
       callback);
 };
 
 
 /**
- * @param {!proto.cartpb.UpdateRequest} request The
+ * @param {!proto.cartpb.AddRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.google.protobuf.Empty>}
  *     A native promise that resolves to the response
  */
-proto.cartpb.CartAPIPromiseClient.prototype.update =
+proto.cartpb.CartAPIPromiseClient.prototype.add =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/cartpb.CartAPI/Update',
+      '/cartpb.CartAPI/Add',
       request,
       metadata || {},
-      methodDescriptor_CartAPI_Update);
+      methodDescriptor_CartAPI_Add);
 };
 
 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.cartpb.DeleteRequest,
+ *   !proto.cartpb.RemoveRequest,
  *   !proto.google.protobuf.Empty>}
  */
-const methodDescriptor_CartAPI_Delete = new grpc.web.MethodDescriptor(
-  '/cartpb.CartAPI/Delete',
+const methodDescriptor_CartAPI_Remove = new grpc.web.MethodDescriptor(
+  '/cartpb.CartAPI/Remove',
   grpc.web.MethodType.UNARY,
-  proto.cartpb.DeleteRequest,
+  proto.cartpb.RemoveRequest,
   google_protobuf_empty_pb.Empty,
   /**
-   * @param {!proto.cartpb.DeleteRequest} request
+   * @param {!proto.cartpb.RemoveRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
@@ -335,13 +253,13 @@ const methodDescriptor_CartAPI_Delete = new grpc.web.MethodDescriptor(
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.cartpb.DeleteRequest,
+ *   !proto.cartpb.RemoveRequest,
  *   !proto.google.protobuf.Empty>}
  */
-const methodInfo_CartAPI_Delete = new grpc.web.AbstractClientBase.MethodInfo(
+const methodInfo_CartAPI_Remove = new grpc.web.AbstractClientBase.MethodInfo(
   google_protobuf_empty_pb.Empty,
   /**
-   * @param {!proto.cartpb.DeleteRequest} request
+   * @param {!proto.cartpb.RemoveRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
@@ -352,7 +270,7 @@ const methodInfo_CartAPI_Delete = new grpc.web.AbstractClientBase.MethodInfo(
 
 
 /**
- * @param {!proto.cartpb.DeleteRequest} request The
+ * @param {!proto.cartpb.RemoveRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
@@ -361,32 +279,32 @@ const methodInfo_CartAPI_Delete = new grpc.web.AbstractClientBase.MethodInfo(
  * @return {!grpc.web.ClientReadableStream<!proto.google.protobuf.Empty>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.cartpb.CartAPIClient.prototype.delete =
+proto.cartpb.CartAPIClient.prototype.remove =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/cartpb.CartAPI/Delete',
+      '/cartpb.CartAPI/Remove',
       request,
       metadata || {},
-      methodDescriptor_CartAPI_Delete,
+      methodDescriptor_CartAPI_Remove,
       callback);
 };
 
 
 /**
- * @param {!proto.cartpb.DeleteRequest} request The
+ * @param {!proto.cartpb.RemoveRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.google.protobuf.Empty>}
  *     A native promise that resolves to the response
  */
-proto.cartpb.CartAPIPromiseClient.prototype.delete =
+proto.cartpb.CartAPIPromiseClient.prototype.remove =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/cartpb.CartAPI/Delete',
+      '/cartpb.CartAPI/Remove',
       request,
       metadata || {},
-      methodDescriptor_CartAPI_Delete);
+      methodDescriptor_CartAPI_Remove);
 };
 
 
