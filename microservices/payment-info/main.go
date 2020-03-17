@@ -38,7 +38,7 @@ const (
 )
 
 func init() {
-	if dbUser = os.Getenv("DB_USERNAME"); dbUser == "" {
+	if dbUser = os.Getenv("DB_USER"); dbUser == "" {
 		dbUser = defaultDBUser
 	}
 	if dbPassword = os.Getenv("DB_PASSWORD"); dbPassword == "" {

@@ -27,7 +27,7 @@ spec:
               value: payment-info-db.payment-info.svc.cluster.local
             - name: DB_PORT
               value: "5432"
-            - name: DB_USERNAME
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: payment-info-user.payment-info-db.credentials
