@@ -9,7 +9,7 @@ export const product = new Vue({
     form: {
       uuid: '',
       name: '',
-      price: 0,
+      price: null,
       imageURLs: [],
     },
     resp: {

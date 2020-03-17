@@ -11,7 +11,7 @@ export const user = new Vue({
       username: '',
       firstName: '',
       lastName: '',
-      age: 0,
+      age: null,
       passwordHash: '',
       addresses: [],
     },
