@@ -1,4 +1,4 @@
-const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Cart, CartProduct} = require('./protobuf/cart_pb.js');
+const {ShowRequest, ShowResponse, AddRequest, RemoveRequest, Cart, CartProduct} = require('./protobuf/cart_pb.js');
 
 const {CartAPIClient} = require('./protobuf/cart_grpc_web_pb.js');
 
@@ -32,11 +32,11 @@ export const order = new Vue({
       this.resp.errorCode = 0;
       this.errorMsg = '';
     },
-    getCart: function() {
+    showCart: function() {
       this.clearResponseField();
-      const req = new GetRequest();
+      const req = new ShowRequest();
       req.setUseruuid(this.form.Useruuid);
-      this.client.get(req, {}, (err, resp) => {
+      this.client.show(req, {}, (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -49,9 +49,9 @@ export const order = new Vue({
         }
       });
     },
-    setCart: function() {
+    addCart: function() {
       this.clearResponseField();
-      const req = new SetRequest();
+      const req = new AddRequest();
       const c = new Cart();
       c.setUseruuid(this.form.userUUID);
       var cartProducts = []
@@ -62,8 +62,8 @@ export const order = new Vue({
         cartProducts.push(cp)
       });
       c.setCartproductsList(cartProducts);
-      req.setCart(c);
-      this.client.set(req, {}, (err, resp) => {
+      req.addCart(c);
+      this.client.add(req, {}, (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -75,23 +75,33 @@ export const order = new Vue({
         }
       });
     },
-    updateOrder: function() {
+    removeCart: function() {
       this.clearResponseField();
-      const req = new UpdateRequest();
+      const req = new RemoveRequest();
       const c = new Cart();
       c.setUseruuid(this.form.userUUID);
-      c.setCartproductsList(this.form.cartProducts);
-      req.setCart(c);
-      this.client.update(req, {}, (err, resp) => {
+      var cartProducts = []
+      this.form.cartProducts.forEach(function(v) {
+        const cp = new CartProduct();
+        cp.setProductuuid(v.productUUID);
+        cp.setCount(v.count);
+        cartProducts.push(cp)
+      });
+      c.setCartproductsList(cartProducts);
+      req.removeCart(c);
+      this.client.remove(req, {}, (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
+          let c = new Object();
+          c.Useruuid = resp.getUseruuid();
+          this.resp.cart.push(c);
           this.resp.errorCode = err.code;
         }
       });
     },
-    deleteOrder: function() {
+    deleteCart: function() {
       this.clearResponseField();
       const req = new DeleteRequest();
       req.setUseruuid(this.form.userUUID);
