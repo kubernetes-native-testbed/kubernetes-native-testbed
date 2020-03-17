@@ -106,6 +106,7 @@ export const user = new Vue({
       this.clearResponseField();
       const req = new UpdateRequest();
       const u = new User();
+      u.setUuid(this.form.uuid);
       u.setUsername(this.form.username);
       u.setFirstname(this.form.firstName);
       u.setLastname(this.form.lastName);

@@ -80,6 +80,7 @@ export const point = new Vue({
       this.clearResponseField();
       const req = new UpdateRequest();
       const p = new Point();
+      p.setUuid(this.form.uuid);
       p.setUseruuid(this.form.userUUID);
       p.setBalance(this.form.balance);
       p.setDescription(this.form.description);

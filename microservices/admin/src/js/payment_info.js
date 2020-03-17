@@ -47,15 +47,15 @@ export const paymentInfo = new Vue({
           this.resp.errorMsg = err.message;
         } else {
           let pi = new Object();
-          pi.uuid = resp.getPaymentInfo().getUuid();
-          pi.userUUID = resp.getPaymentInfo().getUseruuid();
-          pi.name = resp.getPaymentInfo().getName();
-          pi.cardNumber = resp.getPaymentInfo().getCardnumber();
-          pi.securityCode = resp.getPaymentInfo().getSecuritycode();
-          pi.expirationDate = resp.getPaymentInfo().getExpirationdate();
-          pi.createdAt = resp.getPaymentInfo().getCreatedat();
-          pi.updatedAt = resp.getPaymentInfo().getUpdatedat();
-          pi.deletedAt = resp.getPaymentInfo().getDeletedat();
+          pi.uuid = resp.getPaymentinfo().getUuid();
+          pi.userUUID = resp.getPaymentinfo().getUseruuid();
+          pi.name = resp.getPaymentinfo().getName();
+          pi.cardNumber = resp.getPaymentinfo().getCardnumber();
+          pi.securityCode = resp.getPaymentinfo().getSecuritycode();
+          pi.expirationDate = resp.getPaymentinfo().getExpirationdate();
+          pi.createdAt = resp.getPaymentinfo().getCreatedat();
+          pi.updatedAt = resp.getPaymentinfo().getUpdatedat();
+          pi.deletedAt = resp.getPaymentinfo().getDeletedat();
           this.resp.paymentInfo.push(pi);
           this.resp.errorCode = err.code;
         }
@@ -88,6 +88,7 @@ export const paymentInfo = new Vue({
       this.clearResponseField();
       const req = new UpdateRequest();
       const pi = new PaymentInfo();
+      pi.setUuid(this.form.uuid);
       pi.setUseruuid(this.form.userUUID);
       pi.setName(this.form.name);
       pi.setCardnumber(this.form.cardNumber);
