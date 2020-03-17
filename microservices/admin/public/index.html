@@ -357,6 +357,59 @@
     </div>
 
 
+    <!--
+      ###########################################################################################
+      # Delivery Status
+      ###########################################################################################
+    -->
+    <hr>
+    <div id="delivery-status">
+      <div>
+        <h2>Delivery Status</h2>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">OrderUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.orderUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Status:</label></div>
+          <div class="uk-width-3-4">
+            <select class="uk-select" v-model="form.status">
+              <option>Waiting</option>
+              <option>Preparing</option>
+              <option>Shipping</option>
+              <option>Delivered</option>
+            </select>
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">InquiryNumber:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.inquiryNumber" type="text" placeholder="000-0000000-0000000">
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="getDeliveryStatus">Get</button>
+        <button class="uk-button uk-button-primary" v-on:click="setDeliveryStatus">Set</button>
+        <button class="uk-button uk-button-primary" v-on:click="updateDeliveryStatus">Update</button>
+        <button class="uk-button uk-button-primary" v-on:click="deleteDeliveryStatus">Delete</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+      </div>
+      <hr class="uk-divider-small">
+      <label>Response</label><br/>
+      <div class="output">
+        <textarea class="uk-textarea" rows=5>{{ resp.deliveryStatus }}</textarea>
+        <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+      </div>
+    </div>
+
+
     <!-- 
       ###########################################################################################
       # Utils
