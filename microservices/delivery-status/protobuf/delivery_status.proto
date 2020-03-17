@@ -13,17 +13,16 @@ service DeliveryStatusAPI {
 }
 
 message DeliveryStatus {
-	string UUID = 1;
-	string orderUUID = 2;
-	int32 status = 3;
-	string inquiryNumber = 4;
-	google.protobuf.Timestamp createdAt = 5;
-	google.protobuf.Timestamp updatedAt = 6;
-	google.protobuf.Timestamp deletedAt = 7;
+	string orderUUID = 1;
+	int32 status = 2;
+	string inquiryNumber = 3;
+	google.protobuf.Timestamp createdAt = 4;
+	google.protobuf.Timestamp updatedAt = 5;
+	google.protobuf.Timestamp deletedAt = 6;
 }
 
 message GetRequest {
-    string UUID = 1;
+    string orderUUID = 1;
 }
 
 message GetResponse {
@@ -35,7 +34,7 @@ message SetRequest {
 }
 
 message SetResponse {
-	string UUID = 1;
+	string orderUUID = 1;
 }
 
 message UpdateRequest {
@@ -43,5 +42,5 @@ message UpdateRequest {
 }
 
 message DeleteRequest {
-    string UUID = 1;
+    string orderUUID = 1;
 }
