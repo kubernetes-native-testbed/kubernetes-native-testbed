@@ -7,4 +7,5 @@ const product = require('./product.js');
 const user = require('./user.js');
 const order = require('./order.js');
 const payment_info = require('./payment_info.js');
+const point = require('./point.js');
 
