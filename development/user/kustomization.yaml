@@ -3,4 +3,7 @@ bases:
 images:
 - name: registry-harbor-core.infra.svc.cluster.local/library/user
   newName: local-user
-
+patches:
+- path: patch-dnspolicy.yaml
+  target:
+    kind: Deployment
