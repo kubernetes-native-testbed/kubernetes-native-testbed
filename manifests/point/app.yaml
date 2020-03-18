@@ -60,6 +60,9 @@ spec:
               value: "9042"
             - name: DB_PORT_YREDIS
               value: "6379"
+
+            - name: DB_SSL
+              value: disable
           resources:
             requests:
               cpu: 100m
