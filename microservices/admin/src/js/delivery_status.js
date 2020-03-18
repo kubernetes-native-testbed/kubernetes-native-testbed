@@ -5,7 +5,7 @@ const {DeliveryStatusAPIClient} = require('./protobuf/delivery_status_grpc_web_p
 export const order = new Vue({
   el: '#delivery-status',
   data: {
-    endpoint: window.location.protocol + '//' + window.location.host + "/delivery-status",
+    endpoint: window.location.protocol + '//' + window.location.host + "/deliverystatus",
     form: {
       orderUUID: '',
       status: '',
