@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: delivery-status-app
-          image: registry-harbor-core.infra.svc.cluster.local/library/delivery-status:d66f17c426ce8a228cfb21b7f7cb7b4e4a4f7d87
+          image: registry-harbor-core.infra.svc.cluster.local/library/delivery-status:d4b6dc1c21a360bd151b69fa68bd869c412f2040
           env:
             - name: DB_HOST
               value: delivery-status-db.delivery-status.svc.cluster.local
