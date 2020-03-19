@@ -9,7 +9,6 @@ import (
 	"strconv"
 
 	"github.com/golang/protobuf/ptypes/empty"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
