@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: admin
-          image: registry-harbor-core.infra.svc.cluster.local/library/admin:d66f17c426ce8a228cfb21b7f7cb7b4e4a4f7d87
+          image: registry-harbor-core.infra.svc.cluster.local/library/admin:d549466a6f927217f0fabf53f9c715a45ec387e4
           resources:
             requests:
               cpu: 100m
