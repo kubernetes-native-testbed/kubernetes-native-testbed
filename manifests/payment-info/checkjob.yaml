@@ -15,6 +15,7 @@ data:
     export PGPASSWORD=${DB_PASSWORD}
     psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME} -c "\l"
     psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME} -c "\dt"
+    psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME} -c "\du"
 ---
 apiVersion: batch/v1beta1
 kind: CronJob

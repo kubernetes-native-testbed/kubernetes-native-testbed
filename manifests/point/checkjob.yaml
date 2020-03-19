@@ -149,8 +149,10 @@ data:
     echo "check script running..."
 
     # postgres compatible
-    /home/yugabyte/bin/ysqlsh -h ${DB_HOST} -p ${DB_PORT_YPOSTGRES} -d ${DB_NAME} -c "\l"
-    /home/yugabyte/bin/ysqlsh -h ${DB_HOST} -p ${DB_PORT_YPOSTGRES} -d ${DB_NAME} -c "\dt"
+    export PGPASSWORD=${DB_PASSWORD}
+    /home/yugabyte/bin/ysqlsh -h ${DB_HOST} -p ${DB_PORT_YPOSTGRES} -d ${DB_NAME} -U ${DB_USER} -c "\l"
+    /home/yugabyte/bin/ysqlsh -h ${DB_HOST} -p ${DB_PORT_YPOSTGRES} -d ${DB_NAME} -U ${DB_USER} -c "\dt"
+    /home/yugabyte/bin/ysqlsh -h ${DB_HOST} -p ${DB_PORT_YPOSTGRES} -d ${DB_NAME} -U ${DB_USER} -c "\du"
 
     # cassandra compatible
     /home/yugabyte/bin/cqlsh ${DB_HOST} ${DB_PORT_YCASSANDRA} -e "DESCRIBE TABLES;"
@@ -197,7 +199,20 @@ spec:
             - name: DB_PORT_YREDIS
               value: "6379"
             - name: DB_NAME
-              value: yugabyte
+              valueFrom:
+                secretKeyRef:
+                  name: point-db-credentials
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: point-db-credentials
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: point-db-credentials
+                  key: DB_PASSWORD
             volumeMounts:
             - name: scripts-volume
               mountPath: /scripts

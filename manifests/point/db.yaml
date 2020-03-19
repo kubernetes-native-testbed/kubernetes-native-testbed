@@ -1,4 +1,15 @@
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: point-db-credentials
+  namespace: point
+type: Opaque
+stringData:
+  DB_NAME: point
+  DB_USER: point
+  DB_PASSWORD: point
+---
 apiVersion: yugabytedb.rook.io/v1alpha1
 kind: YBCluster
 metadata:
@@ -52,3 +63,62 @@ spec:
           requests:
             storage: 15Gi
         storageClassName: rook-ceph-block
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-db
+  namespace: point
+  labels:
+    service: point
+    role: db
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 10
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: check-container
+        image: yugabytedb/yugabyte:2.0.10.0-b4
+        command:
+        - /home/yugabyte/bin/ysqlsh
+        - -h
+        - $(DB_HOST)
+        - -p
+        - $(DB_PORT_YPOSTGRES)
+        - -c
+        - "CREATE DATABASE $(DB_NAME); CREATE USER $(DB_USER) WITH PASSWORD '$(DB_PASSWORD)';"
+        env:
+        - name: DB_HOST
+          value: yb-tserver-point-db-0.yb-tservers-point-db.point.svc.cluster.local
+        - name: DB_PORT_YPOSTGRES
+          value: "5433"
+        - name: DB_PORT_YCASSANDRA
+          value: "9042"
+        - name: DB_PORT_YREDIS
+          value: "6379"
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: point-db-credentials
+              key: DB_NAME
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: point-db-credentials
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: point-db-credentials
+              key: DB_PASSWORD
+        volumeMounts:
+        - name: scripts-volume
+          mountPath: /scripts
+      volumes:
+        - name: scripts-volume
+          configMap:
+            name: check-scripts-kvs
+            defaultMode: 493 # mode 755

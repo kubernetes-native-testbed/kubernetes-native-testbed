@@ -42,17 +42,25 @@ spec:
             - name: KVS_PORT
               value: "11211"
 
-            - name: DB_USER
-              value: point
-            - name: DB_PASSWORD
-              value: point
-
             - name: DB_HOST
               value: yb-tserver-point-db-0.yb-tservers-point-db.point.svc.cluster.local
             - name: DB_PORT
               value: "5433"
             - name: DB_NAME
-              value: point
+              valueFrom:
+                secretKeyRef:
+                  name: point-db-credentials
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: point-db-credentials
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: point-db-credentials
+                  key: DB_PASSWORD
 
             - name: DB_PORT_YPOSTGRES
               value: "5433"
