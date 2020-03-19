@@ -122,6 +122,7 @@ func main() {
 	log.Printf("listen on %s", defaultBindAddr)
 
 	crConfig := cartRepositoryTiKVConfig{
+		ctx:       context.Background(),
 		pdAddress: kvsHost,
 		pdPort:    kvsPort,
 	}
