@@ -41,12 +41,12 @@ export const order = new Vue({
           this.resp.errorMsg = err.message;
         } else {
           let s = new Object();
-          s.orderUUID = resp.getDeliveryStatus().getOrderuuid();
-          s.status = resp.getDeliveryStatus().getStatus();
-          s.inquiryNumber = resp.getDeliveryStatus().getInquirynumber();
-          s.createdAt = resp.getDeliveryStatus().getCreatedat();
-          s.updatedAt = resp.getDeliveryStatus().getUpdatedat();
-          s.deletedAt = resp.getDeliveryStatus().getDeletedat();
+          s.orderUUID = resp.getDeliverystatus().getOrderuuid();
+          s.status = resp.getDeliverystatus().getStatus();
+          s.inquiryNumber = resp.getDeliverystatus().getInquirynumber();
+          s.createdAt = resp.getDeliverystatus().getCreatedat();
+          s.updatedAt = resp.getDeliverystatus().getUpdatedat();
+          s.deletedAt = resp.getDeliverystatus().getDeletedat();
           this.resp.deliveryStatus.push(s);
           this.resp.errorCode = err.code;
         }
@@ -57,7 +57,7 @@ export const order = new Vue({
       const req = new SetRequest();
       const s = new DeliveryStatus();
       s.setOrderuuid(this.form.orderUUID);
-      s.setStatus(this.form.status);
+      s.setStatus(Number(this.form.status));
       s.setInquirynumber(this.form.inquiryNumber);
       req.setDeliverystatus(s);
       this.client.set(req, {}, (err, resp) => {
@@ -77,7 +77,7 @@ export const order = new Vue({
       const req = new UpdateRequest();
       const s = new DeliveryStatus();
       s.setOrderuuid(this.form.orderUUID);
-      s.setStatus(this.form.status);
+      s.setStatus(Number(this.form.status));
       s.setInquirynumber(this.form.inquiryNumber);
       req.setDeliverystatus(s);
       this.client.update(req, {}, (err, resp) => {

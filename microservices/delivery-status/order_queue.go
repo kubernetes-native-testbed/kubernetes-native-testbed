@@ -8,27 +8,39 @@ import (
 
 type orderQueue interface {
 	subscribe() (<-chan string, error)
+	unsubscribe() error
 }
 
 type orderQueueNATS struct {
 	conn    *nats.Conn
 	subject string
 	retry   int
+
+	subscription *nats.Subscription
 }
 
 func (oq *orderQueueNATS) subscribe() (<-chan string, error) {
 	msgCh := make(chan *nats.Msg, 64)
 	orderCh := make(chan string, 64)
-	if _, err := oq.conn.ChanSubscribe(oq.subject, msgCh); err != nil {
+	sub, err := oq.conn.ChanQueueSubscribe(oq.subject, "delivery-status-group", msgCh)
+	if err != nil {
 		return nil, err
 	}
+	oq.subscription = sub
+
 	go func() {
 		for {
 			msg := <-msgCh
-			orderCh <- msg.Reply
+			if data := string(msg.Data); data != "" {
+				orderCh <- data
+			}
 		}
 	}()
 	return orderCh, nil
+}
+
+func (oq *orderQueueNATS) unsubscribe() error {
+	return oq.subscription.Unsubscribe()
 }
 
 type orderQueueNATSConfig struct {
