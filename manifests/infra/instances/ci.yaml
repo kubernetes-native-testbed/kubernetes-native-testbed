@@ -112,7 +112,17 @@ data:
     git add --all;
     git commit -m "[Update manifest] ${MICROSERVICE} for new image tag ${COMMIT_HASH}";
     git push origin ${MICROSERVICE}-${COMMIT_HASH};
-    gh pr create --base develop --title "Update ${MICROSERVICE} manifest for new image tag ${COMMIT_HASH}" --body "RP is opened at $(date +%s)";
+    cat << _EOF_ > ~/pr-body.txt
+    RP is opened at $(date +%s)
+
+    Changes:
+    https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/commit/${COMMIT_HASH}
+
+    Files:
+    https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/tree/${COMMIT_HASH}
+    _EOF_
+
+    gh pr create --base develop --title "Update ${MICROSERVICE} manifest for new image tag ${COMMIT_HASH}" --body "$(cat ~/pr-body.txt)";
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Condition
