@@ -82,7 +82,7 @@ spec:
           livenessProbe:
             exec:
               command: ["/bin/grpc_health_probe", "-addr=:8080"]
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
           ports:
             - containerPort: 8080
 ---
