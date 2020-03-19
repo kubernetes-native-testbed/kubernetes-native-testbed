@@ -205,7 +205,7 @@ func (s *orderAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*em
 		PaymentInfoUUID: req.GetOrder().GetPaymentInfoUUID(),
 		AddressUUID:     req.GetOrder().GetAddressUUID(),
 	}
-	log.Printf("set %s", o)
+	log.Printf("update %s", o)
 
 	if err := s.orderRepository.update(o); err != nil {
 		return &empty.Empty{}, err

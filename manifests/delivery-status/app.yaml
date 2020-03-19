@@ -36,7 +36,13 @@ spec:
             - name: DB_PASSWORD
               value: cassandra
             - name: DB_KEYSPACE
-              value: deliveryStatus
+              value: deliverystatus
+            - name: ORDER_QUEUE_HOST
+              value: delivery-status-queue.delivery-status.svc.cluster.local
+            - name: ORDER_QUEUE_PORT
+              value: "4222"
+            - name: ORDER_QUEUE_SUBJECT
+              value: order
           resources:
             requests:
               cpu: 100m
