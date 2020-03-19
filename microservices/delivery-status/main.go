@@ -165,10 +165,10 @@ func (s *deliveryStatusAPIServer) Delete(ctx context.Context, req *pb.DeleteRequ
 	return &empty.Empty{}, nil
 }
 
-func (s *deliveryStatusAPIServer) subscribeOrderQueue() error {
+func (s *deliveryStatusAPIServer) subscribeOrderQueue() (func() error, error) {
 	orderCh, err := s.orderQueue.subscribe()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	go func() {
@@ -188,7 +188,7 @@ func (s *deliveryStatusAPIServer) subscribeOrderQueue() error {
 		}
 	}()
 
-	return nil
+	return s.orderQueue.unsubscribe, nil
 
 }
 
@@ -242,9 +242,11 @@ func main() {
 		log.Fatalf("failed to init database: %v", err)
 	}
 
-	if err := api.subscribeOrderQueue(); err != nil {
+	unsubscribe, err := api.subscribeOrderQueue()
+	if err != nil {
 		log.Fatalf("failed to subscribe order queue: %v", err)
 	}
+	defer unsubscribe()
 
 	log.Printf("start deliveryStatus API server")
 	if err := s.Serve(lis); err != nil {
