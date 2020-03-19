@@ -12,12 +12,7 @@ service CartAPI {
 
 message Cart {
 	string userUUID = 1;
-	repeated CartProduct cartProducts = 2;
-}
-
-message CartProduct {
-	string productUUID = 1;
-	int32 count = 2;
+	map<string, int32> cartProducts = 2;
 }
 
 message ShowRequest {

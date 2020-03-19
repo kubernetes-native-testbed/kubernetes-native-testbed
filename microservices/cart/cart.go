@@ -1,21 +1,40 @@
 package main
 
-import "time"
+import (
+	"encoding/json"
+
+	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart/protobuf"
+)
 
 type Cart struct {
-	UUID         string        `gorm:"primary_key"`
-	CartProducts []CartProduct `gorm:"foreignkey:CartUUID;association_foreignkey:UUID"`
-	UserUUID     string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
-	DeletedAt    *time.Time `sql:"index"`
+	UserUUID     string         `json:"user_uuid"`
+	CartProducts map[string]int `json:"cart_products"`
 }
 
-type CartProduct struct {
-	CartUUID    string `gorm:"primary_key"`
-	ProductUUID string `gorm:"primary_key"`
-	Count       int
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   *time.Time `sql:"index"`
+func (cart *Cart) String() string {
+	b, _ := json.Marshal(cart)
+	return string(b)
+}
+
+func convertToCart(pbCart *pb.Cart) *Cart {
+	pbCartProducts := pbCart.GetCartProducts()
+	cartProducts := make(map[string]int, len(pbCartProducts))
+	for k, v := range pbCartProducts {
+		cartProducts[k] = int(v)
+	}
+	return &Cart{
+		UserUUID:     pbCart.GetUserUUID(),
+		CartProducts: cartProducts,
+	}
+}
+
+func convertToCartProto(cart *Cart) *pb.Cart {
+	pbCartProducts := make(map[string]int32, len(cart.CartProducts))
+	for k, v := range cart.CartProducts {
+		pbCartProducts[k] = int32(v)
+	}
+	return &pb.Cart{
+		UserUUID:     cart.UserUUID,
+		CartProducts: pbCartProducts,
+	}
 }

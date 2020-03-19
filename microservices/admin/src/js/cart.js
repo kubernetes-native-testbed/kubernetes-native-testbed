@@ -1,4 +1,4 @@
-const {ShowRequest, ShowResponse, AddRequest, RemoveRequest, Cart, CartProduct} = require('./protobuf/cart_pb.js');
+const {ShowRequest, ShowResponse, AddRequest, RemoveRequest, Cart} = require('./protobuf/cart_pb.js');
 
 const {CartAPIClient} = require('./protobuf/cart_grpc_web_pb.js');
 
@@ -8,7 +8,7 @@ export const order = new Vue({
     endpoint: window.location.protocol + '//' + window.location.host + "/cart",
     form: {
       userUUID: '',
-      cartProducts: [],
+      cartProducts: new Map(),
     },
     resp: {
       cart: [],
@@ -43,7 +43,7 @@ export const order = new Vue({
         } else {
           let c = new Object();
           c.userUUID = resp.getCart().getUseruuid();
-          c.cartProducts = resp.getCart().getCartproductsList();
+          c.cartProducts = resp.getCart().getCartproductsMap();
           this.resp.cart.push(c);
           this.resp.errorCode = err.code;
         }
@@ -54,14 +54,11 @@ export const order = new Vue({
       const req = new AddRequest();
       const c = new Cart();
       c.setUseruuid(this.form.userUUID);
-      var cartProducts = []
+      var cartProductsMap = new Map();
       this.form.cartProducts.forEach(function(v) {
-        const cp = new CartProduct();
-        cp.setProductuuid(v.productUUID);
-        cp.setCount(v.count);
-        cartProducts.push(cp)
+        cartProductsMap.set(v.productUUID, v.count);
       });
-      c.setCartproductsList(cartProducts);
+      c.setCartproductsMap(cartProductsMap);
       req.addCart(c);
       this.client.add(req, {}, (err, resp) => {
         if (err) {
@@ -80,14 +77,11 @@ export const order = new Vue({
       const req = new RemoveRequest();
       const c = new Cart();
       c.setUseruuid(this.form.userUUID);
-      var cartProducts = []
+      var cartProductsMap = new Map();
       this.form.cartProducts.forEach(function(v) {
-        const cp = new CartProduct();
-        cp.setProductuuid(v.productUUID);
-        cp.setCount(v.count);
-        cartProducts.push(cp)
+        cartProductsMap.set(v.productUUID, v.count);
       });
-      c.setCartproductsList(cartProducts);
+      c.setCartproductsMap(cartProductsMap);
       req.removeCart(c);
       this.client.remove(req, {}, (err, resp) => {
         if (err) {
@@ -97,19 +91,6 @@ export const order = new Vue({
           let c = new Object();
           c.Useruuid = resp.getUseruuid();
           this.resp.cart.push(c);
-          this.resp.errorCode = err.code;
-        }
-      });
-    },
-    deleteCart: function() {
-      this.clearResponseField();
-      const req = new DeleteRequest();
-      req.setUseruuid(this.form.userUUID);
-      this.client.delete(req, {}, (err, resp) => {
-        if (err) {
-          this.resp.errorCode = err.code;
-          this.resp.errorMsg = err.message;
-        } else {
           this.resp.errorCode = err.code;
         }
       });
