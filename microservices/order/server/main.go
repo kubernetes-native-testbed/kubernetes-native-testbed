@@ -12,6 +12,7 @@ import (
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order/protobuf"
 	nats "github.com/nats-io/nats.go"
 	"google.golang.org/grpc"
@@ -84,8 +85,8 @@ func init() {
 }
 
 type orderAPIServer struct {
-	orderRepository orderRepository
-	orderSender     orderSender
+	orderRepository order.orderRepository
+	orderSender     order.orderSender
 }
 
 func (s *orderAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
@@ -155,7 +156,7 @@ func (s *orderAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetRe
 func (s *orderAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
 	orderedProducts := make([]OrderedProduct, len(req.GetOrder().GetOrderedProducts()))
 	for i, op := range req.GetOrder().GetOrderedProducts() {
-		orderedProducts[i] = OrderedProduct{
+		orderedProducts[i] = order.OrderedProduct{
 			OrderUUID:   op.GetOrderUUID(),
 			ProductUUID: op.GetProductUUID(),
 			Count:       int(op.GetCount()),
@@ -163,7 +164,7 @@ func (s *orderAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRe
 		}
 	}
 
-	o := &Order{
+	o := &order.Order{
 		UUID:            req.GetOrder().GetUUID(),
 		OrderedProducts: orderedProducts,
 		UserUUID:        req.GetOrder().GetUserUUID(),
@@ -188,9 +189,9 @@ func (s *orderAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRe
 }
 
 func (s *orderAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
-	orderedProducts := make([]OrderedProduct, len(req.GetOrder().GetOrderedProducts()))
+	orderedProducts := make([]order.OrderedProduct, len(req.GetOrder().GetOrderedProducts()))
 	for i, op := range req.GetOrder().GetOrderedProducts() {
-		orderedProducts[i] = OrderedProduct{
+		orderedProducts[i] = order.OrderedProduct{
 			OrderUUID:   op.GetOrderUUID(),
 			ProductUUID: op.GetProductUUID(),
 			Count:       int(op.GetCount()),
@@ -198,7 +199,7 @@ func (s *orderAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*em
 		}
 	}
 
-	o := &Order{
+	o := &order.Order{
 		UUID:            req.GetOrder().GetUUID(),
 		OrderedProducts: orderedProducts,
 		UserUUID:        req.GetOrder().GetUserUUID(),
@@ -258,8 +259,8 @@ func main() {
 
 	s := grpc.NewServer()
 	api := &orderAPIServer{
-		orderRepository: &orderRepositoryImpl{db: db},
-		orderSender: &orderSenderImpl{
+		orderRepository: &order.orderRepositoryImpl{db: db},
+		orderSender: &order.orderSenderImpl{
 			conn:    qconn,
 			subject: deliveryStatusSubject,
 			retry:   5,
