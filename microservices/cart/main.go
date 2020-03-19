@@ -71,6 +71,7 @@ func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Emp
 		return &empty.Empty{}, nil
 	}
 
+	log.Printf("base cart %s", cart)
 	for productUUID, increaseCount := range additionalCart.CartProducts {
 		if _, ok := cart.CartProducts[productUUID]; ok {
 			// increase
@@ -100,6 +101,7 @@ func (s *cartAPIServer) Remove(ctx context.Context, req *pb.RemoveRequest) (*emp
 		return nil, fmt.Errorf("cart is not found for %s", additionalCart.UserUUID)
 	}
 
+	log.Printf("base cart %s", cart)
 	for productUUID, decreaseCount := range additionalCart.CartProducts {
 		if count, ok := cart.CartProducts[productUUID]; ok {
 			// decrease and remove
