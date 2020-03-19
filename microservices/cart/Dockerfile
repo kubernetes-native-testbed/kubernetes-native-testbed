@@ -1,7 +1,7 @@
 FROM golang:1.13.6-buster as builder1
 WORKDIR /app
 COPY ./ /app/
-RUN go get -u
+RUN go get
 RUN go build -o /cart
 
 FROM busybox as builder2

@@ -8,7 +8,7 @@ export const order = new Vue({
     endpoint: window.location.protocol + '//' + window.location.host + "/cart",
     form: {
       userUUID: '',
-      cartProducts: new Map(),
+      cartProducts: [],
     },
     resp: {
       cart: [],
@@ -35,7 +35,7 @@ export const order = new Vue({
     showCart: function() {
       this.clearResponseField();
       const req = new ShowRequest();
-      req.setUseruuid(this.form.Useruuid);
+      req.setUseruuid(this.form.userUUID);
       this.client.show(req, {}, (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
@@ -54,20 +54,15 @@ export const order = new Vue({
       const req = new AddRequest();
       const c = new Cart();
       c.setUseruuid(this.form.userUUID);
-      var cartProductsMap = new Map();
       this.form.cartProducts.forEach(function(v) {
-        cartProductsMap.set(v.productUUID, v.count);
+        c.getCartproductsMap().set(v.productUUID, v.count);
       });
-      c.setCartproductsMap(cartProductsMap);
-      req.addCart(c);
+      req.setCart(c);
       this.client.add(req, {}, (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
-          let c = new Object();
-          c.Useruuid = resp.getUseruuid();
-          this.resp.cart.push(c);
           this.resp.errorCode = err.code;
         }
       });
@@ -77,20 +72,15 @@ export const order = new Vue({
       const req = new RemoveRequest();
       const c = new Cart();
       c.setUseruuid(this.form.userUUID);
-      var cartProductsMap = new Map();
       this.form.cartProducts.forEach(function(v) {
-        cartProductsMap.set(v.productUUID, v.count);
+        c.getCartproductsMap().set(v.productUUID, v.count);
       });
-      c.setCartproductsMap(cartProductsMap);
-      req.removeCart(c);
+      req.setCart(c);
       this.client.remove(req, {}, (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
-          let c = new Object();
-          c.Useruuid = resp.getUseruuid();
-          this.resp.cart.push(c);
           this.resp.errorCode = err.code;
         }
       });

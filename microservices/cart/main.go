@@ -9,7 +9,6 @@ import (
 	"strconv"
 
 	"github.com/golang/protobuf/ptypes/empty"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
@@ -46,29 +45,33 @@ type cartAPIServer struct {
 
 func (s *cartAPIServer) Show(ctx context.Context, req *pb.ShowRequest) (*pb.ShowResponse, error) {
 	userUUID := req.GetUserUUID()
-	cart, ok, err := s.cartRepository.findByUUID(userUUID)
+	cart, notfound, err := s.cartRepository.findByUUID(userUUID)
 	if err != nil {
 		return nil, err
 	}
-	if !ok {
+	if notfound {
 		return nil, fmt.Errorf("cart is not found for %s", userUUID)
 	}
+	log.Printf("show %s", cart)
 	return &pb.ShowResponse{Cart: convertToCartProto(cart)}, nil
 }
 
 func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Empty, error) {
 	additionalCart := convertToCart(req.GetCart())
-	cart, ok, err := s.cartRepository.findByUUID(additionalCart.UserUUID)
+	log.Printf("add %s", additionalCart)
+	cart, notfound, err := s.cartRepository.findByUUID(additionalCart.UserUUID)
 	if err != nil {
 		return nil, err
 	}
-	if !ok {
+	if notfound {
+		log.Printf("store cart for new record")
 		if _, err := s.cartRepository.store(additionalCart); err != nil {
 			return nil, err
 		}
 		return &empty.Empty{}, nil
 	}
 
+	log.Printf("base cart %s", cart)
 	for productUUID, increaseCount := range additionalCart.CartProducts {
 		if _, ok := cart.CartProducts[productUUID]; ok {
 			// increase
@@ -79,6 +82,7 @@ func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Emp
 		}
 	}
 
+	log.Printf("update cart: %s", cart)
 	if err := s.cartRepository.update(cart); err != nil {
 		return nil, err
 	}
@@ -88,14 +92,16 @@ func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Emp
 
 func (s *cartAPIServer) Remove(ctx context.Context, req *pb.RemoveRequest) (*empty.Empty, error) {
 	additionalCart := convertToCart(req.GetCart())
-	cart, ok, err := s.cartRepository.findByUUID(additionalCart.UserUUID)
+	log.Printf("remove %s", additionalCart)
+	cart, notfound, err := s.cartRepository.findByUUID(additionalCart.UserUUID)
 	if err != nil {
 		return nil, err
 	}
-	if !ok {
+	if notfound {
 		return nil, fmt.Errorf("cart is not found for %s", additionalCart.UserUUID)
 	}
 
+	log.Printf("base cart %s", cart)
 	for productUUID, decreaseCount := range additionalCart.CartProducts {
 		if count, ok := cart.CartProducts[productUUID]; ok {
 			// decrease and remove
@@ -108,6 +114,7 @@ func (s *cartAPIServer) Remove(ctx context.Context, req *pb.RemoveRequest) (*emp
 		}
 	}
 
+	log.Printf("update cart: %s", cart)
 	if err := s.cartRepository.update(cart); err != nil {
 		return nil, err
 	}
@@ -123,6 +130,7 @@ func main() {
 	log.Printf("listen on %s", defaultBindAddr)
 
 	crConfig := cartRepositoryTiKVConfig{
+		ctx:       context.Background(),
 		pdAddress: kvsHost,
 		pdPort:    kvsPort,
 	}
