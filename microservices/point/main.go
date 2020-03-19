@@ -178,10 +178,10 @@ func main() {
 	log.Printf("success for connection to %s:%s@tcp(%s)/%s", dbUser, dbPassword, dbHost, dbName)
 
 	s := grpc.NewServer()
-	ap := &pointAPIServer{
+	api := &pointAPIServer{
 		pointRepository: &pointRepositoryImpl{},
 	}
-	pb.RegisterPointAPIServer(s, ap)
+	pb.RegisterPointAPIServer(s, api)
 
 	healthpb.RegisterHealthServer(s, health.NewServer())
 
