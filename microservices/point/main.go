@@ -185,9 +185,13 @@ func main() {
 
 	healthpb.RegisterHealthServer(s, health.NewServer())
 
+	log.Printf("setup database")
+	if err := api.pointRepository.initDB(); err != nil {
+		log.Fatalf("failed to init database: %v", err)
+	}
+
 	log.Printf("start point API server")
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 }
-
