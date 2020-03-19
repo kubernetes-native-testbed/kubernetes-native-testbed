@@ -35,7 +35,7 @@ export const order = new Vue({
     showCart: function() {
       this.clearResponseField();
       const req = new ShowRequest();
-      req.setUseruuid(this.form.Useruuid);
+      req.setUseruuid(this.form.userUUID);
       this.client.show(req, {}, (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
@@ -63,9 +63,6 @@ export const order = new Vue({
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
-          let c = new Object();
-          c.Useruuid = resp.getUseruuid();
-          this.resp.cart.push(c);
           this.resp.errorCode = err.code;
         }
       });
@@ -84,9 +81,6 @@ export const order = new Vue({
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
-          let c = new Object();
-          c.Useruuid = resp.getUseruuid();
-          this.resp.cart.push(c);
           this.resp.errorCode = err.code;
         }
       });
