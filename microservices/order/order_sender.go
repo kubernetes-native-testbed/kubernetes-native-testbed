@@ -1,5 +1,5 @@
 package order
 
-type orderSender interface {
-	send(*Order) error
+type OrderSender interface {
+	Send(*Order) error
 }

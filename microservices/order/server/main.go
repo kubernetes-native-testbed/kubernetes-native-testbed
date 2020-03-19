@@ -2,19 +2,17 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net"
 	"os"
+	"strconv"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/golang/protobuf/ptypes/timestamp"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order/protobuf"
-	nats "github.com/nats-io/nats.go"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -25,12 +23,12 @@ var (
 	dbPassword string
 	dbName     string
 	dbHost     string
-	dbPort     string
+	dbPort     int
 
 	deliveryStatusUsername string
 	deliveryStatusPassword string
 	deliveryStatusHost     string
-	deliveryStatusPort     string
+	deliveryStatusPort     int
 	deliveryStatusSubject  string
 )
 
@@ -42,16 +40,17 @@ const (
 	defaultDBPassword = componentName
 	defaultDBName     = componentName + "db"
 	defaultDBHost     = componentName
-	defaultDBPort     = "4000"
+	defaultDBPort     = 4000
 
 	defaultDeliveryStatusUsername = componentName
 	defaultDeliveryStatusPassword = componentName
 	defaultDeliveryStatusHost     = "delivery-status-queue.delivery-status.svc.cluster.local"
-	defaultDeliveryStatusPort     = "4222"
+	defaultDeliveryStatusPort     = 4222
 	defaultDeliveryStatusSubject  = componentName
 )
 
 func init() {
+	var err error
 	if dbUsername = os.Getenv("DB_USERNAME"); dbUsername == "" {
 		dbUsername = defaultDBUsername
 	}
@@ -64,8 +63,9 @@ func init() {
 	if dbHost = os.Getenv("DB_HOST"); dbHost == "" {
 		dbHost = defaultDBHost
 	}
-	if dbPort = os.Getenv("DB_PORT"); dbPort == "" {
+	if dbPort, err = strconv.Atoi(os.Getenv("DB_PORT")); err != nil {
 		dbPort = defaultDBPort
+		log.Printf("dbPort parse error: %v", err)
 	}
 	if deliveryStatusUsername = os.Getenv("DELIVERY_STATUS_USERNAME"); deliveryStatusUsername == "" {
 		deliveryStatusUsername = defaultDeliveryStatusUsername
@@ -76,8 +76,9 @@ func init() {
 	if deliveryStatusHost = os.Getenv("DELIVERY_STATUS_HOST"); deliveryStatusHost == "" {
 		deliveryStatusHost = defaultDeliveryStatusHost
 	}
-	if deliveryStatusPort = os.Getenv("DELIVERY_STATUS_PORT"); deliveryStatusPort == "" {
+	if deliveryStatusPort, err = strconv.Atoi(os.Getenv("DELIVERY_STATUS_PORT")); err != nil {
 		deliveryStatusPort = defaultDeliveryStatusPort
+		log.Printf("deliveryStatusPort parse error: %v", err)
 	}
 	if deliveryStatusSubject = os.Getenv("DELIVERY_STATUS_SUBJECT"); deliveryStatusSubject == "" {
 		deliveryStatusSubject = defaultDeliveryStatusSubject
@@ -85,13 +86,13 @@ func init() {
 }
 
 type orderAPIServer struct {
-	orderRepository order.orderRepository
-	orderSender     order.orderSender
+	orderRepository              order.OrderRepository
+	orderSenderForDeliveryStatus order.OrderSender
 }
 
 func (s *orderAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	uuid := req.GetUUID()
-	o, err := s.orderRepository.findByUUID(uuid)
+	o, err := s.orderRepository.FindByUUID(uuid)
 	if err != nil {
 		return &pb.GetResponse{}, err
 	}
@@ -154,7 +155,7 @@ func (s *orderAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetRe
 }
 
 func (s *orderAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
-	orderedProducts := make([]OrderedProduct, len(req.GetOrder().GetOrderedProducts()))
+	orderedProducts := make([]order.OrderedProduct, len(req.GetOrder().GetOrderedProducts()))
 	for i, op := range req.GetOrder().GetOrderedProducts() {
 		orderedProducts[i] = order.OrderedProduct{
 			OrderUUID:   op.GetOrderUUID(),
@@ -173,13 +174,13 @@ func (s *orderAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRe
 	}
 	log.Printf("set %s", o)
 
-	uuid, err := s.orderRepository.store(o)
+	uuid, err := s.orderRepository.Store(o)
 	if err != nil {
 		return &pb.SetResponse{}, err
 	}
 
 	go func() {
-		if err := s.orderSender.send(o); err != nil {
+		if err := s.orderSenderForDeliveryStatus.Send(o); err != nil {
 			// TODO: save fail information to order table for avoding lost order
 			log.Printf("send error: %v", err)
 		}
@@ -208,7 +209,7 @@ func (s *orderAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*em
 	}
 	log.Printf("update %s", o)
 
-	if err := s.orderRepository.update(o); err != nil {
+	if err := s.orderRepository.Update(o); err != nil {
 		return &empty.Empty{}, err
 	}
 
@@ -219,7 +220,7 @@ func (s *orderAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*em
 	uuid := req.GetUUID()
 	log.Printf("delete {\"uuid\":\"%s\"}", uuid)
 
-	if err := s.orderRepository.deleteByUUID(uuid); err != nil {
+	if err := s.orderRepository.DeleteByUUID(uuid); err != nil {
 		return &empty.Empty{}, err
 	}
 
@@ -233,45 +234,46 @@ func main() {
 	}
 	log.Printf("listen on %s", defaultBindAddr)
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		dbUsername,
-		dbPassword,
-		dbHost,
-		dbPort,
-		dbName,
-	)
-	db, err := gorm.Open("mysql", dsn)
-	if err != nil {
-		log.Fatalf("failed to open database: %v (dsn=%s)", err, dsn)
+	tidbConfig := order.OrderRepositoryTiDBConfig{
+		Host:     dbHost,
+		Port:     dbPort,
+		Username: dbUsername,
+		Password: dbPassword,
+		DBName:   dbName,
 	}
-	defer db.Close()
-	log.Printf("success for connection to %s", dsn)
+	tidb, closeTiDB, err := tidbConfig.Connect()
+	if err != nil {
+		log.Fatalf("failed to open database: %v (config=%#v)", err, tidbConfig)
+	}
+	defer closeTiDB()
+	log.Printf("succeed to open database")
 
-	qconn, err := nats.Connect(
-		deliveryStatusHost+":"+deliveryStatusPort,
-		nats.UserInfo(deliveryStatusUsername, deliveryStatusPassword),
-	)
-	if err != nil {
-		log.Fatalf("failed to create connection to delivery status queue: %v (%s:%s (user=%s, password=%s))", err, deliveryStatusHost, deliveryStatusPort, deliveryStatusUsername, deliveryStatusPassword)
+	natsConfig := order.OrderSenderNATSConfig{
+		Host:     deliveryStatusHost,
+		Port:     deliveryStatusPort,
+		Username: deliveryStatusUsername,
+		Password: deliveryStatusPassword,
+		Subject:  deliveryStatusSubject,
+		Retry:    5,
 	}
-	defer qconn.Close()
-	log.Printf("success for connection to %s:%s (user=%s, password=%s)", deliveryStatusHost, deliveryStatusPort, deliveryStatusUsername, deliveryStatusPassword)
+	nats, closeNats, err := natsConfig.Connect()
+	if err != nil {
+		log.Fatalf("failed to create connection to delivery status queue: %v (config=%#v)", err, natsConfig)
+	}
+	defer closeNats()
+	log.Printf("succeed to connect to delivery status queue")
 
 	s := grpc.NewServer()
 	api := &orderAPIServer{
-		orderRepository: &order.orderRepositoryImpl{db: db},
-		orderSender: &order.orderSenderImpl{
-			conn:    qconn,
-			subject: deliveryStatusSubject,
-			retry:   5,
-		},
+		orderRepository:              tidb,
+		orderSenderForDeliveryStatus: nats,
 	}
 	pb.RegisterOrderAPIServer(s, api)
 
 	healthpb.RegisterHealthServer(s, health.NewServer())
 
 	log.Printf("setup database")
-	if err := api.orderRepository.initDB(); err != nil {
+	if err := api.orderRepository.InitDB(); err != nil {
 		log.Fatalf("failed to init database: %v", err)
 	}
 
