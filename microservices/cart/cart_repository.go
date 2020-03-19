@@ -120,7 +120,7 @@ type cartRepositoryTiKVConfig struct {
 }
 
 func (c *cartRepositoryTiKVConfig) connect() (cartRepository, func() error, error) {
-	client, err := txnkv.NewClient(c.ctx, []string{fmt.Sprintf("%s:%d", c.pdAddress, c.pdPort)}, config.Config{})
+	client, err := txnkv.NewClient(c.ctx, []string{fmt.Sprintf("%s:%d", c.pdAddress, c.pdPort)}, config.Default())
 	if err != nil {
 		return nil, nil, err
 	}
