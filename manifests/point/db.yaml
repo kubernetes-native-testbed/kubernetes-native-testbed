@@ -19,6 +19,10 @@ spec:
   master:
     # Replica count for Master.
     replicas: 3
+    resources:
+      requests:
+        cpu: 4
+        memory: 4Gi
     # Mentioning network ports is optional. If some or all ports are not specified, then they will be defaulted to below-mentioned values, except for tserver-ui.
     network:
       ports:
@@ -34,11 +38,15 @@ spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 5Gi
+            storage: 20Gi
         storageClassName: rook-ceph-block
   tserver:
     # Replica count for TServer
     replicas: 3
+    resources:
+      requests:
+        cpu: 4
+        memory: 4Gi
     # Mentioning network ports is optional. If some or all ports are not specified, then they will be defaulted to below-mentioned values, except for tserver-ui.
     # For tserver-ui a cluster ip service will be created if the yb-tserver-ui port is explicitly mentioned. If it is not specified, only StatefulSet & headless service will be created for TServer. TServer ClusterIP service creation will be skipped. Whereas for Master, all 3 kubernetes objects will always be created.
     network:
@@ -61,8 +69,23 @@ spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 15Gi
+            storage: 50Gi
         storageClassName: rook-ceph-block
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-db-script
+  namespace: point
+  labels:
+    service: point
+    role: check
+data:
+  init.sh: |-
+    #!/bin/bash
+    echo "initialize database running..."
+    /home/yugabyte/bin/ysqlsh -h ${DB_HOST} -p ${DB_PORT_YPOSTGRES} -c "CREATE DATABASE ${DB_NAME};"
+    /home/yugabyte/bin/ysqlsh -h ${DB_HOST} -p ${DB_PORT_YPOSTGRES} -c "CREATE USER ${DB_USER} WITH PASSWORD '${DB_PASSWORD}';"
 ---
 apiVersion: batch/v1
 kind: Job
@@ -83,13 +106,7 @@ spec:
       - name: check-container
         image: yugabytedb/yugabyte:2.0.10.0-b4
         command:
-        - /home/yugabyte/bin/ysqlsh
-        - -h
-        - $(DB_HOST)
-        - -p
-        - $(DB_PORT_YPOSTGRES)
-        - -c
-        - "CREATE DATABASE $(DB_NAME); CREATE USER $(DB_USER) WITH PASSWORD '$(DB_PASSWORD)';"
+        - /scripts/init.sh
         env:
         - name: DB_HOST
           value: yb-tserver-point-db-0.yb-tservers-point-db.point.svc.cluster.local
@@ -120,5 +137,5 @@ spec:
       volumes:
         - name: scripts-volume
           configMap:
-            name: check-scripts-kvs
+            name: init-db-script
             defaultMode: 493 # mode 755

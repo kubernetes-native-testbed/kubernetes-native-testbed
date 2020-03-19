@@ -3,6 +3,7 @@ module github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservi
 go 1.13
 
 require (
+	github.com/bradfitz/gomemcache v0.0.0-20190913173617-a41fca850d0b
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golang/protobuf v1.3.3
 	github.com/google/uuid v1.1.1

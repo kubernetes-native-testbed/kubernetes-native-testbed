@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 
+	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/golang/protobuf/ptypes/timestamp"
@@ -25,6 +26,8 @@ var (
 	dbHost     string
 	dbPort     string
 	dbSSL      string
+	kvsHost    string
+	kvsPort    string
 )
 
 const (
@@ -40,8 +43,8 @@ const (
 
 	// defaultKVSUser = componentName
 	// defaultKVSPass = componentName
-	// defaultKVSHost = componentName
-	// defaultKVSPort = componentName
+	defaultKVSHost = componentName
+	defaultKVSPort = componentName
 
 	// defaultQueueHost = componentName
 	// defaultQueuePort = componentName
@@ -69,10 +72,18 @@ func init() {
 	if dbSSL = os.Getenv("DB_SSL"); dbSSL == "" {
 		dbSSL = defaultDBHPort
 	}
+
+	if kvsHost = os.Getenv("KVS_HOST"); kvsHost == "" {
+		kvsHost = defaultKVSHost
+	}
+	if kvsPort = os.Getenv("KVS_PORT"); kvsPort == "" {
+		kvsPort = defaultKVSPort
+	}
 }
 
 type pointAPIServer struct {
-	pointRepository pointRepository
+	pointRepository      pointRepository
+	pointCacheRepository pointCacheRepository
 }
 
 func (s *pointAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
@@ -153,6 +164,19 @@ func (s *pointAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*em
 	return &empty.Empty{}, nil
 }
 
+func (s *pointAPIServer) updateAmount(uuid string) (*PointCache, error) {
+	pc, err := s.pointRepository.getAmount(uuid)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.pointCacheRepository.store(pc); err != nil {
+		return nil, err
+	}
+
+	return pc, nil
+}
+
 func main() {
 	lis, err := net.Listen("tcp", defaultBindAddr)
 	if err != nil {
@@ -177,10 +201,20 @@ func main() {
 	defer db.Close()
 	log.Printf("success for connection to %s:%s@tcp(%s)/%s", dbUser, dbPassword, dbHost, dbName)
 
+	cache := memcache.New(
+		fmt.Sprintf("%s:%s",
+			kvsHost,
+			kvsPort,
+		),
+	)
+
 	s := grpc.NewServer()
 	api := &pointAPIServer{
 		pointRepository: &pointRepositoryImpl{
 			db: db,
+		},
+		pointCacheRepository: &pointRepositoryMemcache{
+			cache: cache,
 		},
 	}
 	pb.RegisterPointAPIServer(s, api)
