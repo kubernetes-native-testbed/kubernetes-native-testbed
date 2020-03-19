@@ -21,12 +21,12 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20190728182440-6a916e37a237 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/tikv/client-go v0.0.0-20200110101306-a3ebdb020c83
-	google.golang.org/grpc v1.27.1
 	go.etcd.io/etcd v3.3.19+incompatible // indirect
 	go.uber.org/zap v1.14.1 // indirect
 	golang.org/x/crypto v0.0.0-20200317142112-1b76d66859c6 // indirect
 	golang.org/x/net v0.0.0-20200301022130-244492dfa37a // indirect
 	golang.org/x/sys v0.0.0-20200317113312-5766fd39f98d // indirect
 	golang.org/x/text v0.3.2 // indirect
+	google.golang.org/grpc v1.26.0
 	sigs.k8s.io/yaml v1.2.0 // indirect
 )
