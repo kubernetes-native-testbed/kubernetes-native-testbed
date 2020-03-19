@@ -10,6 +10,7 @@ import (
 	"github.com/tikv/client-go/config"
 	"github.com/tikv/client-go/key"
 	"github.com/tikv/client-go/txnkv"
+	"github.com/tikv/client-go/txnkv/kv"
 )
 
 type cartRepository interface {
@@ -32,7 +33,11 @@ func (cr *cartRepositoryTiKV) findByUUID(uuid string) (*Cart, bool, error) {
 
 	v, err := tx.Get(cr.ctx, key.Key(uuid))
 	if err != nil {
-		return nil, true, err
+		if kv.IsErrNotFound(err) {
+			return nil, true, nil
+		} else {
+			return nil, false, err
+		}
 	}
 
 	hashes := strings.Split(string(v), ",")
@@ -40,7 +45,11 @@ func (cr *cartRepositoryTiKV) findByUUID(uuid string) (*Cart, bool, error) {
 	for _, hash := range hashes {
 		v, err := tx.Get(cr.ctx, key.Key(hash))
 		if err != nil {
-			return nil, false, err
+			if kv.IsErrNotFound(err) {
+				continue
+			} else {
+				return nil, false, err
+			}
 		}
 		cartProductsInfo := strings.Split(string(v), ":")
 		if len(cartProductsInfo) != 2 {

@@ -52,16 +52,19 @@ func (s *cartAPIServer) Show(ctx context.Context, req *pb.ShowRequest) (*pb.Show
 	if !ok {
 		return nil, fmt.Errorf("cart is not found for %s", userUUID)
 	}
+	log.Printf("show %s", cart)
 	return &pb.ShowResponse{Cart: convertToCartProto(cart)}, nil
 }
 
 func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Empty, error) {
 	additionalCart := convertToCart(req.GetCart())
+	log.Printf("add %s", additionalCart)
 	cart, ok, err := s.cartRepository.findByUUID(additionalCart.UserUUID)
 	if err != nil {
 		return nil, err
 	}
 	if !ok {
+		log.Printf("store cart for new record")
 		if _, err := s.cartRepository.store(additionalCart); err != nil {
 			return nil, err
 		}
@@ -78,6 +81,7 @@ func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Emp
 		}
 	}
 
+	log.Printf("update cart: %s", cart)
 	if err := s.cartRepository.update(cart); err != nil {
 		return nil, err
 	}
@@ -87,6 +91,7 @@ func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Emp
 
 func (s *cartAPIServer) Remove(ctx context.Context, req *pb.RemoveRequest) (*empty.Empty, error) {
 	additionalCart := convertToCart(req.GetCart())
+	log.Printf("remove %s", additionalCart)
 	cart, ok, err := s.cartRepository.findByUUID(additionalCart.UserUUID)
 	if err != nil {
 		return nil, err
@@ -107,6 +112,7 @@ func (s *cartAPIServer) Remove(ctx context.Context, req *pb.RemoveRequest) (*emp
 		}
 	}
 
+	log.Printf("update cart: %s", cart)
 	if err := s.cartRepository.update(cart); err != nil {
 		return nil, err
 	}
