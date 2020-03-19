@@ -45,11 +45,11 @@ type cartAPIServer struct {
 
 func (s *cartAPIServer) Show(ctx context.Context, req *pb.ShowRequest) (*pb.ShowResponse, error) {
 	userUUID := req.GetUserUUID()
-	cart, ok, err := s.cartRepository.findByUUID(userUUID)
+	cart, notfound, err := s.cartRepository.findByUUID(userUUID)
 	if err != nil {
 		return nil, err
 	}
-	if !ok {
+	if notfound {
 		return nil, fmt.Errorf("cart is not found for %s", userUUID)
 	}
 	log.Printf("show %s", cart)
