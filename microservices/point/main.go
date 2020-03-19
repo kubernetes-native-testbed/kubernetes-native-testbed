@@ -179,7 +179,9 @@ func main() {
 
 	s := grpc.NewServer()
 	api := &pointAPIServer{
-		pointRepository: &pointRepositoryImpl{},
+		pointRepository: &pointRepositoryImpl{
+			db: db,
+		},
 	}
 	pb.RegisterPointAPIServer(s, api)
 
