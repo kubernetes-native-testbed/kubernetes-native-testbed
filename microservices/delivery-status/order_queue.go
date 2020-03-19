@@ -31,7 +31,9 @@ func (oq *orderQueueNATS) subscribe() (<-chan string, error) {
 	go func() {
 		for {
 			msg := <-msgCh
-			orderCh <- msg.Reply
+			if data := string(msg.Data); data != "" {
+				orderCh <- data
+			}
 		}
 	}()
 	return orderCh, nil
