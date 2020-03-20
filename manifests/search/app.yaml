@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: search-app
-          image: registry-harbor-core.infra.svc.cluster.local/library/search:d12e195794b2afaf2f73d34262e6d9ca4e7aa49f
+          image: registry-harbor-core.infra.svc.cluster.local/library/search:7fa71b77053cd513c102f75ec833c7a9846c1f1d
           env:
             - name: DB_HOST
               value: search-db-es-http.search.svc.cluster.local
