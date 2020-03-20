@@ -90,6 +90,7 @@ data:
     cqlsh -u ${DB_SUPERUSER_USERNAME} -p ${DB_SUPERUSER_PASSWORD} ${DB_HOST} ${DB_PORT} -e "ALTER KEYSPACE system_auth WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'dc1' : 1, 'dc2' : 1};"
     cqlsh -u ${DB_SUPERUSER_USERNAME} -p ${DB_SUPERUSER_PASSWORD} ${DB_HOST} ${DB_PORT} -e "CREATE ROLE ${DB_USERNAME} WITH LOGIN = true AND PASSWORD = '${DB_PASSWORD}';"
     cqlsh -u ${DB_SUPERUSER_USERNAME} -p ${DB_SUPERUSER_PASSWORD} ${DB_HOST} ${DB_PORT} -e "CREATE KEYSPACE ${DB_KEYSPACE} WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'dc1' : 1, 'dc2' : 1};"
+    cqlsh -u ${DB_SUPERUSER_USERNAME} -p ${DB_SUPERUSER_PASSWORD} ${DB_HOST} ${DB_PORT} -e "GRANT ALL PERMISSIONS on KEYSPACE ${DB_KEYSPACE} to ${DB_USERNAME};"
 ---
 apiVersion: batch/v1
 kind: Job
