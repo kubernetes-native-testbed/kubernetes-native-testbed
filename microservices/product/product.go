@@ -1,6 +1,9 @@
-package main
+package product
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type Product struct {
 	UUID      string `gorm:"primary_key"`
@@ -18,4 +21,14 @@ type ProductImage struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time `sql:"index"`
+}
+
+func (p *Product) String() string {
+	b, _ := json.Marshal(p)
+	return string(b)
+}
+
+func (pi *ProductImage) String() string {
+	b, _ := json.Marshal(pi)
+	return string(b)
 }

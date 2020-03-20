@@ -1,6 +1,8 @@
 const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Product} = require('./protobuf/product_pb.js');
+const {ImageUploadRequest, ImageUploadResponse, ImageDeleteRequest} = require('./protobuf/image_pb.js');
 
 const {ProductAPIClient} = require('./protobuf/product_grpc_web_pb.js');
+const {ImageAPIClient} = require('./protobuf/image_grpc_web_pb.js');
 
 export const product = new Vue({
   el: '#product',
@@ -11,6 +13,7 @@ export const product = new Vue({
       name: '',
       price: null,
       imageURLs: [],
+      images: [],
     },
     resp: {
       product: [],
@@ -20,10 +23,56 @@ export const product = new Vue({
   },
   created: function() {
       this.client = new ProductAPIClient(this.endpoint);
+      this.imageClient = new ImageAPIClient(this.endpoint);
   },
   methods: {
     addImageURL: function() {
       this.form.imageURLs.push({value:''});
+    },
+    selectImage: function(e) {
+      Object.keys(e.target.files).forEach((key) => {
+        //console.log('image:', key, ':', e.target.files[key])
+        var reader = new FileReader();
+        reader.onload = () => {
+          this.form.images.push(reader.result);
+        }
+        reader.readAsDataURL(e.target.files[key]);
+      });
+    },
+    convertDataURIToBinary: function(dataURI) {
+      var BASE64_MARKER = ';base64,';
+      var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+      var base64 = dataURI.substring(base64Index);
+      var raw = window.atob(base64);
+      var rawLength = raw.length;
+      var array = new Uint8Array(new ArrayBuffer(rawLength));
+      for(var i = 0; i < rawLength; i++) {
+        array[i] = raw.charCodeAt(i);
+      }
+      return array;
+    },
+    uploadImageBlob: function(blob) {
+      return new Promise((resolve, reject) => {
+        let b = this.convertDataURIToBinary(blob)
+        const imageReq = new ImageUploadRequest();
+        imageReq.setImage(b);
+        this.imageClient.upload(imageReq, {}, (err, resp) => {
+          if (err) {
+            this.resp.errorCode = err.code;
+            this.resp.errorMsg = err.message;
+          } else {
+            resolve(resp);
+          }
+        });
+      });
+    },
+    uploadImages: async function() {
+      var promises = []
+      this.form.images.forEach(async (v) => {
+        promises.push(this.uploadImageBlob(v));
+      });
+      var resps = await Promise.all(promises)
+      return resps
     },
     clearForm: function() {
       this.form.uuid = '';
@@ -57,16 +106,19 @@ export const product = new Vue({
         }
       });
     },
-    setProduct: function() {
+    setProduct: async function() {
       this.clearResponseField();
       const req = new SetRequest();
       const p = new Product();
       p.setName(this.form.name);
       p.setPrice(this.form.price);
-      var urls = []
-      this.form.imageURLs.forEach(function(v) {
-        urls.push(v.value)
+      var urls = [];
+      var resps = await this.uploadImages();
+      resps.forEach(function(v) {
+        //console.log("url:", v.getUrl());
+        urls.push(v.getUrl());
       });
+      console.log("urls:", urls);
       p.setImageurlsList(urls);
       req.setProduct(p);
       this.client.set(req, {}, (err, resp) => {
@@ -88,7 +140,14 @@ export const product = new Vue({
       p.setUuid(this.form.uuid);
       p.setName(this.form.name);
       p.setPrice(this.form.price);
-      p.setImageurlsList(this.form.imageURLs);
+      var urls = [];
+      var resps = await this.uploadImages();
+      resps.forEach(function(v) {
+        //console.log("url:", v.getUrl());
+        urls.push(v.getUrl());
+      });
+      console.log("urls:", urls);
+      p.setImageurlsList(urls);
       req.setProduct(p);
       this.client.update(req, {}, (err, resp) => {
         if (err) {
