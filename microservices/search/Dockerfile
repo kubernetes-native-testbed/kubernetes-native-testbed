@@ -7,3 +7,4 @@ EXPOSE 8080
 COPY --from=builder /app .
 USER nobody
 ENTRYPOINT ["./app"]
+
