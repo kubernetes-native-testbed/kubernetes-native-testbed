@@ -26,6 +26,7 @@ type imageRepositoryMinIO struct {
 	publicBaseURL string
 }
 
+// TODO: read via io.Reader (how to get image md5 sum and size?)
 func (ir *imageRepositoryMinIO) Store(image []byte) (string, error) {
 	if len(image) == 0 {
 		return "", fmt.Errorf("empty image is not allowed")

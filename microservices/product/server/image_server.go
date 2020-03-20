@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"io"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product"
@@ -13,11 +14,34 @@ type imageAPIServer struct {
 }
 
 func (s *imageAPIServer) Upload(stream pb.ImageAPI_UploadServer) error {
-	return nil
+	image := make([]byte, 0, 1_000_000)
+	for {
+		req, err := stream.Recv()
+		if err != nil {
+			if err == io.EOF {
+				break
+			} else {
+				return err
+			}
+		}
+		image = append(image, req.GetImage()...)
+	}
 
+	url, err := s.imageRepository.Store(image)
+	if err != nil {
+		return err
+	}
+
+	if err := stream.SendAndClose(&pb.ImageUploadResponse{Url: url}); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (s *imageAPIServer) Delete(ctx context.Context, req *pb.ImageDeleteRequest) (*empty.Empty, error) {
-	return nil, nil
-
+	if err := s.imageRepository.Delete(req.GetUrl()); err != nil {
+		return nil, err
+	}
+	return &empty.Empty{}, nil
 }
