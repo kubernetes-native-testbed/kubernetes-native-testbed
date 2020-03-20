@@ -13,7 +13,15 @@ type imageAPIServer struct {
 	imageRepository product.ImageRepository
 }
 
-func (s *imageAPIServer) Upload(stream pb.ImageAPI_UploadServer) error {
+func (s *imageAPIServer) Upload(ctx context.Context, req *pb.ImageUploadRequest) (*pb.ImageUploadResponse, error) {
+	url, err := s.imageRepository.Store(req.GetImage())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ImageUploadResponse{Url: url}, nil
+}
+
+func (s *imageAPIServer) UploadStream(stream pb.ImageAPI_UploadStreamServer) error {
 	image := make([]byte, 0, 1_000_000)
 	for {
 		req, err := stream.Recv()
@@ -32,7 +40,7 @@ func (s *imageAPIServer) Upload(stream pb.ImageAPI_UploadServer) error {
 		return err
 	}
 
-	if err := stream.SendAndClose(&pb.ImageUploadResponse{Url: url}); err != nil {
+	if err := stream.SendAndClose(&pb.ImageUploadStreamResponse{Url: url}); err != nil {
 		return err
 	}
 
