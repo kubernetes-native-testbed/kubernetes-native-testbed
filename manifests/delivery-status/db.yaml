@@ -18,10 +18,6 @@ data:
   post_run.sh: |-
     echo "Check Configured seeds by bootstrap"
     grep "seeds:" /etc/cassandra/cassandra.yaml
-
-    # cqlsh -u cassandra -p cassandra -e "CREATE ROLE deliveryStatus WITH LOGIN = true AND PASSWORD = 'deliveryStatus';"
-    # cqlsh -u cassandra -p cassandra -e "CREATE KEYSPACE deliveryStatus WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 2};"
-
 ---  
 apiVersion: db.orange.com/v1alpha1
 kind: CassandraCluster
@@ -65,3 +61,62 @@ spec:
         rack:
           - name: rack1
           - name: rack2
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-db-script
+  namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: check
+data:
+  init.sh: |-
+    #!/bin/bash
+    echo "initialize database running..."
+    cqlsh -u ${DB_USERNAME} -p ${DB_PASSWORD} ${DB_HOST} ${DB_PORT} -e "CREATE ROLE deliveryStatus WITH LOGIN = true AND PASSWORD = 'deliveryStatus';"
+    cqlsh -u ${DB_USERNAME} -p ${DB_PASSWORD} ${DB_HOST} ${DB_PORT} -e "CREATE KEYSPACE deliveryStatus WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 2};"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-db
+  namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: db
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 10
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: check-container
+        image: cassandra:3.11
+        command:
+        - /scripts/init.sh
+        env:
+          - name: DB_HOST
+            value: delivery-status-db.delivery-status.svc.cluster.local
+            # value: delivery-status-db-dc1-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
+            # value: delivery-status-db-dc1-rack2-0.delivery-status-db.delivery-status.svc.cluster.local
+            # value: delivery-status-db-dc2-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
+            # value: delivery-status-db-dc2-rack2-0.delivery-status-db.delivery-status.svc.cluster.local
+          - name: DB_PORT
+            value: "9042"
+          - name: DB_USERNAME
+            value: cassandra
+          - name: DB_PASSWORD
+            value: cassandra
+          - name: DB_KEYSPACE
+            value: deliveryStatus
+        volumeMounts:
+        - name: scripts-volume
+          mountPath: /scripts
+      volumes:
+        - name: scripts-volume
+          configMap:
+            name: init-db-script
+            defaultMode: 493 # mode 755
