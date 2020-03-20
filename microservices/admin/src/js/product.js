@@ -31,7 +31,7 @@ export const product = new Vue({
     },
     selectImage: function(e) {
       Object.keys(e.target.files).forEach((key) => {
-        console.log('image:', key, ':', e.target.files[key])
+        //console.log('image:', key, ':', e.target.files[key])
         var reader = new FileReader();
         reader.onload = () => {
           this.form.images.push(reader.result);
@@ -51,8 +51,28 @@ export const product = new Vue({
       }
       return array;
     },
-    uploadImages: function() {
-
+    uploadImageBlob: function(blob) {
+      return new Promise((resolve, reject) => {
+        let b = this.convertDataURIToBinary(blob)
+        const imageReq = new ImageUploadRequest();
+        imageReq.setImage(b);
+        this.imageClient.upload(imageReq, {}, (err, resp) => {
+          if (err) {
+            this.resp.errorCode = err.code;
+            this.resp.errorMsg = err.message;
+          } else {
+            resolve(resp);
+          }
+        });
+      });
+    },
+    uploadImages: async function() {
+      var promises = []
+      this.form.images.forEach(async (v) => {
+        promises.push(this.uploadImageBlob(v));
+      });
+      var resps = await Promise.all(promises)
+      return resps
     },
     clearForm: function() {
       this.form.uuid = '';
@@ -86,28 +106,19 @@ export const product = new Vue({
         }
       });
     },
-    setProduct: function() {
+    setProduct: async function() {
       this.clearResponseField();
       const req = new SetRequest();
       const p = new Product();
       p.setName(this.form.name);
       p.setPrice(this.form.price);
-      var urls = []
-      this.form.images.forEach((v) => {
-        let b = this.convertDataURIToBinary(v)
-        const imageReq = new ImageUploadRequest();
-        imageReq.setImage(b)
-        this.imageClient.upload(imageReq, {}, (err, resp) => {
-          if (err) {
-            this.resp.errorCode = err.code;
-            this.resp.errorMsg = err.message;
-          } else {
-            urls.push(resp.getUrl())
-            console.log("url:", resp.getUrl())
-          }
-        });
+      var urls = [];
+      var resps = await this.uploadImages();
+      resps.forEach(function(v) {
+        //console.log("url:", v.getUrl());
+        urls.push(v.getUrl());
       });
-      console.log("urls:", urls)
+      console.log("urls:", urls);
       p.setImageurlsList(urls);
       req.setProduct(p);
       this.client.set(req, {}, (err, resp) => {
@@ -129,7 +140,14 @@ export const product = new Vue({
       p.setUuid(this.form.uuid);
       p.setName(this.form.name);
       p.setPrice(this.form.price);
-      p.setImageurlsList(this.form.imageURLs);
+      var urls = [];
+      var resps = await this.uploadImages();
+      resps.forEach(function(v) {
+        //console.log("url:", v.getUrl());
+        urls.push(v.getUrl());
+      });
+      console.log("urls:", urls);
+      p.setImageurlsList(urls);
       req.setProduct(p);
       this.client.update(req, {}, (err, resp) => {
         if (err) {
