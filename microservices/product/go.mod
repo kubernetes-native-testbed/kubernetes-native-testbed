@@ -6,5 +6,6 @@ require (
 	github.com/golang/protobuf v1.3.3
 	github.com/google/uuid v1.1.1
 	github.com/jinzhu/gorm v1.9.12
+	github.com/minio/minio-go/v6 v6.0.50
 	google.golang.org/grpc v1.28.0
 )

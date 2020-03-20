@@ -20,6 +20,14 @@ var (
 	dbName     string
 	dbHost     string
 	dbPort     int
+
+	s3Host            string
+	s3Port            int
+	s3AccessKeyID     string
+	s3SecretAccessKey string
+	s3BucketName      string
+	s3PublicHost      string
+	s3PublicPort      int
 )
 
 const (
@@ -31,6 +39,14 @@ const (
 	defaultDBName     = componentName
 	defaultDBHost     = componentName
 	defaultDBPort     = 3306
+
+	defaultS3Host            = "minio-hl-svc.infra.svc.cluster.local"
+	defaultS3Port            = 9000
+	defaultS3AccessKeyID     = componentName
+	defaultS3SecretAccessKey = componentName
+	defaultS3BucketName      = componentName + "-image"
+	defaultS3PublicHost      = "minio.34.84.105.184.nip.io"
+	defaultS3PublicPort      = 443
 )
 
 func init() {
@@ -50,6 +66,30 @@ func init() {
 	if dbPort, err = strconv.Atoi(os.Getenv("DB_PORT")); err != nil {
 		dbPort = defaultDBPort
 		log.Printf("dbPort parse error: %v", err)
+	}
+
+	if s3Host = os.Getenv("S3_HOST"); s3Host == "" {
+		s3Host = defaultS3Host
+	}
+	if s3Port, err = strconv.Atoi(os.Getenv("S3_PORT")); err != nil {
+		s3Port = defaultS3Port
+		log.Printf("s3Port parse error: %v", err)
+	}
+	if s3AccessKeyID = os.Getenv("S3_ACCESS_KEY_ID"); s3AccessKeyID == "" {
+		s3AccessKeyID = defaultS3AccessKeyID
+	}
+	if s3SecretAccessKey = os.Getenv("S3_SECRET_ACCESS_KEY"); s3SecretAccessKey == "" {
+		s3SecretAccessKey = defaultS3SecretAccessKey
+	}
+	if s3BucketName = os.Getenv("S3_BUCKET_NAME"); s3BucketName == "" {
+		s3BucketName = defaultS3BucketName
+	}
+	if s3PublicHost = os.Getenv("S3_PUBLIC_HOST"); s3PublicHost == "" {
+		s3PublicHost = defaultS3PublicHost
+	}
+	if s3PublicPort, err = strconv.Atoi(os.Getenv("S3_PUBLIC_PORT")); err != nil {
+		s3PublicPort = defaultS3PublicPort
+		log.Printf("s3PublicPort parse error: %v", err)
 	}
 }
 
@@ -74,17 +114,44 @@ func main() {
 	defer closeMySQL()
 	log.Printf("succeed to open database")
 
-	s := grpc.NewServer()
-	api := &productAPIServer{
+	productAPI := &productAPIServer{
 		productRepository: mysql,
 	}
-	pb.RegisterProductAPIServer(s, api)
+
+	minioConfig := product.ImageRepositoryMinIOConfig{
+		Host:            s3Host,
+		Port:            s3Port,
+		AccessKeyID:     s3AccessKeyID,
+		SecretAccessKey: s3SecretAccessKey,
+		BucketName:      s3BucketName,
+		UseSSL:          false,
+		PublicHost:      s3PublicHost,
+		PublicPort:      s3PublicPort,
+	}
+	minio, err := minioConfig.Connect()
+	if err != nil {
+		log.Fatalf("failed to connect object storage: %v (config=%#v)", err, minioConfig)
+	}
+	log.Printf("succeed to connect object storage")
+
+	imageAPI := &imageAPIServer{
+		imageRepository: minio,
+	}
+
+	s := grpc.NewServer()
+	pb.RegisterProductAPIServer(s, productAPI)
+	pb.RegisterImageAPIServer(s, imageAPI)
 
 	healthpb.RegisterHealthServer(s, health.NewServer())
 
 	log.Printf("setup database")
-	if err := api.productRepository.InitDB(); err != nil {
+	if err := productAPI.productRepository.InitDB(); err != nil {
 		log.Fatalf("failed to init database: %v", err)
+	}
+
+	log.Printf("setup object storage")
+	if err := imageAPI.imageRepository.InitRepository(); err != nil {
+		log.Fatalf("failed to init object storage: %v", err)
 	}
 
 	log.Printf("start product API server")
