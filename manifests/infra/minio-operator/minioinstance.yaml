@@ -70,8 +70,8 @@ spec:
   ## Configure resource requests and limits for MinIO containers
   resources:
     requests:
-      memory: 512Mi
-      cpu: 250m
+      memory: 128Mi
+      cpu: 50m
   ## Liveness probe detects situations where MinIO server instance
   ## is not working properly and needs restart. Kubernetes automatically
   ## restarts the pods if liveness checks fail.

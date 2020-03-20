@@ -21,8 +21,8 @@ spec:
     replicas: 3
     resources:
       requests:
-        cpu: 4
-        memory: 4Gi
+        cpu: 2
+        memory: 2Gi
     # Mentioning network ports is optional. If some or all ports are not specified, then they will be defaulted to below-mentioned values, except for tserver-ui.
     network:
       ports:
@@ -45,8 +45,8 @@ spec:
     replicas: 3
     resources:
       requests:
-        cpu: 4
-        memory: 4Gi
+        cpu: 2
+        memory: 2Gi
     # Mentioning network ports is optional. If some or all ports are not specified, then they will be defaulted to below-mentioned values, except for tserver-ui.
     # For tserver-ui a cluster ip service will be created if the yb-tserver-ui port is explicitly mentioned. If it is not specified, only StatefulSet & headless service will be created for TServer. TServer ClusterIP service creation will be skipped. Whereas for Master, all 3 kubernetes objects will always be created.
     network:

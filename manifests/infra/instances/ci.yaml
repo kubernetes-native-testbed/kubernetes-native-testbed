@@ -66,11 +66,11 @@ spec:
     - --skip-tls-verify
     resources:
       limits:
-        cpu: 2
-        memory: "2Gi"
-      requests:
-        cpu: 1
+        cpu: 1000m
         memory: "1Gi"
+      requests:
+        cpu: 100m
+        memory: "128Mi"
     securityContext:
       runAsUser: 0
 ---
