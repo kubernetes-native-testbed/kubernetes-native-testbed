@@ -116,7 +116,7 @@ func (dr *deliveryStatusRepositoryCassandra) initDB() error {
 func createKeyspace(session *gocql.Session, keyspaceName, option string) error {
 	var optstr string
 	if option != "" {
-		optstr = "WITH" + option
+		optstr = "WITH " + option
 	}
 	stmt := fmt.Sprintf(`CREATE KEYSPACE %s %s`, keyspaceName, optstr)
 	if err := session.Query(stmt).RetryPolicy(&gocql.SimpleRetryPolicy{NumRetries: 3}).Exec(); err != nil {
@@ -129,7 +129,7 @@ func createTable(session *gocql.Session, keyspaceName, tableName string, columns
 	colstr := strings.Join(columns, ",")
 	var optstr string
 	if option != "" {
-		optstr = "WITH" + option
+		optstr = "WITH " + option
 	}
 	stmt := fmt.Sprintf(`CREATE TABLE %s.%s (%s) %s`, keyspaceName, tableName, colstr, optstr)
 	if err := session.Query(stmt).RetryPolicy(&gocql.SimpleRetryPolicy{NumRetries: 3}).Exec(); err != nil {
