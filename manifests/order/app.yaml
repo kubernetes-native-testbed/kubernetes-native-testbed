@@ -47,6 +47,7 @@ spec:
                   key: orderuser
             - name: DB_NAME
               value: orderdb
+
             - name: DELIVERY_STATUS_USERNAME
               value: order
             - name: DELIVERY_STATUS_PASSWORD
@@ -60,6 +61,20 @@ spec:
               value: "4222"
             - name: DELIVERY_STATUS_SUBJECT
               value: order
+
+            - name: POINT_QUEUE_HOST
+              value: point-queue-kafka-bootstrap.point.svc.cluster.local
+            - name: POINT_QUEUE_PORT
+              value: "9092"
+            - name: POINT_QUEUE_TOPIC
+              value: point-topic
+            - name: POINT_QUEUE_USER
+              value: point-user
+            - name: POINT_QUEUE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: point-user
+                  key: user.password
           resources:
             requests:
               cpu: 100m

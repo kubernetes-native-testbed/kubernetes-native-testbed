@@ -30,6 +30,12 @@ var (
 	deliveryStatusHost     string
 	deliveryStatusPort     int
 	deliveryStatusSubject  string
+
+	pointQueueUsername string
+	pointQueuePassword string
+	pointQueueHost     string
+	pointQueuePort     int
+	pointQueueTopic    string
 )
 
 const (
@@ -47,6 +53,12 @@ const (
 	defaultDeliveryStatusHost     = "delivery-status-queue.delivery-status.svc.cluster.local"
 	defaultDeliveryStatusPort     = 4222
 	defaultDeliveryStatusSubject  = componentName
+
+	defaultPointQueueUsername = componentName
+	defaultPointQueuePassword = componentName
+	defaultPointQueueHost     = componentName
+	defaultPointQueuePort     = 4222
+	defaultPointQueueTopic    = componentName
 )
 
 func init() {
@@ -67,6 +79,7 @@ func init() {
 		dbPort = defaultDBPort
 		log.Printf("dbPort parse error: %v", err)
 	}
+
 	if deliveryStatusUsername = os.Getenv("DELIVERY_STATUS_USERNAME"); deliveryStatusUsername == "" {
 		deliveryStatusUsername = defaultDeliveryStatusUsername
 	}
@@ -83,11 +96,29 @@ func init() {
 	if deliveryStatusSubject = os.Getenv("DELIVERY_STATUS_SUBJECT"); deliveryStatusSubject == "" {
 		deliveryStatusSubject = defaultDeliveryStatusSubject
 	}
+
+	if pointQueueUsername = os.Getenv("POINT_QUEUE_USER"); pointQueueUsername == "" {
+		pointQueueUsername = defaultPointQueueUsername
+	}
+	if pointQueuePassword = os.Getenv("POINT_QUEUE_PASSWORD"); pointQueuePassword == "" {
+		pointQueuePassword = defaultPointQueuePassword
+	}
+	if pointQueueHost = os.Getenv("POINT_QUEUE_HOST"); pointQueueHost == "" {
+		pointQueueHost = defaultPointQueueHost
+	}
+	if pointQueuePort, err = strconv.Atoi(os.Getenv("POINT_QUEUE_PORT")); err != nil {
+		pointQueuePort = defaultPointQueuePort
+		log.Printf("pointQueuePort parse error: %v", err)
+	}
+	if pointQueueTopic = os.Getenv("POINT_QUEUE_TOPIC"); pointQueueTopic == "" {
+		pointQueueTopic = defaultPointQueueTopic
+	}
 }
 
 type orderAPIServer struct {
 	orderRepository              order.OrderRepository
 	orderSenderForDeliveryStatus order.OrderSender
+	orderSenderForPoint          order.OrderSender
 }
 
 func (s *orderAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
@@ -180,7 +211,14 @@ func (s *orderAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRe
 	}
 
 	go func() {
-		if err := s.orderSenderForDeliveryStatus.Send(o); err != nil {
+		if err := s.orderSenderForDeliveryStatus.Send(o, order.CreateOperation); err != nil {
+			// TODO: save fail information to order table for avoding lost order
+			log.Printf("send error: %v", err)
+		}
+	}()
+
+	go func() {
+		if err := s.orderSenderForPoint.Send(o, order.CreateOperation); err != nil {
 			// TODO: save fail information to order table for avoding lost order
 			log.Printf("send error: %v", err)
 		}
@@ -224,6 +262,13 @@ func (s *orderAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*em
 		return &empty.Empty{}, err
 	}
 
+	go func() {
+		if err := s.orderSenderForPoint.Send(&order.Order{UUID: uuid}, order.DeleteOperation); err != nil {
+			// TODO: save fail information to order table for avoding lost order
+			log.Printf("send error: %v", err)
+		}
+	}()
+
 	return &empty.Empty{}, nil
 }
 
@@ -263,10 +308,23 @@ func main() {
 	defer closeNats()
 	log.Printf("succeed to connect to delivery status queue")
 
+	kafkaConfig := order.OrderSenderKafkaConfig{
+		Host:     pointQueueHost,
+		Port:     pointQueuePort,
+		Username: pointQueueUsername,
+		Password: pointQueuePassword,
+		Topic:    pointQueueTopic,
+		Retry:    5,
+	}
+	kafka, closeKafka, err := kafkaConfig.Connect()
+	defer closeKafka()
+	log.Printf("succeed to connect to point queue")
+
 	s := grpc.NewServer()
 	api := &orderAPIServer{
 		orderRepository:              tidb,
 		orderSenderForDeliveryStatus: nats,
+		orderSenderForPoint:          kafka,
 	}
 	pb.RegisterOrderAPIServer(s, api)
 

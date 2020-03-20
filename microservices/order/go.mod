@@ -9,4 +9,5 @@ require (
 	github.com/nats-io/nats-server/v2 v2.1.4 // indirect
 	github.com/nats-io/nats.go v1.9.1
 	google.golang.org/grpc v1.28.0
+	gopkg.in/confluentinc/confluent-kafka-go.v1 v1.1.0 // indirect
 )

@@ -13,7 +13,7 @@ type orderSenderNATS struct {
 	retry   int
 }
 
-func (os *orderSenderNATS) Send(o *Order) error {
+func (os *orderSenderNATS) Send(o *Order, op Operation) error {
 	var err error
 	for i := 0; i < os.retry; i++ {
 		if err = os.conn.Publish(os.subject, []byte(o.UUID)); err == nil {

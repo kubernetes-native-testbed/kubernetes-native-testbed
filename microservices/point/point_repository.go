@@ -58,11 +58,11 @@ func (pr *pointRepositoryImpl) deleteByUUID(uuid string) error {
 }
 
 func (pr *pointRepositoryImpl) getAmount(useruuid string) (int32, error) {
-	rows, err := pr.db.Model(&Point{}).Where("UserUUID = ?", useruuid).Select("Balance").Rows() // (*sql.Rows, error)
-	defer rows.Close()
+	rows, err := pr.db.Model(&Point{}).Where("user_uuid = ?", useruuid).Select("balance").Rows() // (*sql.Rows, error)
 	if err != nil {
 		return 0, fmt.Errorf("getAmount error: %w (useruuid: %s)", err, useruuid)
 	}
+	defer rows.Close()
 
 	amount := int32(0)
 	for rows.Next() {
