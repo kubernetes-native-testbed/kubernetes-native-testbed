@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: payment-info-app
-          image: registry-harbor-core.infra.svc.cluster.local/library/payment-info:5958c8a359baf93c77bdcadec57af4d451666909
+          image: registry-harbor-core.infra.svc.cluster.local/library/payment-info:b14b25781b126292559d0f1ec360b3857f8e7e53
           env:
             - name: DB_HOST
               value: payment-info-db.payment-info.svc.cluster.local
