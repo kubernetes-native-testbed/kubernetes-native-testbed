@@ -36,7 +36,7 @@ const (
 	defaultDBName     = componentName
 	defaultDBHost     = componentName
 	defaultDBHPort    = componentName
-	defaultDBSSL      = "enable"
+	defaultDBSSL      = "require"
 )
 
 func init() {
@@ -56,7 +56,7 @@ func init() {
 		dbPort = defaultDBHPort
 	}
 	if dbSSL = os.Getenv("DB_SSL"); dbSSL == "" {
-		dbSSL = defaultDBHPort
+		dbSSL = defaultDBSSL
 	}
 }
 
