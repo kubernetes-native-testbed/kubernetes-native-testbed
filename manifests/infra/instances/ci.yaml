@@ -122,7 +122,7 @@ data:
     https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/tree/${COMMIT_HASH}
     _EOF_
 
-    gh pr create --base develop --title "Update ${MICROSERVICE} manifest for new image tag ${COMMIT_HASH}" --body "$(cat ~/pr-body.txt)";
+    gh pr create --base develop --title "[Update manifest] ${MICROSERVICE} for new image tag ${COMMIT_HASH}" --body "$(cat ~/pr-body.txt)";
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Condition
