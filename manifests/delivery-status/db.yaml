@@ -63,6 +63,19 @@ spec:
           - name: rack2
 ---
 apiVersion: v1
+kind: Secret
+metadata:
+  name: delivery-status-db
+  namespace: delivery-status
+  labels:
+    service: delivery-status
+    role: db
+stringData:
+  username: deliverystatus
+  password: deliverystatus
+  keyspace: deliverystatus
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: init-db-script
@@ -104,11 +117,20 @@ spec:
           - name: DB_PORT
             value: "9042"
           - name: DB_USERNAME
-            value: deliverystatus
+            valueFrom:
+              secretKeyRef:
+                name: delivery-status-db
+                key: username
           - name: DB_PASSWORD
-            value: deliverystatus
+            valueFrom:
+              secretKeyRef:
+                name: delivery-status-db
+                key: password
           - name: DB_KEYSPACE
-            value: deliverystatus
+            valueFrom:
+              secretKeyRef:
+                name: delivery-status-db
+                key: keyspace
           - name: DB_SUPERUSER_USERNAME
             value: cassandra
           - name: DB_SUPERUSER_PASSWORD

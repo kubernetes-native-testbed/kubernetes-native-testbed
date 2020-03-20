@@ -28,11 +28,20 @@ spec:
             - name: DB_PORT
               value: "9042"
             - name: DB_USERNAME
-              value: deliveryStatus
+              valueFrom:
+                secretKeyRef:
+                  name: delivery-status-db
+                  key: username
             - name: DB_PASSWORD
-              value: deliveryStatus
+              valueFrom:
+                secretKeyRef:
+                  name: delivery-status-db
+                  key: password
             - name: DB_KEYSPACE
-              value: deliverystatus
+              valueFrom:
+                secretKeyRef:
+                  name: delivery-status-db
+                  key: keyspace
             - name: ORDER_QUEUE_HOST
               value: delivery-status-queue.delivery-status.svc.cluster.local
             - name: ORDER_QUEUE_PORT
