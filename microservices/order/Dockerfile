@@ -2,7 +2,7 @@ FROM golang:1.13.6-buster as builder1
 WORKDIR /app
 COPY ./ /app/
 RUN go get
-RUN go build -o /order ./server/main.go
+RUN go build -o /order ./server/*.go
 
 FROM busybox as builder2
 RUN GRPC_HEALTH_PROBE_VERSION=v0.3.1 && \
