@@ -48,11 +48,20 @@ spec:
             - name: DB_PORT
               value: "9042"
             - name: DB_USERNAME
-              value: deliverystatus
+              valueFrom:
+                secretKeyRef:
+                  name: delivery-status-db
+                  key: username
             - name: DB_PASSWORD
-              value: deliverystatus
+              valueFrom:
+                secretKeyRef:
+                  name: delivery-status-db
+                  key: password
             - name: DB_KEYSPACE
-              value: deliverystatus
+              valueFrom:
+                secretKeyRef:
+                  name: delivery-status-db
+                  key: keyspace
             volumeMounts:
             - name: scripts-volume
               mountPath: /scripts
