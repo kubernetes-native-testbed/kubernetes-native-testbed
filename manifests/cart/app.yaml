@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: cart
-          image: registry-harbor-core.infra.svc.cluster.local/library/cart:5958c8a359baf93c77bdcadec57af4d451666909
+          image: registry-harbor-core.infra.svc.cluster.local/library/cart:b14b25781b126292559d0f1ec360b3857f8e7e53
           env:
             - name: KVS_HOST
               value: cart-db-pd.cart.svc.cluster.local
