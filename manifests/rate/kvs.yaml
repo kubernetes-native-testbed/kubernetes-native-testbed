@@ -9,7 +9,7 @@ metadata:
     role: kvs
 type: Opaque
 stringData:
-  PASSWORD: rate
+  password: rate
 ---
 apiVersion: databases.spotahome.com/v1
 kind: RedisFailover

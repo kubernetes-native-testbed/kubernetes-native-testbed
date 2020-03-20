@@ -31,7 +31,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: rate-kvs
-                  key: PASSWORD
+                  key: password
           resources:
             requests:
               cpu: 100m

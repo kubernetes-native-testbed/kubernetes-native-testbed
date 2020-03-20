@@ -54,7 +54,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: rate-kvs
-                  key: PASSWORD
+                  key: password
             volumeMounts:
             - name: scripts-volume
               mountPath: /scripts
