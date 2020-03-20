@@ -7,3 +7,4 @@ push: build
 	docker push k8stestbed/admin:$(COMMIT_HASH)
 
 .PHONY: build push
+

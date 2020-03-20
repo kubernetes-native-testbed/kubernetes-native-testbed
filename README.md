@@ -78,7 +78,13 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 * run following command
 
 ```
-./init.sh
+./tools/init.sh
+```
+
+# Destroy clusters
+
+```
+./tools/destroy_cluster.sh
 ```
 
 # Directory structure

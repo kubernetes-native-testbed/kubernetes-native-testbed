@@ -85,7 +85,7 @@ metadata:
     app: loki
     chart: loki-0.25.1
     heritage: Helm
-data:
+stringData:
   loki.yaml: |-
     auth_enabled: false
     chunk_store_config:
