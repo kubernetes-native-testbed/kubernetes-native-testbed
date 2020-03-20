@@ -74,8 +74,9 @@ data:
   init.sh: |-
     #!/bin/bash
     echo "initialize database running..."
-    cqlsh -u ${DB_USERNAME} -p ${DB_PASSWORD} ${DB_HOST} ${DB_PORT} -e "CREATE ROLE deliveryStatus WITH LOGIN = true AND PASSWORD = 'deliveryStatus';"
-    cqlsh -u ${DB_USERNAME} -p ${DB_PASSWORD} ${DB_HOST} ${DB_PORT} -e "CREATE KEYSPACE deliveryStatus WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 2};"
+    cqlsh -u ${DB_SUPERUSER_USERNAME} -p ${DB_SUPERUSER_PASSWORD} ${DB_HOST} ${DB_PORT} -e "ALTER KEYSPACE system_auth WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'dc1' : 1, 'dc2' : 1};"
+    cqlsh -u ${DB_SUPERUSER_USERNAME} -p ${DB_SUPERUSER_PASSWORD} ${DB_HOST} ${DB_PORT} -e "CREATE ROLE ${DB_USERNAME} WITH LOGIN = true AND PASSWORD = '${DB_PASSWORD}';"
+    cqlsh -u ${DB_SUPERUSER_USERNAME} -p ${DB_SUPERUSER_PASSWORD} ${DB_HOST} ${DB_PORT} -e "CREATE KEYSPACE ${DB_KEYSPACE} WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'dc1' : 1, 'dc2' : 1};"
 ---
 apiVersion: batch/v1
 kind: Job
@@ -100,18 +101,18 @@ spec:
         env:
           - name: DB_HOST
             value: delivery-status-db.delivery-status.svc.cluster.local
-            # value: delivery-status-db-dc1-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
-            # value: delivery-status-db-dc1-rack2-0.delivery-status-db.delivery-status.svc.cluster.local
-            # value: delivery-status-db-dc2-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
-            # value: delivery-status-db-dc2-rack2-0.delivery-status-db.delivery-status.svc.cluster.local
           - name: DB_PORT
             value: "9042"
           - name: DB_USERNAME
-            value: cassandra
+            value: deliverystatus
           - name: DB_PASSWORD
-            value: cassandra
+            value: deliverystatus
           - name: DB_KEYSPACE
-            value: deliveryStatus
+            value: deliverystatus
+          - name: DB_SUPERUSER_USERNAME
+            value: cassandra
+          - name: DB_SUPERUSER_PASSWORD
+            value: cassandra
         volumeMounts:
         - name: scripts-volume
           mountPath: /scripts
