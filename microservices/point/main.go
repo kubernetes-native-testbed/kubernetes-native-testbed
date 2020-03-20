@@ -135,7 +135,7 @@ func (s *pointAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRe
 	}
 
 	if err := s.updateAmountCache(p.UserUUID); err != nil {
-		log.Printf("failed to update amout cache for %s", p.UserUUID)
+		log.Printf("failed to update amout cache for %s: %w", p.UserUUID, err)
 	}
 
 	return &pb.SetResponse{UUID: uuid}, nil
@@ -155,7 +155,7 @@ func (s *pointAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*em
 	}
 
 	if err := s.updateAmountCache(p.UserUUID); err != nil {
-		log.Printf("failed to update amout cache for %s", p.UserUUID)
+		log.Printf("failed to update amout cache for %s: %w", p.UserUUID, err)
 	}
 
 	return &empty.Empty{}, nil
@@ -175,7 +175,7 @@ func (s *pointAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*em
 	}
 
 	if err := s.updateAmountCache(p.UserUUID); err != nil {
-		log.Printf("failed to update amout cache for %s", p.UserUUID)
+		log.Printf("failed to update amout cache for %s: %w", p.UserUUID, err)
 	}
 
 	return &empty.Empty{}, nil
@@ -194,6 +194,7 @@ func (s *pointAPIServer) updateAmountCache(useruuid string) error {
 	if err := s.pointCacheRepository.store(pc); err != nil {
 		return err
 	}
+	log.Printf("Amount is updated. UserUUID=%s, Amount=%d", useruuid, amount)
 	return nil
 }
 

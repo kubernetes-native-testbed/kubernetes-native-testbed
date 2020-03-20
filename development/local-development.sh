@@ -37,7 +37,6 @@ telepresence \
   --namespace ${MICROSERVICE} \
   --swap-deployment ${MICROSERVICE} \
   --expose 8080:80 \
-  --logfile /dev/null \
   --run sleep 10000 &
 
 # watch files and run applications on local kubernetes by skaffold
