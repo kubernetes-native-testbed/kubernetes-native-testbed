@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -24,6 +25,7 @@ type imageRepositoryMinIO struct {
 	client        *minio.Client
 	bucketName    string
 	publicBaseURL string
+	hostname      string
 }
 
 // TODO: read via io.Reader (how to get image md5 sum and size?)
@@ -88,8 +90,19 @@ func (ir *imageRepositoryMinIO) FilenameToURL(filename string) (string, error) {
 	return fmt.Sprintf("%s/%s", ir.publicBaseURL, filename), nil
 }
 
-func (ir *imageRepositoryMinIO) URLToFilename(url string) (string, error) {
-	return strings.TrimLeft(url, ir.publicBaseURL), nil
+func (ir *imageRepositoryMinIO) URLToFilename(urlstr string) (string, error) {
+	u, err := url.Parse(urlstr)
+	if err != nil {
+		return "", err
+	}
+	if u.Hostname() != ir.hostname {
+		return "", fmt.Errorf("this is not own url")
+	}
+
+	pathArray := strings.Split(u.Path, "/")
+	filename := pathArray[len(pathArray)-1]
+
+	return filename, nil
 }
 
 func (ir *imageRepositoryMinIO) InitRepository() error {
@@ -153,5 +166,6 @@ func (c *ImageRepositoryMinIOConfig) Connect() (ImageRepository, error) {
 		client:        client,
 		bucketName:    c.BucketName,
 		publicBaseURL: fmt.Sprintf("https://%s:%d/%s", c.PublicHost, c.PublicPort, c.BucketName),
+		hostname:      c.PublicHost,
 	}, nil
 }
