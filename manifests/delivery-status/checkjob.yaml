@@ -52,9 +52,9 @@ spec:
             - name: DB_PORT
               value: "9042"
             - name: DB_USERNAME
-              value: cassandra
+              value: deliveryStatus
             - name: DB_PASSWORD
-              value: cassandra
+              value: deliveryStatus
             - name: DB_KEYSPACE
               value: deliveryStatus
             volumeMounts:
