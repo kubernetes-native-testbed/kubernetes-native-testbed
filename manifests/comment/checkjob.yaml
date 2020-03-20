@@ -40,7 +40,7 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: check-container
-            image: mysql:5.7
+            image: kubedb/mongo:4.1
             command:
             - /scripts/check.sh
             env:
