@@ -45,18 +45,14 @@ spec:
             env:
             - name: DB_HOST
               value: delivery-status-db.delivery-status.svc.cluster.local
-              # value: delivery-status-db-dc1-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
-              # value: delivery-status-db-dc1-rack2-0.delivery-status-db.delivery-status.svc.cluster.local
-              # value: delivery-status-db-dc2-rack1-0.delivery-status-db.delivery-status.svc.cluster.local
-              # value: delivery-status-db-dc2-rack2-0.delivery-status-db.delivery-status.svc.cluster.local
             - name: DB_PORT
               value: "9042"
             - name: DB_USERNAME
-              value: deliveryStatus
+              value: deliverystatus
             - name: DB_PASSWORD
-              value: deliveryStatus
+              value: deliverystatus
             - name: DB_KEYSPACE
-              value: deliveryStatus
+              value: deliverystatus
             volumeMounts:
             - name: scripts-volume
               mountPath: /scripts
