@@ -71,6 +71,86 @@ proto.productpb.ImageAPIPromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.productpb.ImageUploadRequest,
+ *   !proto.productpb.ImageUploadResponse>}
+ */
+const methodDescriptor_ImageAPI_Upload = new grpc.web.MethodDescriptor(
+  '/productpb.ImageAPI/Upload',
+  grpc.web.MethodType.UNARY,
+  proto.productpb.ImageUploadRequest,
+  proto.productpb.ImageUploadResponse,
+  /**
+   * @param {!proto.productpb.ImageUploadRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.productpb.ImageUploadResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.productpb.ImageUploadRequest,
+ *   !proto.productpb.ImageUploadResponse>}
+ */
+const methodInfo_ImageAPI_Upload = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.productpb.ImageUploadResponse,
+  /**
+   * @param {!proto.productpb.ImageUploadRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.productpb.ImageUploadResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.productpb.ImageUploadRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.productpb.ImageUploadResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.productpb.ImageUploadResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.productpb.ImageAPIClient.prototype.upload =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/productpb.ImageAPI/Upload',
+      request,
+      metadata || {},
+      methodDescriptor_ImageAPI_Upload,
+      callback);
+};
+
+
+/**
+ * @param {!proto.productpb.ImageUploadRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.productpb.ImageUploadResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.productpb.ImageAPIPromiseClient.prototype.upload =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/productpb.ImageAPI/Upload',
+      request,
+      metadata || {},
+      methodDescriptor_ImageAPI_Upload);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.productpb.ImageDeleteRequest,
  *   !proto.google.protobuf.Empty>}
  */

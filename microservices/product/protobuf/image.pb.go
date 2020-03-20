@@ -111,6 +111,92 @@ func (m *ImageUploadResponse) GetUrl() string {
 	return ""
 }
 
+type ImageUploadStreamRequest struct {
+	Image                []byte   `protobuf:"bytes,1,opt,name=image,proto3" json:"image,omitempty"`
+	Overwrite            bool     `protobuf:"varint,2,opt,name=overwrite,proto3" json:"overwrite,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ImageUploadStreamRequest) Reset()         { *m = ImageUploadStreamRequest{} }
+func (m *ImageUploadStreamRequest) String() string { return proto.CompactTextString(m) }
+func (*ImageUploadStreamRequest) ProtoMessage()    {}
+func (*ImageUploadStreamRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9624c68e2b547544, []int{2}
+}
+
+func (m *ImageUploadStreamRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ImageUploadStreamRequest.Unmarshal(m, b)
+}
+func (m *ImageUploadStreamRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ImageUploadStreamRequest.Marshal(b, m, deterministic)
+}
+func (m *ImageUploadStreamRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImageUploadStreamRequest.Merge(m, src)
+}
+func (m *ImageUploadStreamRequest) XXX_Size() int {
+	return xxx_messageInfo_ImageUploadStreamRequest.Size(m)
+}
+func (m *ImageUploadStreamRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ImageUploadStreamRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ImageUploadStreamRequest proto.InternalMessageInfo
+
+func (m *ImageUploadStreamRequest) GetImage() []byte {
+	if m != nil {
+		return m.Image
+	}
+	return nil
+}
+
+func (m *ImageUploadStreamRequest) GetOverwrite() bool {
+	if m != nil {
+		return m.Overwrite
+	}
+	return false
+}
+
+type ImageUploadStreamResponse struct {
+	Url                  string   `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ImageUploadStreamResponse) Reset()         { *m = ImageUploadStreamResponse{} }
+func (m *ImageUploadStreamResponse) String() string { return proto.CompactTextString(m) }
+func (*ImageUploadStreamResponse) ProtoMessage()    {}
+func (*ImageUploadStreamResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9624c68e2b547544, []int{3}
+}
+
+func (m *ImageUploadStreamResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ImageUploadStreamResponse.Unmarshal(m, b)
+}
+func (m *ImageUploadStreamResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ImageUploadStreamResponse.Marshal(b, m, deterministic)
+}
+func (m *ImageUploadStreamResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImageUploadStreamResponse.Merge(m, src)
+}
+func (m *ImageUploadStreamResponse) XXX_Size() int {
+	return xxx_messageInfo_ImageUploadStreamResponse.Size(m)
+}
+func (m *ImageUploadStreamResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ImageUploadStreamResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ImageUploadStreamResponse proto.InternalMessageInfo
+
+func (m *ImageUploadStreamResponse) GetUrl() string {
+	if m != nil {
+		return m.Url
+	}
+	return ""
+}
+
 type ImageDeleteRequest struct {
 	Url                  string   `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -122,7 +208,7 @@ func (m *ImageDeleteRequest) Reset()         { *m = ImageDeleteRequest{} }
 func (m *ImageDeleteRequest) String() string { return proto.CompactTextString(m) }
 func (*ImageDeleteRequest) ProtoMessage()    {}
 func (*ImageDeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9624c68e2b547544, []int{2}
+	return fileDescriptor_9624c68e2b547544, []int{4}
 }
 
 func (m *ImageDeleteRequest) XXX_Unmarshal(b []byte) error {
@@ -153,13 +239,15 @@ func (m *ImageDeleteRequest) GetUrl() string {
 func init() {
 	proto.RegisterType((*ImageUploadRequest)(nil), "productpb.ImageUploadRequest")
 	proto.RegisterType((*ImageUploadResponse)(nil), "productpb.ImageUploadResponse")
+	proto.RegisterType((*ImageUploadStreamRequest)(nil), "productpb.ImageUploadStreamRequest")
+	proto.RegisterType((*ImageUploadStreamResponse)(nil), "productpb.ImageUploadStreamResponse")
 	proto.RegisterType((*ImageDeleteRequest)(nil), "productpb.ImageDeleteRequest")
 }
 
 func init() { proto.RegisterFile("image.proto", fileDescriptor_9624c68e2b547544) }
 
 var fileDescriptor_9624c68e2b547544 = []byte{
-	// 232 bytes of a gzipped FileDescriptorProto
+	// 274 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xce, 0xcc, 0x4d, 0x4c,
 	0x4f, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x2c, 0x28, 0xca, 0x4f, 0x29, 0x4d, 0x2e,
 	0x29, 0x48, 0x92, 0x92, 0x4e, 0xcf, 0xcf, 0x4f, 0xcf, 0x49, 0xd5, 0x07, 0x4b, 0x24, 0x95, 0xa6,
@@ -168,13 +256,16 @@ var fileDescriptor_9624c68e2b547544 = []byte{
 	0x82, 0x0d, 0x93, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x09, 0x82, 0x70, 0x84, 0x64, 0xb8, 0x38, 0xf3,
 	0xcb, 0x52, 0x8b, 0xca, 0x8b, 0x32, 0x4b, 0x52, 0x25, 0x98, 0x14, 0x18, 0x35, 0x38, 0x82, 0x10,
 	0x02, 0x4a, 0xea, 0x5c, 0xc2, 0x28, 0x26, 0x15, 0x17, 0xe4, 0xe7, 0x15, 0xa7, 0x0a, 0x09, 0x70,
-	0x31, 0x97, 0x16, 0xe5, 0x80, 0x0d, 0xe2, 0x0c, 0x02, 0x31, 0x95, 0xd4, 0xa0, 0x56, 0xba, 0xa4,
-	0xe6, 0xa4, 0x96, 0xa4, 0xc2, 0xac, 0xc4, 0x50, 0x67, 0x34, 0x8b, 0x91, 0x8b, 0x03, 0xac, 0xd0,
-	0x31, 0xc0, 0x53, 0xc8, 0x9b, 0x8b, 0x0d, 0x62, 0xb0, 0x90, 0xac, 0x1e, 0xdc, 0x6b, 0x7a, 0x98,
-	0x4e, 0x97, 0x92, 0xc3, 0x25, 0x0d, 0x71, 0x8f, 0x12, 0x83, 0x06, 0xa3, 0x90, 0x23, 0x17, 0x1b,
-	0xc4, 0x72, 0x4c, 0xc3, 0x50, 0x1c, 0x25, 0x25, 0xa6, 0x07, 0x09, 0x3b, 0x3d, 0x58, 0xd8, 0xe9,
-	0xb9, 0x82, 0xc2, 0x4e, 0x89, 0x21, 0x89, 0x0d, 0x2c, 0x62, 0x0c, 0x08, 0x00, 0x00, 0xff, 0xff,
-	0x84, 0xca, 0x44, 0x79, 0x75, 0x01, 0x00, 0x00,
+	0x31, 0x97, 0x16, 0xe5, 0x80, 0x0d, 0xe2, 0x0c, 0x02, 0x31, 0x95, 0xfc, 0xb8, 0x24, 0x90, 0x14,
+	0x06, 0x97, 0x14, 0xa5, 0x26, 0xe6, 0x52, 0x62, 0xb1, 0x2e, 0x97, 0x24, 0x16, 0xf3, 0x70, 0x5a,
+	0xaf, 0x06, 0xf5, 0xb1, 0x4b, 0x6a, 0x4e, 0x6a, 0x49, 0x2a, 0xcc, 0x62, 0x0c, 0x75, 0x46, 0xdf,
+	0x19, 0xb9, 0x38, 0xc0, 0x0a, 0x1d, 0x03, 0x3c, 0x85, 0x3c, 0xb9, 0xd8, 0x20, 0xc6, 0x0b, 0xc9,
+	0xea, 0xc1, 0x43, 0x56, 0x0f, 0x33, 0xe4, 0xa4, 0xe4, 0x70, 0x49, 0x43, 0xdc, 0xa3, 0xc4, 0x20,
+	0x14, 0xcb, 0xc5, 0x83, 0xec, 0x52, 0x21, 0x65, 0xec, 0x3a, 0x50, 0xc2, 0x45, 0x4a, 0x05, 0xbf,
+	0x22, 0x98, 0xe1, 0x1a, 0x8c, 0x42, 0x8e, 0x5c, 0x6c, 0x10, 0x9f, 0x61, 0xba, 0x14, 0xc5, 0xc7,
+	0x52, 0x62, 0x7a, 0x90, 0x74, 0xa1, 0x07, 0x4b, 0x17, 0x7a, 0xae, 0xa0, 0x74, 0xa1, 0xc4, 0x90,
+	0xc4, 0x06, 0x16, 0x31, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x24, 0xfa, 0x26, 0x73, 0x51, 0x02,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -189,7 +280,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ImageAPIClient interface {
-	Upload(ctx context.Context, opts ...grpc.CallOption) (ImageAPI_UploadClient, error)
+	Upload(ctx context.Context, in *ImageUploadRequest, opts ...grpc.CallOption) (*ImageUploadResponse, error)
+	UploadStream(ctx context.Context, opts ...grpc.CallOption) (ImageAPI_UploadStreamClient, error)
 	Delete(ctx context.Context, in *ImageDeleteRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
@@ -201,34 +293,43 @@ func NewImageAPIClient(cc *grpc.ClientConn) ImageAPIClient {
 	return &imageAPIClient{cc}
 }
 
-func (c *imageAPIClient) Upload(ctx context.Context, opts ...grpc.CallOption) (ImageAPI_UploadClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_ImageAPI_serviceDesc.Streams[0], "/productpb.ImageAPI/Upload", opts...)
+func (c *imageAPIClient) Upload(ctx context.Context, in *ImageUploadRequest, opts ...grpc.CallOption) (*ImageUploadResponse, error) {
+	out := new(ImageUploadResponse)
+	err := c.cc.Invoke(ctx, "/productpb.ImageAPI/Upload", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &imageAPIUploadClient{stream}
+	return out, nil
+}
+
+func (c *imageAPIClient) UploadStream(ctx context.Context, opts ...grpc.CallOption) (ImageAPI_UploadStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_ImageAPI_serviceDesc.Streams[0], "/productpb.ImageAPI/UploadStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &imageAPIUploadStreamClient{stream}
 	return x, nil
 }
 
-type ImageAPI_UploadClient interface {
-	Send(*ImageUploadRequest) error
-	CloseAndRecv() (*ImageUploadResponse, error)
+type ImageAPI_UploadStreamClient interface {
+	Send(*ImageUploadStreamRequest) error
+	CloseAndRecv() (*ImageUploadStreamResponse, error)
 	grpc.ClientStream
 }
 
-type imageAPIUploadClient struct {
+type imageAPIUploadStreamClient struct {
 	grpc.ClientStream
 }
 
-func (x *imageAPIUploadClient) Send(m *ImageUploadRequest) error {
+func (x *imageAPIUploadStreamClient) Send(m *ImageUploadStreamRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *imageAPIUploadClient) CloseAndRecv() (*ImageUploadResponse, error) {
+func (x *imageAPIUploadStreamClient) CloseAndRecv() (*ImageUploadStreamResponse, error) {
 	if err := x.ClientStream.CloseSend(); err != nil {
 		return nil, err
 	}
-	m := new(ImageUploadResponse)
+	m := new(ImageUploadStreamResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -246,7 +347,8 @@ func (c *imageAPIClient) Delete(ctx context.Context, in *ImageDeleteRequest, opt
 
 // ImageAPIServer is the server API for ImageAPI service.
 type ImageAPIServer interface {
-	Upload(ImageAPI_UploadServer) error
+	Upload(context.Context, *ImageUploadRequest) (*ImageUploadResponse, error)
+	UploadStream(ImageAPI_UploadStreamServer) error
 	Delete(context.Context, *ImageDeleteRequest) (*empty.Empty, error)
 }
 
@@ -254,8 +356,11 @@ type ImageAPIServer interface {
 type UnimplementedImageAPIServer struct {
 }
 
-func (*UnimplementedImageAPIServer) Upload(srv ImageAPI_UploadServer) error {
-	return status.Errorf(codes.Unimplemented, "method Upload not implemented")
+func (*UnimplementedImageAPIServer) Upload(ctx context.Context, req *ImageUploadRequest) (*ImageUploadResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Upload not implemented")
+}
+func (*UnimplementedImageAPIServer) UploadStream(srv ImageAPI_UploadStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method UploadStream not implemented")
 }
 func (*UnimplementedImageAPIServer) Delete(ctx context.Context, req *ImageDeleteRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
@@ -265,26 +370,44 @@ func RegisterImageAPIServer(s *grpc.Server, srv ImageAPIServer) {
 	s.RegisterService(&_ImageAPI_serviceDesc, srv)
 }
 
-func _ImageAPI_Upload_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(ImageAPIServer).Upload(&imageAPIUploadServer{stream})
+func _ImageAPI_Upload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImageUploadRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImageAPIServer).Upload(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/productpb.ImageAPI/Upload",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImageAPIServer).Upload(ctx, req.(*ImageUploadRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-type ImageAPI_UploadServer interface {
-	SendAndClose(*ImageUploadResponse) error
-	Recv() (*ImageUploadRequest, error)
+func _ImageAPI_UploadStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ImageAPIServer).UploadStream(&imageAPIUploadStreamServer{stream})
+}
+
+type ImageAPI_UploadStreamServer interface {
+	SendAndClose(*ImageUploadStreamResponse) error
+	Recv() (*ImageUploadStreamRequest, error)
 	grpc.ServerStream
 }
 
-type imageAPIUploadServer struct {
+type imageAPIUploadStreamServer struct {
 	grpc.ServerStream
 }
 
-func (x *imageAPIUploadServer) SendAndClose(m *ImageUploadResponse) error {
+func (x *imageAPIUploadStreamServer) SendAndClose(m *ImageUploadStreamResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *imageAPIUploadServer) Recv() (*ImageUploadRequest, error) {
-	m := new(ImageUploadRequest)
+func (x *imageAPIUploadStreamServer) Recv() (*ImageUploadStreamRequest, error) {
+	m := new(ImageUploadStreamRequest)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -314,14 +437,18 @@ var _ImageAPI_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*ImageAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "Upload",
+			Handler:    _ImageAPI_Upload_Handler,
+		},
+		{
 			MethodName: "Delete",
 			Handler:    _ImageAPI_Delete_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "Upload",
-			Handler:       _ImageAPI_Upload_Handler,
+			StreamName:    "UploadStream",
+			Handler:       _ImageAPI_UploadStream_Handler,
 			ClientStreams: true,
 		},
 	},
