@@ -40,7 +40,7 @@ spec:
             - name: DB_NAME
               value: payment_info_db
             - name: DB_SSL
-              value: disable
+              value: require
           resources:
             requests:
               cpu: 100m

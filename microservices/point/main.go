@@ -39,7 +39,7 @@ const (
 	defaultDBName     = componentName
 	defaultDBHost     = componentName
 	defaultDBHPort    = componentName
-	defaultDBSSL      = "enable"
+	defaultDBSSL      = "require"
 
 	// defaultKVSUser = componentName
 	// defaultKVSPass = componentName
@@ -70,7 +70,7 @@ func init() {
 		dbPort = defaultDBHPort
 	}
 	if dbSSL = os.Getenv("DB_SSL"); dbSSL == "" {
-		dbSSL = defaultDBHPort
+		dbSSL = defaultDBSSL
 	}
 
 	if kvsHost = os.Getenv("KVS_HOST"); kvsHost == "" {
