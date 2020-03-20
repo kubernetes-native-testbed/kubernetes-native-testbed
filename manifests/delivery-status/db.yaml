@@ -103,7 +103,7 @@ metadata:
 spec:
   completions: 1
   parallelism: 1
-  backoffLimit: 10
+  backoffLimit: 10000
   template:
     spec:
       restartPolicy: OnFailure
