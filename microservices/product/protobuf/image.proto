@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package productpb;
+
+service ImageAPI {
+	rpc Upload(stream ImageUploadRequest) returns (ImageUploadResponse) {}
+	rpc Delete(ImageDeleteRequest) returns (google.protobuf.Empty) {}
+}
+
+message ImageUploadRequest {
+    bytes image = 1;
+	bool overwrite = 2;
+}
+
+message ImageUploadResponse {
+	string url = 1;
+}
+
+message ImageDeleteRequest {
+	string url = 1;
+}
