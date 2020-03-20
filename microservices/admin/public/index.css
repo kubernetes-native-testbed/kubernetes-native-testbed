@@ -13,6 +13,10 @@
     align: "left";
 }
 
+.imagethumb {
+  height: 100px;
+}
+
 body {
   margin: 10px 50px;
 }

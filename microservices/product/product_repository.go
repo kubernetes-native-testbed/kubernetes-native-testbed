@@ -1,4 +1,4 @@
-package main
+package product
 
 import (
 	"fmt"
@@ -7,20 +7,20 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type productRepository interface {
-	findByUUID(string) (*Product, error)
-	store(*Product) (string, error)
-	update(*Product) error
-	deleteByUUID(string) error
+type ProductRepository interface {
+	FindByUUID(string) (*Product, error)
+	Store(*Product) (string, error)
+	Update(*Product) error
+	DeleteByUUID(string) error
 
-	initDB() error
+	InitDB() error
 }
 
-type productRepositoryImpl struct {
+type productRepositoryMySQL struct {
 	db *gorm.DB
 }
 
-func (pr *productRepositoryImpl) findByUUID(uuid string) (*Product, error) {
+func (pr *productRepositoryMySQL) FindByUUID(uuid string) (*Product, error) {
 	p := &Product{UUID: uuid}
 	if err := pr.db.Preload("ImageURLs").Find(p).Error; err != nil {
 		return nil, fmt.Errorf("findByID error: %w (uuid: %s)", err, uuid)
@@ -28,7 +28,7 @@ func (pr *productRepositoryImpl) findByUUID(uuid string) (*Product, error) {
 	return p, nil
 }
 
-func (pr *productRepositoryImpl) store(p *Product) (string, error) {
+func (pr *productRepositoryMySQL) Store(p *Product) (string, error) {
 	if !pr.db.NewRecord(p) {
 		return "", fmt.Errorf("store error: this key already exists")
 	}
@@ -41,23 +41,47 @@ func (pr *productRepositoryImpl) store(p *Product) (string, error) {
 	return p.UUID, nil
 }
 
-func (pr *productRepositoryImpl) update(p *Product) error {
+func (pr *productRepositoryMySQL) Update(p *Product) error {
 	if err := pr.db.Save(p).Error; err != nil {
 		return fmt.Errorf("update error: %w (product: %v)", err, p)
 	}
 	return nil
 }
 
-func (pr *productRepositoryImpl) deleteByUUID(uuid string) error {
+func (pr *productRepositoryMySQL) DeleteByUUID(uuid string) error {
 	if err := pr.db.Delete(&Product{UUID: uuid}).Error; err != nil {
 		return fmt.Errorf("deleteByID error: %w (uuid: %s)", err, uuid)
 	}
 	return nil
 }
 
-func (pr *productRepositoryImpl) initDB() error {
+func (pr *productRepositoryMySQL) InitDB() error {
 	if err := pr.db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&Product{}, &ProductImage{}).Error; err != nil {
 		return err
 	}
 	return nil
+}
+
+type ProductRepositoryMySQLConfig struct {
+	Host     string
+	Port     int
+	Username string
+	Password string
+	DBName   string
+}
+
+func (c *ProductRepositoryMySQLConfig) Connect() (ProductRepository, func() error, error) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
+		c.Username,
+		c.Password,
+		c.Host,
+		c.Port,
+		c.DBName,
+	)
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		return nil, nil, fmt.Errorf("%w (dsn=%s)", err, dsn)
+	}
+
+	return &productRepositoryMySQL{db: db}, db.Close, nil
 }

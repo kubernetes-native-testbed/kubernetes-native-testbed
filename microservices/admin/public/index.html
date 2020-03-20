@@ -45,6 +45,26 @@
         </br>
 
         <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Images:</label></div>
+          <div class="uk-width-3-4">
+            <div uk-form-custom>
+              <input v-on:change="selectImage" type="file" multiple>
+              <button class="uk-button uk-button-default" type="button" tabindex="-1">Select Images</button>
+            </div>
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div>
+            <span v-for="(image, index) in form.images">
+              <img class="imagethumb" :key="index" v-bind:src="image">
+            </span>
+          </div>
+        </div>
+        </br>
+
+        <!--div uk-grid>
           <div class="uk-width-1-4"><label class="uk-align-right">ImageURLs:</label></div>
           <div class="uk-width-3-4">
             <span v-for="(url, index) in form.imageURLs">
@@ -54,7 +74,7 @@
             <button class="uk-button" v-on:click="addImageURL">+</button>
           </div>
         </div>
-        </br>
+        </br-->
 
         <button class="uk-button uk-button-primary" v-on:click="getProduct">Get</button>
         <button class="uk-button uk-button-primary" v-on:click="setProduct">Set</button>
