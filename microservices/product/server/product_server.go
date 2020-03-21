@@ -17,9 +17,12 @@ type productAPIServer struct {
 
 func (s *productAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	uuid := req.GetUUID()
-	p, err := s.productRepository.FindByUUID(uuid)
+	p, nferr, err := s.productRepository.FindByUUID(uuid)
 	if err != nil {
 		return &pb.GetResponse{}, err
+	}
+	if nferr != nil {
+		return &pb.GetResponse{}, nferr
 	}
 	log.Printf("get %s", p)
 
@@ -105,4 +108,14 @@ func (s *productAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*
 	}
 
 	return &empty.Empty{}, nil
+}
+
+func (s *productAPIServer) IsExists(ctx context.Context, req *pb.IsExistsRequest) (*pb.IsExistsResponse, error) {
+	uuid := req.GetUUID()
+	log.Printf("isExists: %s", uuid)
+	_, nferr, err := s.productRepository.FindByUUID(uuid)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.IsExistsResponse{IsExists: nferr == nil}, nil
 }
