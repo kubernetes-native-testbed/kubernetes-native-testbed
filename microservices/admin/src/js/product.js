@@ -133,7 +133,7 @@ export const product = new Vue({
         }
       });
     },
-    updateProduct: function() {
+    updateProduct: async function() {
       this.clearResponseField();
       const req = new UpdateRequest();
       const p = new Product();
