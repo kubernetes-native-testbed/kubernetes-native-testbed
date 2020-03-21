@@ -390,5 +390,85 @@ proto.productpb.ProductAPIPromiseClient.prototype.delete =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.productpb.IsExistsRequest,
+ *   !proto.productpb.IsExistsResponse>}
+ */
+const methodDescriptor_ProductAPI_IsExists = new grpc.web.MethodDescriptor(
+  '/productpb.ProductAPI/IsExists',
+  grpc.web.MethodType.UNARY,
+  proto.productpb.IsExistsRequest,
+  proto.productpb.IsExistsResponse,
+  /**
+   * @param {!proto.productpb.IsExistsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.productpb.IsExistsResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.productpb.IsExistsRequest,
+ *   !proto.productpb.IsExistsResponse>}
+ */
+const methodInfo_ProductAPI_IsExists = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.productpb.IsExistsResponse,
+  /**
+   * @param {!proto.productpb.IsExistsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.productpb.IsExistsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.productpb.IsExistsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.productpb.IsExistsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.productpb.IsExistsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.productpb.ProductAPIClient.prototype.isExists =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/productpb.ProductAPI/IsExists',
+      request,
+      metadata || {},
+      methodDescriptor_ProductAPI_IsExists,
+      callback);
+};
+
+
+/**
+ * @param {!proto.productpb.IsExistsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.productpb.IsExistsResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.productpb.ProductAPIPromiseClient.prototype.isExists =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/productpb.ProductAPI/IsExists',
+      request,
+      metadata || {},
+      methodDescriptor_ProductAPI_IsExists);
+};
+
+
 module.exports = proto.productpb;
 
