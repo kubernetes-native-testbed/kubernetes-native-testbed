@@ -12,7 +12,6 @@ service UserAPI {
     rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
 	rpc IsExists(IsExistsRequest) returns (IsExistsResponse) {}
 	rpc Authentication(AuthenticationRequest) returns (AuthenticationResponse) {}
-	rpc IsValidToken(IsValidTokenRequest) returns (IsValidTokenResponse) {}
 }
 
 message User {
@@ -79,13 +78,4 @@ message AuthenticationRequest {
 
 message AuthenticationResponse {
 	string token = 1;
-}
-
-message IsValidTokenRequest {
-	string UUID = 1;
-	string token = 2;
-}
-
-message IsValidTokenResponse {
-	bool isValid = 1;
 }

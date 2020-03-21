@@ -2,11 +2,14 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"os"
 	"strconv"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/golang/protobuf/ptypes/timestamp"
@@ -64,9 +67,12 @@ type userAPIServer struct {
 func (s *userAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	uuid := req.GetUUID()
 	log.Printf("{\"operation\":\"get\", \"uuid\":\"%s\"}", uuid)
-	u, err := s.userRepository.FindByUUID(uuid)
+	u, nferr, err := s.userRepository.FindByUUID(uuid)
 	if err != nil {
 		return &pb.GetResponse{}, err
+	}
+	if nferr != nil {
+		return &pb.GetResponse{}, nferr
 	}
 
 	var resp pb.GetResponse
@@ -192,7 +198,13 @@ func (s *userAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*emp
 }
 
 func (s *userAPIServer) IsExists(ctx context.Context, req *pb.IsExistsRequest) (*pb.IsExistsResponse, error) {
-	return nil, nil
+	uuid := req.GetUUID()
+	log.Printf("isExists: {\"uuid\":\"%s\"}", uuid)
+	_, nferr, err := s.userRepository.FindByUUID(uuid)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.IsExistsResponse{IsExists: nferr == nil}, nil
 }
 
 func (s *userAPIServer) Authentication(ctx context.Context, req *pb.AuthenticationRequest) (*pb.AuthenticationResponse, error) {

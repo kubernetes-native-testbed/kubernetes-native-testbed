@@ -8,7 +8,7 @@ import (
 )
 
 type UserRepository interface {
-	FindByUUID(string) (*User, error)
+	FindByUUID(string) (*User, error, error)
 	Store(*User) (string, error)
 	Update(*User) error
 	DeleteByUUID(string) error
@@ -19,12 +19,16 @@ type userRepositoryMySQL struct {
 	db *gorm.DB
 }
 
-func (rr *userRepositoryMySQL) FindByUUID(uuid string) (*User, error) {
+func (rr *userRepositoryMySQL) FindByUUID(uuid string) (*User, error, error) {
 	p := &User{UUID: uuid}
 	if err := rr.db.Preload("Addresses").Find(p).Error; err != nil {
-		return nil, fmt.Errorf("findByID error: %w (uuid: %s)", err, uuid)
+		if err == gorm.ErrRecordNotFound {
+			return nil, err, nil
+		} else {
+			return nil, nil, fmt.Errorf("findByID error: %w (uuid: %s)", err, uuid)
+		}
 	}
-	return p, nil
+	return p, nil, nil
 }
 
 func (rr *userRepositoryMySQL) Store(u *User) (string, error) {
