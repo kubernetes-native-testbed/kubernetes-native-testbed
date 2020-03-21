@@ -52,6 +52,20 @@ func init() {
 		kvsPort = defaultKVSPort
 		log.Printf("kvsPort parse error: %v", err)
 	}
+	if orderHost = os.Getenv("ORDER_HOST"); orderHost == "" {
+		orderHost = defaultOrderHost
+	}
+	if orderPort, err = strconv.Atoi(os.Getenv("ORDER_PORT")); err != nil {
+		orderPort = defaultOrderPort
+		log.Printf("orderPort parse error: %v", err)
+	}
+	if productHost = os.Getenv("PRODUCT_HOST"); productHost == "" {
+		productHost = defaultProductHost
+	}
+	if productPort, err = strconv.Atoi(os.Getenv("PRODUCT_PORT")); err != nil {
+		productPort = defaultProductPort
+		log.Printf("productPort parse error: %v", err)
+	}
 }
 
 type cartAPIServer struct {
@@ -232,12 +246,14 @@ func main() {
 	defer closeCr()
 	log.Printf("successed to connect to kvs")
 
-	orderConn, err := grpc.Dial(fmt.Sprintf("%s:%d", orderHost, orderPort), grpc.WithInsecure())
+	orderEndpoint := fmt.Sprintf("%s:%d", orderHost, orderPort)
+	orderConn, err := grpc.Dial(orderEndpoint, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	}
 	orderClient := orderpb.NewOrderAPIClient(orderConn)
-	productConn, err := grpc.Dial(fmt.Sprintf("%s:%d", productHost, productPort), grpc.WithInsecure())
+	productEndpoint := fmt.Sprintf("%s:%d", productHost, productPort)
+	productConn, err := grpc.Dial(productEndpoint, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -245,9 +261,11 @@ func main() {
 
 	s := grpc.NewServer()
 	api := &cartAPIServer{
-		cartRepository: cr,
-		orderClient:    orderClient,
-		productClient:  productClient,
+		cartRepository:  cr,
+		orderClient:     orderClient,
+		orderEndpoint:   orderEndpoint,
+		productClient:   productClient,
+		productEndpoint: productEndpoint,
 	}
 	pb.RegisterCartAPIServer(s, api)
 
