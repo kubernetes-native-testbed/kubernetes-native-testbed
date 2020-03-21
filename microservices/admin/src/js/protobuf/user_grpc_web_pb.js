@@ -390,5 +390,245 @@ proto.userpb.UserAPIPromiseClient.prototype.delete =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.userpb.IsExistsRequest,
+ *   !proto.userpb.IsExistsResponse>}
+ */
+const methodDescriptor_UserAPI_IsExists = new grpc.web.MethodDescriptor(
+  '/userpb.UserAPI/IsExists',
+  grpc.web.MethodType.UNARY,
+  proto.userpb.IsExistsRequest,
+  proto.userpb.IsExistsResponse,
+  /**
+   * @param {!proto.userpb.IsExistsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.userpb.IsExistsResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.userpb.IsExistsRequest,
+ *   !proto.userpb.IsExistsResponse>}
+ */
+const methodInfo_UserAPI_IsExists = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.userpb.IsExistsResponse,
+  /**
+   * @param {!proto.userpb.IsExistsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.userpb.IsExistsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.userpb.IsExistsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.userpb.IsExistsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.userpb.IsExistsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.userpb.UserAPIClient.prototype.isExists =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/userpb.UserAPI/IsExists',
+      request,
+      metadata || {},
+      methodDescriptor_UserAPI_IsExists,
+      callback);
+};
+
+
+/**
+ * @param {!proto.userpb.IsExistsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.userpb.IsExistsResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.userpb.UserAPIPromiseClient.prototype.isExists =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/userpb.UserAPI/IsExists',
+      request,
+      metadata || {},
+      methodDescriptor_UserAPI_IsExists);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.userpb.AuthenticationRequest,
+ *   !proto.userpb.AuthenticationResponse>}
+ */
+const methodDescriptor_UserAPI_Authentication = new grpc.web.MethodDescriptor(
+  '/userpb.UserAPI/Authentication',
+  grpc.web.MethodType.UNARY,
+  proto.userpb.AuthenticationRequest,
+  proto.userpb.AuthenticationResponse,
+  /**
+   * @param {!proto.userpb.AuthenticationRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.userpb.AuthenticationResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.userpb.AuthenticationRequest,
+ *   !proto.userpb.AuthenticationResponse>}
+ */
+const methodInfo_UserAPI_Authentication = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.userpb.AuthenticationResponse,
+  /**
+   * @param {!proto.userpb.AuthenticationRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.userpb.AuthenticationResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.userpb.AuthenticationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.userpb.AuthenticationResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.userpb.AuthenticationResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.userpb.UserAPIClient.prototype.authentication =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/userpb.UserAPI/Authentication',
+      request,
+      metadata || {},
+      methodDescriptor_UserAPI_Authentication,
+      callback);
+};
+
+
+/**
+ * @param {!proto.userpb.AuthenticationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.userpb.AuthenticationResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.userpb.UserAPIPromiseClient.prototype.authentication =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/userpb.UserAPI/Authentication',
+      request,
+      metadata || {},
+      methodDescriptor_UserAPI_Authentication);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.userpb.IsValidTokenRequest,
+ *   !proto.userpb.IsValidTokenResponse>}
+ */
+const methodDescriptor_UserAPI_IsValidToken = new grpc.web.MethodDescriptor(
+  '/userpb.UserAPI/IsValidToken',
+  grpc.web.MethodType.UNARY,
+  proto.userpb.IsValidTokenRequest,
+  proto.userpb.IsValidTokenResponse,
+  /**
+   * @param {!proto.userpb.IsValidTokenRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.userpb.IsValidTokenResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.userpb.IsValidTokenRequest,
+ *   !proto.userpb.IsValidTokenResponse>}
+ */
+const methodInfo_UserAPI_IsValidToken = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.userpb.IsValidTokenResponse,
+  /**
+   * @param {!proto.userpb.IsValidTokenRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.userpb.IsValidTokenResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.userpb.IsValidTokenRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.userpb.IsValidTokenResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.userpb.IsValidTokenResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.userpb.UserAPIClient.prototype.isValidToken =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/userpb.UserAPI/IsValidToken',
+      request,
+      metadata || {},
+      methodDescriptor_UserAPI_IsValidToken,
+      callback);
+};
+
+
+/**
+ * @param {!proto.userpb.IsValidTokenRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.userpb.IsValidTokenResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.userpb.UserAPIPromiseClient.prototype.isValidToken =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/userpb.UserAPI/IsValidToken',
+      request,
+      metadata || {},
+      methodDescriptor_UserAPI_IsValidToken);
+};
+
+
 module.exports = proto.userpb;
 
