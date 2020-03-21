@@ -1,4 +1,4 @@
-package main
+package cart
 
 import (
 	"context"
@@ -13,11 +13,11 @@ import (
 	"github.com/tikv/client-go/txnkv/kv"
 )
 
-type cartRepository interface {
-	findByUUID(string) (*Cart, bool, error)
-	store(*Cart) (string, error)
-	update(*Cart) error
-	deleteByUUID(string) error
+type CartRepository interface {
+	FindByUUID(string) (*Cart, bool, error)
+	Store(*Cart) (string, error)
+	Update(*Cart) error
+	DeleteByUUID(string) error
 }
 
 type cartRepositoryTiKV struct {
@@ -25,7 +25,7 @@ type cartRepositoryTiKV struct {
 	ctx    context.Context
 }
 
-func (cr *cartRepositoryTiKV) findByUUID(uuid string) (*Cart, bool, error) {
+func (cr *cartRepositoryTiKV) FindByUUID(uuid string) (*Cart, bool, error) {
 	tx, err := cr.client.Begin(cr.ctx)
 	if err != nil {
 		return nil, false, err
@@ -70,7 +70,7 @@ func (cr *cartRepositoryTiKV) findByUUID(uuid string) (*Cart, bool, error) {
 	return &Cart{UserUUID: uuid, CartProducts: productMap}, false, nil
 }
 
-func (cr *cartRepositoryTiKV) store(cart *Cart) (string, error) {
+func (cr *cartRepositoryTiKV) Store(cart *Cart) (string, error) {
 	tx, err := cr.client.Begin(cr.ctx)
 	if err != nil {
 		return "", err
@@ -98,14 +98,14 @@ func (cr *cartRepositoryTiKV) store(cart *Cart) (string, error) {
 	return cart.UserUUID, nil
 }
 
-func (cr *cartRepositoryTiKV) update(cart *Cart) error {
-	if _, err := cr.store(cart); err != nil {
+func (cr *cartRepositoryTiKV) Update(cart *Cart) error {
+	if _, err := cr.Store(cart); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (cr *cartRepositoryTiKV) deleteByUUID(uuid string) error {
+func (cr *cartRepositoryTiKV) DeleteByUUID(uuid string) error {
 	tx, err := cr.client.Begin(cr.ctx)
 	if err != nil {
 		return err
@@ -122,18 +122,18 @@ func (cr *cartRepositoryTiKV) deleteByUUID(uuid string) error {
 	return nil
 }
 
-type cartRepositoryTiKVConfig struct {
-	ctx       context.Context
-	pdAddress string
-	pdPort    int
+type CartRepositoryTiKVConfig struct {
+	Ctx       context.Context
+	PdAddress string
+	PdPort    int
 }
 
-func (c *cartRepositoryTiKVConfig) connect() (cartRepository, func() error, error) {
-	client, err := txnkv.NewClient(c.ctx, []string{fmt.Sprintf("%s:%d", c.pdAddress, c.pdPort)}, config.Default())
+func (c *CartRepositoryTiKVConfig) Connect() (CartRepository, func() error, error) {
+	client, err := txnkv.NewClient(c.Ctx, []string{fmt.Sprintf("%s:%d", c.PdAddress, c.PdPort)}, config.Default())
 	if err != nil {
 		return nil, nil, err
 	}
 
-	return &cartRepositoryTiKV{client: client, ctx: c.ctx}, client.Close, nil
+	return &cartRepositoryTiKV{client: client, ctx: c.Ctx}, client.Close, nil
 
 }

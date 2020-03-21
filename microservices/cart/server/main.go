@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/golang/protobuf/ptypes/empty"
+	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart/protobuf"
 	orderpb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order/protobuf"
 	productpb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product/protobuf"
@@ -54,7 +55,7 @@ func init() {
 }
 
 type cartAPIServer struct {
-	cartRepository  cartRepository
+	cartRepository  cart.CartRepository
 	orderClient     orderpb.OrderAPIClient
 	orderEndpoint   string
 	productClient   productpb.ProductAPIClient
@@ -63,27 +64,27 @@ type cartAPIServer struct {
 
 func (s *cartAPIServer) Show(ctx context.Context, req *pb.ShowRequest) (*pb.ShowResponse, error) {
 	userUUID := req.GetUserUUID()
-	cart, notfound, err := s.cartRepository.findByUUID(userUUID)
+	c, notfound, err := s.cartRepository.FindByUUID(userUUID)
 	if err != nil {
 		return nil, err
 	}
 	if notfound {
 		return nil, fmt.Errorf("cart is not found for %s", userUUID)
 	}
-	log.Printf("show %s", cart)
-	return &pb.ShowResponse{Cart: convertToCartProto(cart)}, nil
+	log.Printf("show %s", c)
+	return &pb.ShowResponse{Cart: cart.ConvertToCartProto(c)}, nil
 }
 
 func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Empty, error) {
-	additionalCart := convertToCart(req.GetCart())
+	additionalCart := cart.ConvertToCart(req.GetCart())
 	log.Printf("add %s", additionalCart)
-	cart, notfound, err := s.cartRepository.findByUUID(additionalCart.UserUUID)
+	cart, notfound, err := s.cartRepository.FindByUUID(additionalCart.UserUUID)
 	if err != nil {
 		return nil, err
 	}
 	if notfound {
 		log.Printf("store cart for new record")
-		if _, err := s.cartRepository.store(additionalCart); err != nil {
+		if _, err := s.cartRepository.Store(additionalCart); err != nil {
 			return nil, err
 		}
 		return &empty.Empty{}, nil
@@ -101,7 +102,7 @@ func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Emp
 	}
 
 	log.Printf("update cart: %s", cart)
-	if err := s.cartRepository.update(cart); err != nil {
+	if err := s.cartRepository.Update(cart); err != nil {
 		return nil, err
 	}
 
@@ -109,9 +110,9 @@ func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Emp
 }
 
 func (s *cartAPIServer) Remove(ctx context.Context, req *pb.RemoveRequest) (*empty.Empty, error) {
-	additionalCart := convertToCart(req.GetCart())
+	additionalCart := cart.ConvertToCart(req.GetCart())
 	log.Printf("remove %s", additionalCart)
-	cart, notfound, err := s.cartRepository.findByUUID(additionalCart.UserUUID)
+	cart, notfound, err := s.cartRepository.FindByUUID(additionalCart.UserUUID)
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +134,7 @@ func (s *cartAPIServer) Remove(ctx context.Context, req *pb.RemoveRequest) (*emp
 	}
 
 	log.Printf("update cart: %s", cart)
-	if err := s.cartRepository.update(cart); err != nil {
+	if err := s.cartRepository.Update(cart); err != nil {
 		return nil, err
 	}
 
@@ -144,13 +145,16 @@ func (s *cartAPIServer) Commit(ctx context.Context, req *pb.CommitRequest) (*pb.
 	retry := 1
 	orderedProducts := make([]*orderpb.OrderedProduct, 0, len(req.GetCart().GetCartProducts()))
 
-	cart := convertToCart(req.GetCart())
+	cart := cart.ConvertToCart(req.GetCart())
 	for productUUID, count := range cart.CartProducts {
 		var err error
 		var productResp *productpb.GetResponse
 		for i := 0; i < retry; i++ {
 			productResp, err = s.productClient.Get(ctx, &productpb.GetRequest{UUID: productUUID})
 			if err != nil {
+				if err := s.recoverMicroserviceConnection(s.productClient); err != nil {
+					return nil, err
+				}
 				continue
 			}
 		}
@@ -178,6 +182,9 @@ func (s *cartAPIServer) Commit(ctx context.Context, req *pb.CommitRequest) (*pb.
 	for i := 0; i < retry; i++ {
 		orderResp, err = s.orderClient.Set(ctx, orderReq)
 		if err != nil {
+			if err := s.recoverMicroserviceConnection(s.productClient); err != nil {
+				return nil, err
+			}
 			continue
 		}
 	}
@@ -213,12 +220,12 @@ func main() {
 	}
 	log.Printf("listen on %s", defaultBindAddr)
 
-	crConfig := cartRepositoryTiKVConfig{
-		ctx:       context.Background(),
-		pdAddress: kvsHost,
-		pdPort:    kvsPort,
+	crConfig := cart.CartRepositoryTiKVConfig{
+		Ctx:       context.Background(),
+		PdAddress: kvsHost,
+		PdPort:    kvsPort,
 	}
-	cr, closeCr, err := crConfig.connect()
+	cr, closeCr, err := crConfig.Connect()
 	if err != nil {
 		log.Fatalf("failed to connect to kvs: %v (config=%#v)", err, crConfig)
 	}

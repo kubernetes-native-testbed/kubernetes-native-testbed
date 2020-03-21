@@ -1,4 +1,4 @@
-package main
+package cart
 
 import (
 	"encoding/json"
@@ -16,7 +16,7 @@ func (cart *Cart) String() string {
 	return string(b)
 }
 
-func convertToCart(pbCart *pb.Cart) *Cart {
+func ConvertToCart(pbCart *pb.Cart) *Cart {
 	pbCartProducts := pbCart.GetCartProducts()
 	cartProducts := make(map[string]int, len(pbCartProducts))
 	for k, v := range pbCartProducts {
@@ -28,7 +28,7 @@ func convertToCart(pbCart *pb.Cart) *Cart {
 	}
 }
 
-func convertToCartProto(cart *Cart) *pb.Cart {
+func ConvertToCartProto(cart *Cart) *pb.Cart {
 	pbCartProducts := make(map[string]int32, len(cart.CartProducts))
 	for k, v := range cart.CartProducts {
 		pbCartProducts[k] = int32(v)
