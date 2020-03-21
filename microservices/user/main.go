@@ -189,6 +189,18 @@ func (s *userAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*emp
 	return &empty.Empty{}, nil
 }
 
+func (s *userAPIServer) IsExists(ctx context.Context, req *pb.IsExistsRequest) (*pb.IsExistsResponse, error) {
+	return nil, nil
+}
+
+func (s *userAPIServer) Authentication(ctx context.Context, req *pb.AuthenticationRequest) (*pb.AuthenticationResponse, error) {
+	return nil, nil
+}
+
+func (s *userAPIServer) IsValidToken(ctx context.Context, req *pb.IsValidTokenRequest) (*pb.IsValidTokenResponse, error) {
+	return nil, nil
+}
+
 func main() {
 	lis, err := net.Listen("tcp", defaultBindAddr)
 	if err != nil {
