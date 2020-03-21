@@ -17,3 +17,4 @@ COPY --from=builder2 /bin/grpc_health_probe /bin/grpc_health_probe
 USER nobody
 ENTRYPOINT ["./comment"]
 
+
