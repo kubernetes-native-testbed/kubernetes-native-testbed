@@ -203,8 +203,9 @@ proto.deliverystatuspb.DeliveryStatus.prototype.toObject = function(opt_includeI
 proto.deliverystatuspb.DeliveryStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
     orderuuid: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    status: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    inquirynumber: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    useruuid: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    status: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    inquirynumber: jspb.Message.getFieldWithDefault(msg, 4, ""),
     createdat: (f = msg.getCreatedat()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     updatedat: (f = msg.getUpdatedat()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     deletedat: (f = msg.getDeletedat()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
@@ -249,24 +250,28 @@ proto.deliverystatuspb.DeliveryStatus.deserializeBinaryFromReader = function(msg
       msg.setOrderuuid(value);
       break;
     case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUseruuid(value);
+      break;
+    case 3:
       var value = /** @type {number} */ (reader.readInt32());
       msg.setStatus(value);
       break;
-    case 3:
+    case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setInquirynumber(value);
-      break;
-    case 4:
-      var value = new google_protobuf_timestamp_pb.Timestamp;
-      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
-      msg.setCreatedat(value);
       break;
     case 5:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
-      msg.setUpdatedat(value);
+      msg.setCreatedat(value);
       break;
     case 6:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setUpdatedat(value);
+      break;
+    case 7:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setDeletedat(value);
@@ -307,29 +312,28 @@ proto.deliverystatuspb.DeliveryStatus.serializeBinaryToWriter = function(message
       f
     );
   }
+  f = message.getUseruuid();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
   f = message.getStatus();
   if (f !== 0) {
     writer.writeInt32(
-      2,
+      3,
       f
     );
   }
   f = message.getInquirynumber();
   if (f.length > 0) {
     writer.writeString(
-      3,
+      4,
       f
     );
   }
   f = message.getCreatedat();
-  if (f != null) {
-    writer.writeMessage(
-      4,
-      f,
-      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
-    );
-  }
-  f = message.getUpdatedat();
   if (f != null) {
     writer.writeMessage(
       5,
@@ -337,10 +341,18 @@ proto.deliverystatuspb.DeliveryStatus.serializeBinaryToWriter = function(message
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
-  f = message.getDeletedat();
+  f = message.getUpdatedat();
   if (f != null) {
     writer.writeMessage(
       6,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
+  f = message.getDeletedat();
+  if (f != null) {
+    writer.writeMessage(
+      7,
       f,
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
@@ -364,48 +376,63 @@ proto.deliverystatuspb.DeliveryStatus.prototype.setOrderuuid = function(value) {
 
 
 /**
- * optional int32 status = 2;
+ * optional string userUUID = 2;
+ * @return {string}
+ */
+proto.deliverystatuspb.DeliveryStatus.prototype.getUseruuid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.deliverystatuspb.DeliveryStatus.prototype.setUseruuid = function(value) {
+  jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional int32 status = 3;
  * @return {number}
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.getStatus = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /** @param {number} value */
 proto.deliverystatuspb.DeliveryStatus.prototype.setStatus = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
+  jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
 /**
- * optional string inquiryNumber = 3;
+ * optional string inquiryNumber = 4;
  * @return {string}
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.getInquirynumber = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
 /** @param {string} value */
 proto.deliverystatuspb.DeliveryStatus.prototype.setInquirynumber = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
 /**
- * optional google.protobuf.Timestamp createdAt = 4;
+ * optional google.protobuf.Timestamp createdAt = 5;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.getCreatedat = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 4));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 5));
 };
 
 
 /** @param {?proto.google.protobuf.Timestamp|undefined} value */
 proto.deliverystatuspb.DeliveryStatus.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 4, value);
+  jspb.Message.setWrapperField(this, 5, value);
 };
 
 
@@ -422,23 +449,23 @@ proto.deliverystatuspb.DeliveryStatus.prototype.clearCreatedat = function() {
  * @return {boolean}
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.hasCreatedat = function() {
-  return jspb.Message.getField(this, 4) != null;
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
 /**
- * optional google.protobuf.Timestamp updatedAt = 5;
+ * optional google.protobuf.Timestamp updatedAt = 6;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.getUpdatedat = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 5));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 6));
 };
 
 
 /** @param {?proto.google.protobuf.Timestamp|undefined} value */
 proto.deliverystatuspb.DeliveryStatus.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 5, value);
+  jspb.Message.setWrapperField(this, 6, value);
 };
 
 
@@ -455,23 +482,23 @@ proto.deliverystatuspb.DeliveryStatus.prototype.clearUpdatedat = function() {
  * @return {boolean}
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.hasUpdatedat = function() {
-  return jspb.Message.getField(this, 5) != null;
+  return jspb.Message.getField(this, 6) != null;
 };
 
 
 /**
- * optional google.protobuf.Timestamp deletedAt = 6;
+ * optional google.protobuf.Timestamp deletedAt = 7;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.getDeletedat = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 6));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 7));
 };
 
 
 /** @param {?proto.google.protobuf.Timestamp|undefined} value */
 proto.deliverystatuspb.DeliveryStatus.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 6, value);
+  jspb.Message.setWrapperField(this, 7, value);
 };
 
 
@@ -488,7 +515,7 @@ proto.deliverystatuspb.DeliveryStatus.prototype.clearDeletedat = function() {
  * @return {boolean}
  */
 proto.deliverystatuspb.DeliveryStatus.prototype.hasDeletedat = function() {
-  return jspb.Message.getField(this, 6) != null;
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
