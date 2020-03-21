@@ -464,6 +464,37 @@
         <button class="uk-button uk-button-primary" v-on:click="addCart">Add</button>
         <button class="uk-button uk-button-primary" v-on:click="removeCart">Remove</button>
         <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+        </br>
+
+        <hr class="uk-divider-small">
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="commitform.userUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">AddressUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="commitform.addressUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">PaymentInfoUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="commitform.paymentInfoUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="commitCart">Commit</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearCommitForm">Clear</button>
+
       </div>
       <hr class="uk-divider-small">
       <label>Response</label><br/>
