@@ -8,3 +8,4 @@ COPY --from=builder /app .
 USER nobody
 ENTRYPOINT ["./app"]
 
+
