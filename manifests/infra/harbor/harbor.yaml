@@ -1306,7 +1306,7 @@ spec:
         image: busybox:latest
         imagePullPolicy: IfNotPresent
         command: ["/bin/sh"]
-        args: ["-c", "chown -R 999:999 /var/lib/postgresql/data"]
+        args: ["-c", "chown -R 999:999 /var/lib/postgresql/data; chmod 0700 /var/lib/postgresql/data"]
         volumeMounts:
         - name: database-data
           mountPath: /var/lib/postgresql/data
