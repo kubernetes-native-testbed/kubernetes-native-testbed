@@ -8,6 +8,7 @@ service CartAPI {
 	rpc Show(ShowRequest) returns (ShowResponse) {}
 	rpc Add(AddRequest) returns (google.protobuf.Empty) {}
     rpc Remove(RemoveRequest) returns (google.protobuf.Empty) {}
+	rpc Commit(CommitRequest) returns (CommitResponse) {}
 }
 
 message Cart {
@@ -29,4 +30,14 @@ message AddRequest {
 
 message RemoveRequest {
 	Cart cart = 1;
+}
+
+message CommitRequest {
+	Cart cart = 1;
+	string addressUUID = 2;
+	string paymentInfoUUID = 3;
+}
+
+message CommitResponse {
+	string orderUUID = 1;
 }
