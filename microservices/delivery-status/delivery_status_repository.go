@@ -25,11 +25,11 @@ type deliveryStatusRepositoryCassandra struct {
 }
 
 func (dr *deliveryStatusRepositoryCassandra) findByUUID(uuid string) (*DeliveryStatus, error) {
-	var orderUUID, inquiryNumber string
+	var orderUUID, userUUID, inquiryNumber string
 	var status int
 	var createdAt, updatedAt, deletedAt time.Time
-	stmt := fmt.Sprintf(`SELECT order_uuid, status, inquiry_number, created_at, updated_at, deleted_at FROM %s.%s WHERE order_uuid=?`, dr.keyspace, dr.table)
-	if err := dr.session.Query(stmt, uuid).RetryPolicy(&gocql.SimpleRetryPolicy{NumRetries: 3}).Scan(&orderUUID, &status, &inquiryNumber, &createdAt, &updatedAt, &deletedAt); err != nil {
+	stmt := fmt.Sprintf(`SELECT order_uuid, user_uuid, status, inquiry_number, created_at, updated_at, deleted_at FROM %s.%s WHERE order_uuid=?`, dr.keyspace, dr.table)
+	if err := dr.session.Query(stmt, uuid).RetryPolicy(&gocql.SimpleRetryPolicy{NumRetries: 3}).Scan(&orderUUID, &userUUID, &status, &inquiryNumber, &createdAt, &updatedAt, &deletedAt); err != nil {
 		return nil, err
 	}
 
@@ -39,6 +39,7 @@ func (dr *deliveryStatusRepositoryCassandra) findByUUID(uuid string) (*DeliveryS
 
 	return &DeliveryStatus{
 		OrderUUID:     orderUUID,
+		UserUUID:      userUUID,
 		Status:        Status(status),
 		InquiryNumber: inquiryNumber,
 		CreatedAt:     createdAt,
@@ -48,16 +49,16 @@ func (dr *deliveryStatusRepositoryCassandra) findByUUID(uuid string) (*DeliveryS
 }
 
 func (dr *deliveryStatusRepositoryCassandra) store(r *DeliveryStatus) (string, error) {
-	stmt := fmt.Sprintf(`INSERT INTO %s.%s(order_uuid, status, inquiry_number, created_at, updated_at) values (?, ?, ?, ?, ?)`, dr.keyspace, dr.table)
-	if err := dr.session.Query(stmt, r.OrderUUID, r.Status, r.InquiryNumber, time.Now(), time.Now()).RetryPolicy(&gocql.SimpleRetryPolicy{NumRetries: 3}).Exec(); err != nil {
+	stmt := fmt.Sprintf(`INSERT INTO %s.%s(order_uuid, user_uuid, status, inquiry_number, created_at, updated_at) values (?, ?, ?, ?, ?, ?)`, dr.keyspace, dr.table)
+	if err := dr.session.Query(stmt, r.OrderUUID, r.UserUUID, r.Status, r.InquiryNumber, time.Now(), time.Now()).RetryPolicy(&gocql.SimpleRetryPolicy{NumRetries: 3}).Exec(); err != nil {
 		return "", err
 	}
 	return r.OrderUUID, nil
 }
 
 func (dr *deliveryStatusRepositoryCassandra) update(r *DeliveryStatus) error {
-	stmt := fmt.Sprintf(`UPDATE %s.%s SET status=?, inquiry_number=?, updated_at=? WHERE order_uuid=?`, dr.keyspace, dr.table)
-	if err := dr.session.Query(stmt, r.Status, r.InquiryNumber, time.Now(), r.OrderUUID).RetryPolicy(&gocql.SimpleRetryPolicy{NumRetries: 3}).Exec(); err != nil {
+	stmt := fmt.Sprintf(`UPDATE %s.%s SET user_uuid=?, status=?, inquiry_number=?, updated_at=? WHERE order_uuid=?`, dr.keyspace, dr.table)
+	if err := dr.session.Query(stmt, r.UserUUID, r.Status, r.InquiryNumber, time.Now(), r.OrderUUID).RetryPolicy(&gocql.SimpleRetryPolicy{NumRetries: 3}).Exec(); err != nil {
 		return err
 	}
 	return nil
@@ -92,6 +93,7 @@ func (dr *deliveryStatusRepositoryCassandra) initDB() error {
 		log.Printf("create table %s", dr.table)
 		tableColumns := []string{
 			"order_uuid text PRIMARY KEY",
+			"user_uuid text",
 			"status int",
 			"inquiry_number text",
 			"created_at timestamp",
