@@ -317,6 +317,9 @@ func main() {
 		Retry:    5,
 	}
 	kafka, closeKafka, err := kafkaConfig.Connect()
+	if err != nil {
+		log.Fatalf("failed to create connection to point queue: %v (config=%#v)", err, kafkaConfig)
+	}
 	defer closeKafka()
 	log.Printf("succeed to connect to point queue")
 

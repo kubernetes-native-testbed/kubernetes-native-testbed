@@ -71,10 +71,7 @@ spec:
             - name: POINT_QUEUE_USER
               value: point-user
             - name: POINT_QUEUE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: point-user
-                  key: user.password
+              value: qZ1OPWVDNE85
           resources:
             requests:
               cpu: 100m
