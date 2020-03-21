@@ -27,6 +27,8 @@ var (
 	dbName     string
 	dbHost     string
 	dbPort     int
+
+	privateKey string
 )
 
 const (
@@ -57,6 +59,9 @@ func init() {
 	if dbPort, err = strconv.Atoi(os.Getenv("DB_PORT")); err != nil {
 		dbPort = defaultDBPort
 		log.Printf("dbPort parse error: %v", err)
+	}
+	if privateKey = os.Getenv("PRIVATE_KEY"); privateKey == "" {
+		log.Fatal("PRIVATE_KEY is required")
 	}
 }
 
@@ -208,11 +213,36 @@ func (s *userAPIServer) IsExists(ctx context.Context, req *pb.IsExistsRequest) (
 }
 
 func (s *userAPIServer) Authentication(ctx context.Context, req *pb.AuthenticationRequest) (*pb.AuthenticationResponse, error) {
-	return nil, nil
-}
+	uuid := req.GetUUID()
+	log.Printf("authentication: {\"uuid\":\"%s\"}", uuid)
+	u, nferr, err := s.userRepository.FindByUUID(uuid)
+	if err != nil {
+		return nil, err
+	}
+	if nferr != nil {
+		return nil, nferr
+	}
 
-func (s *userAPIServer) IsValidToken(ctx context.Context, req *pb.IsValidTokenRequest) (*pb.IsValidTokenResponse, error) {
-	return nil, nil
+	if u.PasswordHash != req.GetPasswordHash() {
+		return nil, fmt.Errorf("user_uuid or password is not match (userUUID=%s)", uuid)
+	}
+
+	signKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privateKey))
+	if err != nil {
+		return nil, err
+	}
+
+	token := jwt.New(jwt.SigningMethodES512)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["user_uuid"] = uuid
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+
+	tokenString, err := token.SignedString(signKey)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.AuthenticationResponse{Token: tokenString}, nil
 }
 
 func main() {
