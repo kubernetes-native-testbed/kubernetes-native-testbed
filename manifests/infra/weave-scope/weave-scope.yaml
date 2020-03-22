@@ -190,6 +190,13 @@ items:
               env: []
               image: 'docker.io/weaveworks/scope:1.12.0'
               imagePullPolicy: IfNotPresent
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi
               ports:
                 - containerPort: 4040
                   protocol: TCP
@@ -274,6 +281,13 @@ items:
               env: []
               image: 'docker.io/weaveworks/scope:1.12.0'
               imagePullPolicy: IfNotPresent
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi
               ports:
                 - containerPort: 4041
                   protocol: TCP
@@ -335,8 +349,11 @@ items:
               imagePullPolicy: IfNotPresent
               resources:
                 requests:
-                  cpu: 100m
-                  memory: 100Mi
+                  cpu: 50m
+                  memory: 128Mi
+                limits:
+                  cpu: 50m
+                  memory: 128Mi
               securityContext:
                 privileged: true
               volumeMounts:
