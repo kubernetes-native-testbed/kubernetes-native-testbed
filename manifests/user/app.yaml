@@ -92,6 +92,10 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: jwtkey
+  namespace: user
+  labels:
+    service: user
+    role: app
 stringData:
   id_ecdsa_521: |
     -----BEGIN EC PRIVATE KEY-----

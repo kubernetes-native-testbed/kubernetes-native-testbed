@@ -8,6 +8,7 @@ export const order = new Vue({
     endpoint: window.location.protocol + '//' + window.location.host + "/deliverystatus",
     form: {
       orderUUID: '',
+      userUUID: '',
       status: '',
       inquiryNumber: '',
     },
@@ -23,6 +24,7 @@ export const order = new Vue({
   methods: {
     clearForm: function() {
       this.form.orderUUID = '';
+      this.form.userUUID = '';
       this.form.status = '';
       this.form.inquiryNumber = '';
     },
@@ -42,6 +44,7 @@ export const order = new Vue({
         } else {
           let s = new Object();
           s.orderUUID = resp.getDeliverystatus().getOrderuuid();
+          s.userUUID = resp.getDeliverystatus().getUseruuid();
           s.status = resp.getDeliverystatus().getStatus();
           s.inquiryNumber = resp.getDeliverystatus().getInquirynumber();
           s.createdAt = resp.getDeliverystatus().getCreatedat();
@@ -57,6 +60,7 @@ export const order = new Vue({
       const req = new SetRequest();
       const s = new DeliveryStatus();
       s.setOrderuuid(this.form.orderUUID);
+      s.setUseruuid(this.form.userUUID);
       s.setStatus(Number(this.form.status));
       s.setInquirynumber(this.form.inquiryNumber);
       req.setDeliverystatus(s);
@@ -77,6 +81,7 @@ export const order = new Vue({
       const req = new UpdateRequest();
       const s = new DeliveryStatus();
       s.setOrderuuid(this.form.orderUUID);
+      s.setUseruuid(this.form.userUUID);
       s.setStatus(Number(this.form.status));
       s.setInquirynumber(this.form.inquiryNumber);
       req.setDeliverystatus(s);

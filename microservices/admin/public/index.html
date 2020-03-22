@@ -80,6 +80,7 @@
         <button class="uk-button uk-button-primary" v-on:click="setProduct">Set</button>
         <button class="uk-button uk-button-primary" v-on:click="updateProduct">Update</button>
         <button class="uk-button uk-button-primary" v-on:click="deleteProduct">Delete</button>
+        <button class="uk-button uk-button-primary" v-on:click="isExistsProduct">ExistCheck</button>
         <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
       </div>
       <hr class="uk-divider-small">
@@ -141,9 +142,9 @@
         </br>
 
         <div uk-grid>
-          <div class="uk-width-1-4"><label class="uk-align-right">PasswordHash:</label></div>
+          <div class="uk-width-1-4"><label class="uk-align-right">Password:</label></div>
           <div class="uk-width-3-4">
-            <input class="uk-input" v-model="form.passwordHash" type="text" placeholder="PASSWORD">
+            <input class="uk-input" v-model="form.password" type="text" placeholder="PASSWORD">
           </div>
         </div>
         </br>
@@ -169,8 +170,31 @@
         <button class="uk-button uk-button-primary" v-on:click="setUser">Set</button>
         <button class="uk-button uk-button-primary" v-on:click="updateUser">Update</button>
         <button class="uk-button uk-button-primary" v-on:click="deleteUser">Delete</button>
+        <button class="uk-button uk-button-primary" v-on:click="isExistsUser">ExistCheck</button>
         <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+
+        <hr class="uk-divider-small">
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="authform.uuid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Password:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="authform.password" type="text" placeholder="xxxxx">
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="authUser">Authentication</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearAuthForm">Clear</button>
       </div>
+
       <hr class="uk-divider-small">
       <label>Response</label><br/>
       <div class="output">
@@ -390,6 +414,14 @@
           <div class="uk-width-1-4"><label class="uk-align-right">OrderUUID:</label></div>
           <div class="uk-width-3-4">
             <input class="uk-input" v-model="form.orderUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
           </div>
         </div>
         </br>

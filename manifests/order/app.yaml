@@ -72,6 +72,14 @@ spec:
               value: point-user
             - name: POINT_QUEUE_PASSWORD
               value: qZ1OPWVDNE85
+            - name: USER_HOST
+              value: user.user.svc.cluster.local
+            - name: USER_PORT
+              value: 8080
+            - name: PAYMENT_INFO_HOST
+              value: payment-info.payment-info.svc.cluster.local
+            - name: PAYMENT_INFO_PORT
+              value: 8080
           resources:
             requests:
               cpu: 100m

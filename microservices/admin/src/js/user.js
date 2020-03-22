@@ -1,4 +1,4 @@
-const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, User, Address} = require('./protobuf/user_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, IsExistsRequest, IsExistsResponse, AuthenticationRequest, AuthenticationResponse, User, Address} = require('./protobuf/user_pb.js');
 
 const {UserAPIClient} = require('./protobuf/user_grpc_web_pb.js');
 
@@ -12,8 +12,12 @@ export const user = new Vue({
       firstName: '',
       lastName: '',
       age: null,
-      passwordHash: '',
+      password: '',
       addresses: [],
+    },
+    authform: {
+      uuid: '',
+      password: '',
     },
     resp: {
       user: [],
@@ -29,13 +33,17 @@ export const user = new Vue({
       this.form.addresses.push({zipCode:'', country: '', state: '', city: '', addressLine: '', disabled: null});
     },
     clearForm: function() {
-      this.form.uuid = '',
-      this.form.username = '',
-      this.form.firstName = '',
-      this.form.lastName = '',
-      this.form.age = null,
-      this.form.passwordHash = '',
+      this.form.uuid = '';
+      this.form.username = '';
+      this.form.firstName = '';
+      this.form.lastName = '';
+      this.form.age = null;
+      this.form.password = '';
       this.form.addresses = [];
+    },
+    clearAuthForm: function() {
+      this.authform.uuid = '';
+      this.authform.password = '';
     },
     clearResponseField: function() {
       this.resp.user = [];
@@ -75,7 +83,7 @@ export const user = new Vue({
       u.setFirstname(this.form.firstName);
       u.setLastname(this.form.lastName);
       u.setAge(this.form.age);
-      u.setPasswordhash(this.form.passwordHash);
+      u.setPassword(this.form.password);
 
       var addresses = []
       this.form.addresses.forEach(function(v) {
@@ -111,7 +119,7 @@ export const user = new Vue({
       u.setFirstname(this.form.firstName);
       u.setLastname(this.form.lastName);
       u.setAge(this.form.age);
-      u.setPasswordhash(this.form.passwordHash);
+      u.setPassword(this.form.password);
       u.setAddressesList(this.form.addresses);
       req.setUser(u);
       this.client.update(req, {}, (err, resp) => {
@@ -132,6 +140,40 @@ export const user = new Vue({
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    isExistsUser: function() {
+      this.clearResponseField();
+      const req = new IsExistsRequest();
+      req.setUuid(this.form.uuid);
+      this.client.isExists(req, {}, (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let u = new Object();
+          u.userUUID = this.form.uuid;
+          u.isExists = resp.getIsexists();
+          this.resp.user.push(u);
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    authUser: function() {
+      this.clearResponseField();
+      const req = new AuthenticationRequest();
+      req.setUuid(this.authform.uuid);
+      req.setPassword(this.authform.password);
+      this.client.authentication(req, {}, (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let u = new Object();
+          u.token = resp.getToken();
+          this.resp.user.push(u);
           this.resp.errorCode = err.code;
         }
       });
