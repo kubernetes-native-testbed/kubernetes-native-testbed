@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed.git
     targetRevision: develop
-    path: manifests/infra/cd-manifests
+    path: manifests/cicd/cd-manifests
     directory:
       recurse: true
   destination:
