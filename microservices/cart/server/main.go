@@ -156,8 +156,9 @@ func (s *cartAPIServer) Remove(ctx context.Context, req *pb.RemoveRequest) (*emp
 }
 
 func (s *cartAPIServer) Commit(ctx context.Context, req *pb.CommitRequest) (*pb.CommitResponse, error) {
-	retry := 1
+	retry := 5
 	orderedProducts := make([]*orderpb.OrderedProduct, 0, len(req.GetCart().GetCartProducts()))
+	log.Printf("commit %s", cart.ConvertToCart(req.GetCart()))
 
 	cart := cart.ConvertToCart(req.GetCart())
 	for productUUID, count := range cart.CartProducts {
@@ -173,7 +174,7 @@ func (s *cartAPIServer) Commit(ctx context.Context, req *pb.CommitRequest) (*pb.
 			}
 		}
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("product request error: %w", err)
 		}
 		orderedProducts = append(orderedProducts, &orderpb.OrderedProduct{
 			ProductUUID: productResp.GetProduct().GetUUID(),
@@ -203,6 +204,8 @@ func (s *cartAPIServer) Commit(ctx context.Context, req *pb.CommitRequest) (*pb.
 		}
 	}
 	if err != nil {
+		return nil, fmt.Errorf("order request error: %w", err)
+	}
 		return nil, err
 	}
 
