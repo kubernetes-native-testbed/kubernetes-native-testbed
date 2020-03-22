@@ -3,6 +3,7 @@ git pull
 
 for i in `git branch -a | grep remotes | grep -v develop | grep -v master`; do
   git push --delete origin  $(echo $i | perl -p -e 's|remotes/origin/||g') &
+  sleep 0.2
 done
 
 
