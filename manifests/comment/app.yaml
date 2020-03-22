@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: comment
-          image: registry-harbor-core.infra.svc.cluster.local/library/comment:a5e24aa9b091f12e08a19ac107c22365ac561ef8
+          image: registry-harbor-core.infra.svc.cluster.local/library/comment:05120ed01480192a2eb1f6e7a9f768eee4e3c888
           env:
             - name: DB_HOST
               value: comment-db.comment.svc.cluster.local
