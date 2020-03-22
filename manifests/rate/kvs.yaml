@@ -16,6 +16,8 @@ kind: RedisFailover
 metadata:
   name: rate-kvs
   namespace: rate
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     service: rate
     role: kvs

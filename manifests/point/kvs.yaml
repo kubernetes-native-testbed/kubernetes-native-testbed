@@ -4,6 +4,8 @@ kind: Mcrouter
 metadata:
   name: point-kvs
   namespace: point
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     service: point
     role: kvs

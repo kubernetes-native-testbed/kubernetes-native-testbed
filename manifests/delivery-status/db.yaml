@@ -24,6 +24,8 @@ kind: CassandraCluster
 metadata:
   name: delivery-status-db
   namespace: delivery-status
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     cluster: k8s.kaas
 spec:

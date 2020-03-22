@@ -33,6 +33,8 @@ kind: MysqlCluster
 metadata:
   name: product-db
   namespace: product
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     service: product
     role: db
