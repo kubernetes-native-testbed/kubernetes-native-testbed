@@ -12,5 +12,6 @@ FROM ubuntu:18.04
 EXPOSE 8080
 COPY --from=builder1 /server .
 COPY --from=builder2 /bin/grpc_health_probe /bin/grpc_health_probe
+RUN chmod 755 /server
 USER nobody
 ENTRYPOINT ["./server"]

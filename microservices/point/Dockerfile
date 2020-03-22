@@ -33,6 +33,7 @@ RUN apt-get update && apt-get -y install software-properties-common && \
 
 COPY --from=builder1 /server .
 COPY --from=builder2 /bin/grpc_health_probe /bin/grpc_health_probe
+RUN chmod 755 /server
 USER nobody
 ENTRYPOINT ["./server"]
 
