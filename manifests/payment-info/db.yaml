@@ -3,6 +3,8 @@ kind: postgresql
 metadata:
   name: payment-info-db
   namespace: payment-info
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     service: payment-info
     role: db

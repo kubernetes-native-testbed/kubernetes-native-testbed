@@ -4,6 +4,8 @@ kind: MongoDB
 metadata:
   name: comment-db
   namespace: comment
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     service: comment
     role: db

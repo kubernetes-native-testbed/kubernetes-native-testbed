@@ -4,6 +4,8 @@ kind: Kafka
 metadata:
   name: point-queue
   namespace: point
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     service: point
     role: queue

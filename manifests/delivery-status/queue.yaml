@@ -4,6 +4,8 @@ kind: NatsCluster
 metadata:
   name: delivery-status-queue
   namespace: delivery-status
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     service: delivery-status
     role: queue

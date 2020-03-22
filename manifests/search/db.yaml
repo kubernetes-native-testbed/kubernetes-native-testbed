@@ -4,6 +4,8 @@ kind: Elasticsearch
 metadata:
   name: search-db
   namespace: search
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     service: search
     role: db

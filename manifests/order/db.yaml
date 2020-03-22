@@ -525,6 +525,8 @@ kind: TidbCluster
 metadata:
   name: order-db
   namespace: order
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     service: order
     role: db

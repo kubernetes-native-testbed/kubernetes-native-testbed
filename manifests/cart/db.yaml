@@ -431,6 +431,8 @@ kind: TidbCluster
 metadata:
   name: cart-db
   namespace: cart
+  annotations:
+    argocd.argoproj.io/hook: Skip
   labels:
     service: cart
     role: db
