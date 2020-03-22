@@ -119,7 +119,7 @@ data:
     https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/commit/${COMMIT_HASH}
 
     Files:
-    https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/tree/${COMMIT_HASH}
+    https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/tree/${COMMIT_HASH}/microservices/${MICROSERVICE}
     _EOF_
 
     gh pr create --base develop --title "[Update manifest] ${MICROSERVICE} for new image tag ${COMMIT_HASH}" --body "$(cat ~/pr-body.txt)";
