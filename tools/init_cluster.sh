@@ -2,9 +2,38 @@
 set +e
 
 CURRENT_DIR=$(cd $(dirname $0); pwd)
-until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/ | kubectl apply -f -; do
+
+until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/ns | kubectl apply -f -; do
   echo retrying apply manifests at first time;
   sleep 1;
+done
+
+until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/infra/contour | kubectl apply -f -; do
+  echo retrying apply manifests at first time;
+  sleep 1;
+done
+
+until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/infra/rook | kubectl apply -f -; do
+  echo retrying apply manifests at first time;
+  sleep 1;
+done
+
+until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/infra | kubectl apply -f -; do
+  echo retrying apply manifests at first time;
+  sleep 1;
+done
+
+until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/cicd/ci-manifests | kubectl apply -f -; do
+  echo retrying apply manifests at first time;
+  sleep 1;
+done
+
+for MICROSERVICE in `find ../microservices -name Dockerfile | cut -d "/" -f 3`; do
+  echo "applying ${MICROSERVICE} manifests"
+  until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/${MICROSERVICE} | kubectl apply -f -; do
+    echo retrying apply manifests at first time;
+    sleep 1;
+  done
 done
 
 cat ${CURRENT_DIR}/../manifests/infra/tmp/* | kubectl delete -f -
