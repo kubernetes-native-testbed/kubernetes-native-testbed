@@ -32,19 +32,25 @@ if [ -z "${LOCAL_CONTEXT}" ]; then
 fi
 
 # connect remote kubernetes and local kubernetes by telepresence
-telepresence \
+TELEPRESENCE_CMD="telepresence \
   --context ${REMOTE_CONTEXT} \
   --namespace ${MICROSERVICE} \
   --swap-deployment ${MICROSERVICE} \
   --expose 8080:80 \
-  --run sleep 10000 &
+  --run sleep 10000"
+echo $TELEPRESENCE_CMD
+$TELEPRESENCE_CMD &
+
 
 # watch files and run applications on local kubernetes by skaffold
+SKAFFOLD_CMD="skaffold dev \
+  --kube-context ${LOCAL_CONTEXT} \
+  --filename ../../development/${MICROSERVICE}/skaffold.yaml \
+  --port-forward"
+
+echo $SKAFFOLD_CMD
 while true; do
-  skaffold dev \
-    --kube-context ${LOCAL_CONTEXT} \
-    --filename ../../development/${MICROSERVICE}/skaffold.yaml \
-    --port-forward 
+  $SKAFFOLD_CMD
 done;
 
 wait
