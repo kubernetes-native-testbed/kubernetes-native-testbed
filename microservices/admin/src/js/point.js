@@ -1,4 +1,4 @@
-const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Point} = require('./protobuf/point_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, GetTotalAmountRequest, Point} = require('./protobuf/point_pb.js');
 
 const {PointAPIClient} = require('./protobuf/point_grpc_web_pb.js');
 
@@ -27,6 +27,9 @@ export const point = new Vue({
       this.form.userUUID = '';
       this.form.balance = null;
       this.form.description = '';
+    },
+    clearTotalAmountForm: function() {
+      this.totalAmountForm.useruuid = '';
     },
     clearResponseField: function() {
       this.resp.point = [];
@@ -103,6 +106,23 @@ export const point = new Vue({
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    getTotalAmount: function() {
+      this.clearResponseField();
+      const req = new GetTotalAmountRequest();
+      req.setUseruuid(this.totalAmountForm.useruuid);
+      this.client.getTotalAmount(req, {}, (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let p = new Object();
+          p.useruuid = resp.getUseruuid();
+          p.totalAmount = resp.getTotalamount();
+          this.resp.point.push(p);
           this.resp.errorCode = err.code;
         }
       });
