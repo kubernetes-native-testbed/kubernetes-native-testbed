@@ -88,7 +88,7 @@ type cartAPIServer struct {
 func (s *cartAPIServer) Show(ctx context.Context, req *pb.ShowRequest) (*pb.ShowResponse, error) {
 	userUUID := req.GetUserUUID()
 
-	if err := validateToken(ctx, userUUID); err != nil {
+	if err := verifyToken(ctx, userUUID); err != nil {
 		return nil, err
 	}
 
@@ -269,7 +269,7 @@ func (s *cartAPIServer) rollbackOrder(ctx context.Context, orderUUID string) err
 	return nil
 }
 
-func validateToken(ctx context.Context, userUUID string) error {
+func verifyToken(ctx context.Context, userUUID string) error {
 	header, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return fmt.Errorf("Could not get metadata header")
