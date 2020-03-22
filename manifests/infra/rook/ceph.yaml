@@ -41,7 +41,7 @@ spec:
     disable: false
   annotations:
   resources:
-  removeOSDsIfOutAndSafeToRemove: false
+  removeOSDsIfOutAndSafeToRemove: true
   storage: # cluster level storage configuration and selection
     useAllNodes: true
     useAllDevices: false
