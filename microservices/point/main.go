@@ -41,6 +41,7 @@ var (
 
 const (
 	defaultBindAddr = ":8080"
+	pointRatio      = 0.01
 
 	componentName     = "point"
 	defaultDBUser     = componentName
@@ -162,7 +163,7 @@ func (s *pointAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRe
 		return &pb.SetResponse{}, err
 	}
 
-	if err := s.updateAmountCache(p.UserUUID); err != nil {
+	if err := s.updateTotalAmountCache(p.UserUUID); err != nil {
 		log.Printf("failed to update amout cache for %s: %w", p.UserUUID, err)
 	}
 
@@ -182,7 +183,7 @@ func (s *pointAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*em
 		return &empty.Empty{}, err
 	}
 
-	if err := s.updateAmountCache(p.UserUUID); err != nil {
+	if err := s.updateTotalAmountCache(p.UserUUID); err != nil {
 		log.Printf("failed to update amout cache for %s: %w", p.UserUUID, err)
 	}
 
@@ -202,27 +203,40 @@ func (s *pointAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*em
 		return &empty.Empty{}, err
 	}
 
-	if err := s.updateAmountCache(p.UserUUID); err != nil {
+	if err := s.updateTotalAmountCache(p.UserUUID); err != nil {
 		log.Printf("failed to update amout cache for %s: %w", p.UserUUID, err)
 	}
 
 	return &empty.Empty{}, nil
 }
 
-func (s *pointAPIServer) updateAmountCache(useruuid string) error {
-	amount, err := s.pointRepository.getAmount(useruuid)
+func (s *pointAPIServer) GetTotalAmount(ctx context.Context, req *pb.GetTotalAmountRequest) (*pb.GetTotalAmountResponse, error) {
+	user_uuid := req.GetUserUUID()
+	pc, err := s.pointCacheRepository.findByUUID(user_uuid)
+	if err != nil {
+		if err := s.updateTotalAmountCache(user_uuid); err != nil {
+			log.Printf("failed to update amout cache for %s: %w", user_uuid, err)
+			return nil, err
+		}
+	}
+
+	return &pb.GetTotalAmountResponse{UserUUID: pc.UserUUID, TotalAmount: pc.TotalAmount}, nil
+}
+
+func (s *pointAPIServer) updateTotalAmountCache(useruuid string) error {
+	amount, err := s.pointRepository.getTotalAmount(useruuid)
 	if err != nil {
 		return err
 	}
 
 	pc := &PointCache{
-		UserUUID: useruuid,
-		Amount:   amount,
+		UserUUID:    useruuid,
+		TotalAmount: amount,
 	}
 	if err := s.pointCacheRepository.store(pc); err != nil {
 		return err
 	}
-	log.Printf("Amount is updated. UserUUID=%s, Amount=%d", useruuid, amount)
+	log.Printf("Total amount is updated. UserUUID=%s, TotalAmount=%d", useruuid, amount)
 	return nil
 }
 
@@ -251,9 +265,9 @@ func (s *pointAPIServer) subscribeOrderQueue() (func() error, error) {
 
 			switch order.Operation(operation) {
 			case order.CreateOperation:
-				cost := 0
+				cost := float64(0)
 				for _, op := range o.OrderedProducts {
-					cost = cost + op.Price*op.Count
+					cost = cost + float64(op.Price*op.Count)*pointRatio
 				}
 
 				p := &Point{

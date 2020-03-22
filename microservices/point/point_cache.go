@@ -1,6 +1,6 @@
 package main
 
 type PointCache struct {
-	UserUUID string
-	Amount   int32
+	UserUUID    string
+	TotalAmount int32
 }
