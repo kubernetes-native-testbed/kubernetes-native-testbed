@@ -23,7 +23,7 @@ func (os *orderSenderKafka) Send(o *Order, op Operation) error {
 	for i := 0; i < os.retry; i++ {
 		err = os.producer.Produce(&kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &os.topic, Partition: kafka.PartitionAny},
-			Value:          []byte(fmt.Sprintf("%s:%s", op, bytes)),
+			Value:          []byte(fmt.Sprintf("%s::%s", op, bytes)),
 		}, nil)
 		if err == nil {
 			log.Printf("send [%s] %s", os.topic, o)

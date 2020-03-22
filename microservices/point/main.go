@@ -234,7 +234,7 @@ func (s *pointAPIServer) subscribeOrderQueue() (func() error, error) {
 
 	go func() {
 		for {
-			msg := strings.Split(<-orderCh, ":")
+			msg := strings.Split(<-orderCh, "::")
 			if len(msg) != 2 {
 				log.Printf("received data is invalid: %s (size: %d)\n", msg, len(msg))
 				continue
