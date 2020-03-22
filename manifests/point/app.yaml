@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: point-app
-          image: registry-harbor-core.infra.svc.cluster.local/library/point:a5e24aa9b091f12e08a19ac107c22365ac561ef8
+          image: registry-harbor-core.infra.svc.cluster.local/library/point:9290f50c4bde7d2407a727b93162acb6a0beb81d
           env:
             - name: QUEUE_HOST
               value: point-queue-kafka-bootstrap.point.svc.cluster.local
