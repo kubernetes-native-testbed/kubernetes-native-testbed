@@ -114,6 +114,7 @@ func (s *deliveryStatusAPIServer) Get(ctx context.Context, req *pb.GetRequest) (
 
 	resp.DeliveryStatus = &pb.DeliveryStatus{
 		OrderUUID:     ds.OrderUUID,
+		UserUUID:      ds.UserUUID,
 		Status:        int32(ds.Status),
 		InquiryNumber: ds.InquiryNumber,
 		CreatedAt:     cat,
@@ -127,6 +128,7 @@ func (s *deliveryStatusAPIServer) Get(ctx context.Context, req *pb.GetRequest) (
 func (s *deliveryStatusAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
 	ds := &DeliveryStatus{
 		OrderUUID:     req.GetDeliveryStatus().GetOrderUUID(),
+		UserUUID:      req.GetDeliveryStatus().GetUserUUID(),
 		Status:        Status(req.GetDeliveryStatus().GetStatus()),
 		InquiryNumber: req.GetDeliveryStatus().GetInquiryNumber(),
 	}
@@ -143,6 +145,7 @@ func (s *deliveryStatusAPIServer) Set(ctx context.Context, req *pb.SetRequest) (
 func (s *deliveryStatusAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
 	ds := &DeliveryStatus{
 		OrderUUID:     req.GetDeliveryStatus().GetOrderUUID(),
+		UserUUID:      req.GetDeliveryStatus().GetUserUUID(),
 		Status:        Status(req.GetDeliveryStatus().GetStatus()),
 		InquiryNumber: req.GetDeliveryStatus().GetInquiryNumber(),
 	}

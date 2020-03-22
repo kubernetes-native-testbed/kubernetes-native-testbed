@@ -1,4 +1,4 @@
-const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, User, Address} = require('./protobuf/user_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, IsExistsRequest, IsExistsResponse, AuthenticationRequest, AuthenticationResponse, User, Address} = require('./protobuf/user_pb.js');
 
 const {UserAPIClient} = require('./protobuf/user_grpc_web_pb.js');
 
@@ -132,6 +132,23 @@ export const user = new Vue({
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    isExistsUser: function() {
+      this.clearResponseField();
+      const req = new IsExistsRequest();
+      req.setUuid(this.form.uuid);
+      this.client.isExists(req, {}, (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let u = new Object();
+          u.userUUID = this.form.uuid;
+          u.isExists = resp.getIsexists();
+          this.resp.user.push(u);
           this.resp.errorCode = err.code;
         }
       });

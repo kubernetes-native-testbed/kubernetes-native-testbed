@@ -1,4 +1,4 @@
-const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Product} = require('./protobuf/product_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, IsExistsRequest, IsExistsResponse, Product} = require('./protobuf/product_pb.js');
 const {ImageUploadRequest, ImageUploadResponse, ImageDeleteRequest} = require('./protobuf/image_pb.js');
 
 const {ProductAPIClient} = require('./protobuf/product_grpc_web_pb.js');
@@ -167,6 +167,23 @@ export const product = new Vue({
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    isExistsProduct: function() {
+      this.clearResponseField();
+      const req = new IsExistsRequest();
+      req.setUuid(this.form.uuid);
+      this.client.isExists(req, {}, (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let p = new Object();
+          p.productUUID = this.form.uuid;
+          p.isExists = resp.getIsexists();
+          this.resp.product.push(p);
           this.resp.errorCode = err.code;
         }
       });
