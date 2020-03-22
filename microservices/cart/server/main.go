@@ -202,10 +202,16 @@ func (s *cartAPIServer) Commit(ctx context.Context, req *pb.CommitRequest) (*pb.
 			}
 			continue
 		}
+		break
 	}
 	if err != nil {
 		return nil, fmt.Errorf("order request error: %w", err)
 	}
+
+	if err := s.cartRepository.DeleteByUUID(req.GetCart().GetUserUUID()); err != nil {
+		if err := s.rollbackOrder(ctx, orderResp.GetUUID()); err != nil {
+			log.Print(err)
+		}
 		return nil, err
 	}
 
@@ -226,6 +232,24 @@ func (s *cartAPIServer) recoverMicroserviceConnection(client interface{}) error 
 			return err
 		}
 		s.productClient = productpb.NewProductAPIClient(conn)
+	}
+	return nil
+}
+
+func (s *cartAPIServer) rollbackOrder(ctx context.Context, orderUUID string) error {
+	var err error
+	for i := 0; i < 5; i++ {
+		_, err = s.orderClient.Delete(ctx, &orderpb.DeleteRequest{UUID: orderUUID})
+		if err != nil {
+			if err := s.recoverMicroserviceConnection(s.productClient); err != nil {
+				return err
+			}
+			continue
+		}
+		break
+	}
+	if err != nil {
+		return fmt.Errorf("rollback failure for order %s: %w", orderUUID, err)
 	}
 	return nil
 }
