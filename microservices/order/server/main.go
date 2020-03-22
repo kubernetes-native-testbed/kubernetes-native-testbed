@@ -358,7 +358,7 @@ func (s *orderAPIServer) orderValidation(ctx context.Context, order *pb.Order) e
 	if err != nil {
 		return err
 	}
-	if paymentInfoResp.GetPaymentInfo().GetUserUUID() == userUUID {
+	if paymentInfoResp.GetPaymentInfo().GetUserUUID() != userUUID {
 		return fmt.Errorf("paymentInfo's userUUID is not match: %s (userUUID=%s)", targetPaymentInfoUUID, userUUID)
 	}
 
