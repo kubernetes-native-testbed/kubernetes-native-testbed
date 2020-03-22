@@ -63,6 +63,7 @@ const (
 )
 
 func init() {
+	var err error
 	if dbUser = os.Getenv("DB_USER"); dbUser == "" {
 		dbUser = defaultDBUser
 	}
@@ -98,7 +99,7 @@ func init() {
 	if orderQueueHost = os.Getenv("QUEUE_HOST"); orderQueueHost == "" {
 		orderQueueHost = defaultQueueHost
 	}
-	if orderQueuePort, err := strconv.Atoi(os.Getenv("QUEUE_PORT")); err != nil {
+	if orderQueuePort, err = strconv.Atoi(os.Getenv("QUEUE_PORT")); err != nil {
 		orderQueuePort = defaultQueuePort
 		log.Printf("orderQueuePort parse error: %v", err)
 	}

@@ -15,4 +15,11 @@ require (
 	google.golang.org/genproto v0.0.0-20200212174721-66ed5ce911ce // indirect
 	google.golang.org/grpc v1.26.0
 	gopkg.in/confluentinc/confluent-kafka-go.v1 v1.1.0 // indirect
+	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order v0.0.0-00010101000000-000000000000
+)
+
+
+replace (
+	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order => ../order
+	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order/protobuf => ../order/protobuf
 )
