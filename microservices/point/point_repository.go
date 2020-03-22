@@ -13,7 +13,7 @@ type pointRepository interface {
 	update(*Point) error
 	deleteByUUID(string) error
 
-	getAmount(string) (int32, error)
+	getTotalAmount(string) (int32, error)
 
 	initDB() error
 }
@@ -57,10 +57,10 @@ func (pr *pointRepositoryImpl) deleteByUUID(uuid string) error {
 	return nil
 }
 
-func (pr *pointRepositoryImpl) getAmount(useruuid string) (int32, error) {
+func (pr *pointRepositoryImpl) getTotalAmount(useruuid string) (int32, error) {
 	rows, err := pr.db.Model(&Point{}).Where("user_uuid = ?", useruuid).Select("balance").Rows() // (*sql.Rows, error)
 	if err != nil {
-		return 0, fmt.Errorf("getAmount error: %w (useruuid: %s)", err, useruuid)
+		return 0, fmt.Errorf("getTotalAmount error: %w (useruuid: %s)", err, useruuid)
 	}
 	defer rows.Close()
 

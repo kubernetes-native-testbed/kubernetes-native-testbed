@@ -10,6 +10,7 @@ service PointAPI {
     rpc Set(SetRequest) returns (SetResponse) {}
     rpc Update(UpdateRequest) returns (google.protobuf.Empty) {}
     rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+    rpc GetTotalAmount(GetTotalAmountRequest) returns (GetTotalAmountResponse) {}
 }
 
 message Point {
@@ -44,4 +45,13 @@ message UpdateRequest {
 
 message DeleteRequest {
     string UUID = 1;
+}
+
+message GetTotalAmountRequest {
+	string UserUUID = 1;
+}
+
+message GetTotalAmountResponse {
+	string UserUUID = 1;
+	int32 TotalAmount = 2;
 }

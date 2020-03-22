@@ -390,5 +390,85 @@ proto.pointpb.PointAPIPromiseClient.prototype.delete =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.pointpb.GetTotalAmountRequest,
+ *   !proto.pointpb.GetTotalAmountResponse>}
+ */
+const methodDescriptor_PointAPI_GetTotalAmount = new grpc.web.MethodDescriptor(
+  '/pointpb.PointAPI/GetTotalAmount',
+  grpc.web.MethodType.UNARY,
+  proto.pointpb.GetTotalAmountRequest,
+  proto.pointpb.GetTotalAmountResponse,
+  /**
+   * @param {!proto.pointpb.GetTotalAmountRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.pointpb.GetTotalAmountResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.pointpb.GetTotalAmountRequest,
+ *   !proto.pointpb.GetTotalAmountResponse>}
+ */
+const methodInfo_PointAPI_GetTotalAmount = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.pointpb.GetTotalAmountResponse,
+  /**
+   * @param {!proto.pointpb.GetTotalAmountRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.pointpb.GetTotalAmountResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.pointpb.GetTotalAmountRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.pointpb.GetTotalAmountResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.pointpb.GetTotalAmountResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.pointpb.PointAPIClient.prototype.getTotalAmount =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/pointpb.PointAPI/GetTotalAmount',
+      request,
+      metadata || {},
+      methodDescriptor_PointAPI_GetTotalAmount,
+      callback);
+};
+
+
+/**
+ * @param {!proto.pointpb.GetTotalAmountRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.pointpb.GetTotalAmountResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.pointpb.PointAPIPromiseClient.prototype.getTotalAmount =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/pointpb.PointAPI/GetTotalAmount',
+      request,
+      metadata || {},
+      methodDescriptor_PointAPI_GetTotalAmount);
+};
+
+
 module.exports = proto.pointpb;
 
