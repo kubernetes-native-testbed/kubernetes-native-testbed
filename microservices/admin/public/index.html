@@ -391,7 +391,21 @@
         <button class="uk-button uk-button-primary" v-on:click="updatePoint">Update</button>
         <button class="uk-button uk-button-primary" v-on:click="deletePoint">Delete</button>
         <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+
+        <hr class="uk-divider-small">
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="totalAmountForm.useruuid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="getTotalAmount">Get Total Amount</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearTotalAmountForm">Clear</button>
       </div>
+
       <hr class="uk-divider-small">
       <label>Response</label><br/>
       <div class="output">
@@ -453,6 +467,8 @@
         <button class="uk-button uk-button-primary" v-on:click="deleteDeliveryStatus">Delete</button>
         <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
       </div>
+
+
       <hr class="uk-divider-small">
       <label>Response</label><br/>
       <div class="output">
