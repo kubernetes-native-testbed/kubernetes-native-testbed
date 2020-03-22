@@ -1,8 +1,7 @@
 FROM golang:1.13.6-buster as builder1
 WORKDIR /app
 COPY ./ /app/
-RUN go get -u
-RUN go build -o /comment
+RUN cd comment; go get; go build -o /server
 
 FROM busybox as builder2
 RUN GRPC_HEALTH_PROBE_VERSION=v0.3.1 && \
@@ -11,10 +10,10 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.3.1 && \
 
 FROM ubuntu:18.04
 EXPOSE 8080
-COPY --from=builder1 /comment .
+COPY --from=builder1 /server .
 COPY --from=builder2 /bin/grpc_health_probe /bin/grpc_health_probe
 
 USER nobody
-ENTRYPOINT ["./comment"]
+ENTRYPOINT ["./server"]
 
 
