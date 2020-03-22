@@ -2,6 +2,8 @@ const {ShowRequest, ShowResponse, AddRequest, RemoveRequest, CommitRequest, Comm
 
 const {CartAPIClient} = require('./protobuf/cart_grpc_web_pb.js');
 
+const {GetTokenMetadata} = require('./cookie.js');
+
 export const order = new Vue({
   el: '#cart',
   data: {
@@ -46,7 +48,7 @@ export const order = new Vue({
       this.clearResponseField();
       const req = new ShowRequest();
       req.setUseruuid(this.form.userUUID);
-      this.client.show(req, {}, (err, resp) => {
+      this.client.show(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;

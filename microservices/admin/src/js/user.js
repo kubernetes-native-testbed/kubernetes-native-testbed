@@ -2,6 +2,8 @@ const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRe
 
 const {UserAPIClient} = require('./protobuf/user_grpc_web_pb.js');
 
+const {SetTokenToCookie} = require('./cookie.js');
+
 export const user = new Vue({
   el: '#user',
   data: {
@@ -173,6 +175,7 @@ export const user = new Vue({
         } else {
           let u = new Object();
           u.token = resp.getToken();
+          SetTokenToCookie(u.token, 3600);
           this.resp.user.push(u);
           this.resp.errorCode = err.code;
         }
