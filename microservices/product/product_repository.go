@@ -8,7 +8,7 @@ import (
 )
 
 type ProductRepository interface {
-	FindByUUID(string) (*Product, error)
+	FindByUUID(string) (*Product, error, error)
 	Store(*Product) (string, error)
 	Update(*Product) error
 	DeleteByUUID(string) error
@@ -20,12 +20,16 @@ type productRepositoryMySQL struct {
 	db *gorm.DB
 }
 
-func (pr *productRepositoryMySQL) FindByUUID(uuid string) (*Product, error) {
+func (pr *productRepositoryMySQL) FindByUUID(uuid string) (*Product, error, error) {
 	p := &Product{UUID: uuid}
 	if err := pr.db.Preload("ImageURLs").Find(p).Error; err != nil {
-		return nil, fmt.Errorf("findByID error: %w (uuid: %s)", err, uuid)
+		if err == gorm.ErrRecordNotFound {
+			return nil, err, nil
+		} else {
+			return nil, nil, fmt.Errorf("findByID error: %w (uuid: %s)", err, uuid)
+		}
 	}
-	return p, nil
+	return p, nil, nil
 }
 
 func (pr *productRepositoryMySQL) Store(p *Product) (string, error) {

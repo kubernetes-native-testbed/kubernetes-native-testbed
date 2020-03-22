@@ -25,6 +25,7 @@ type Status int
 
 type DeliveryStatus struct {
 	OrderUUID     string     `json:"order_uuid"`
+	UserUUID      string     `json:"user_uuid"`
 	Status        Status     `json:"status"`
 	InquiryNumber string     `json:"inquiry_number"`
 	CreatedAt     time.Time  `json:"created_at"`

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"os"
@@ -13,6 +14,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order/protobuf"
+	paymentinfopb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/payment-info/protobuf"
+	userpb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/user/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -36,6 +39,11 @@ var (
 	pointQueueHost     string
 	pointQueuePort     int
 	pointQueueTopic    string
+
+	userHost        string
+	userPort        int
+	paymentInfoHost string
+	paymentInfoPort int
 )
 
 const (
@@ -59,6 +67,11 @@ const (
 	defaultPointQueueHost     = componentName
 	defaultPointQueuePort     = 4222
 	defaultPointQueueTopic    = componentName
+
+	defaultUserHost        = "user.user.svc.cluster.local"
+	defaultUserPort        = 8080
+	defaultPaymentInfoHost = "payment-info.payment-info.svc.cluster.local"
+	defaultPaymentInfoPort = 8080
 )
 
 func init() {
@@ -113,12 +126,32 @@ func init() {
 	if pointQueueTopic = os.Getenv("POINT_QUEUE_TOPIC"); pointQueueTopic == "" {
 		pointQueueTopic = defaultPointQueueTopic
 	}
+
+	if userHost = os.Getenv("USER_HOST"); userHost == "" {
+		userHost = defaultUserHost
+	}
+	if userPort, err = strconv.Atoi(os.Getenv("USER_PORT")); err != nil {
+		userPort = defaultUserPort
+		log.Printf("userPort parse error: %v", err)
+	}
+	if paymentInfoHost = os.Getenv("PAYMENT_INFO_HOST"); paymentInfoHost == "" {
+		paymentInfoHost = defaultPaymentInfoHost
+	}
+	if paymentInfoPort, err = strconv.Atoi(os.Getenv("PAYMENT_INFO_PORT")); err != nil {
+		paymentInfoPort = defaultPaymentInfoPort
+		log.Printf("paymentInfoPort parse error: %v", err)
+	}
 }
 
 type orderAPIServer struct {
 	orderRepository              order.OrderRepository
 	orderSenderForDeliveryStatus order.OrderSender
 	orderSenderForPoint          order.OrderSender
+
+	userClient          userpb.UserAPIClient
+	userEndpoint        string
+	paymentInfoClient   paymentinfopb.PaymentInfoAPIClient
+	paymentInfoEndpoint string
 }
 
 func (s *orderAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
@@ -196,6 +229,10 @@ func (s *orderAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRe
 		}
 	}
 
+	if err := s.orderValidation(ctx, req.GetOrder()); err != nil {
+		return nil, err
+	}
+
 	o := &order.Order{
 		UUID:            req.GetOrder().GetUUID(),
 		OrderedProducts: orderedProducts,
@@ -238,6 +275,10 @@ func (s *orderAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*em
 		}
 	}
 
+	if err := s.orderValidation(ctx, req.GetOrder()); err != nil {
+		return nil, err
+	}
+
 	o := &order.Order{
 		UUID:            req.GetOrder().GetUUID(),
 		OrderedProducts: orderedProducts,
@@ -270,6 +311,78 @@ func (s *orderAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*em
 	}()
 
 	return &empty.Empty{}, nil
+}
+
+func (s *orderAPIServer) orderValidation(ctx context.Context, order *pb.Order) error {
+	userUUID := order.GetUserUUID()
+	targetAddressUUID := order.GetAddressUUID()
+	targetPaymentInfoUUID := order.GetPaymentInfoUUID()
+
+	var err error
+
+	retry := 1
+	var userResp *userpb.GetResponse
+	for i := 0; i < retry; i++ {
+		userResp, err = s.userClient.Get(ctx, &userpb.GetRequest{UUID: userUUID})
+		if err != nil {
+			if err := s.recoverMicroserviceConnection(s.userClient); err != nil {
+				return err
+			}
+			continue
+		}
+		break
+	}
+	if err != nil {
+		return err
+	}
+	var addressFound bool
+	for _, address := range userResp.GetUser().GetAddresses() {
+		if address.GetUUID() == targetAddressUUID {
+			addressFound = true
+			break
+		}
+	}
+	if !addressFound {
+		return fmt.Errorf("valid address uuid is not found: %s (userUUID=%s)", targetAddressUUID, userUUID)
+	}
+
+	var paymentInfoResp *paymentinfopb.GetResponse
+	for i := 0; i < retry; i++ {
+		paymentInfoResp, err = s.paymentInfoClient.Get(ctx, &paymentinfopb.GetRequest{UUID: targetPaymentInfoUUID})
+		if err != nil {
+			if err := s.recoverMicroserviceConnection(s.paymentInfoClient); err != nil {
+				return err
+			}
+			continue
+		}
+		break
+	}
+	if err != nil {
+		return err
+	}
+	if paymentInfoResp.GetPaymentInfo().GetUserUUID() != userUUID {
+		return fmt.Errorf("paymentInfo's userUUID is not match: %s (userUUID=%s)", targetPaymentInfoUUID, userUUID)
+	}
+
+	return nil
+}
+
+func (s *orderAPIServer) recoverMicroserviceConnection(client interface{}) error {
+	switch client.(type) {
+	case paymentinfopb.PaymentInfoAPIClient:
+		conn, err := grpc.Dial(s.paymentInfoEndpoint, grpc.WithInsecure())
+		if err != nil {
+			return err
+		}
+		s.paymentInfoClient = paymentinfopb.NewPaymentInfoAPIClient(conn)
+	case userpb.UserAPIClient:
+		conn, err := grpc.Dial(s.userEndpoint, grpc.WithInsecure())
+		if err != nil {
+			return err
+		}
+		s.userClient = userpb.NewUserAPIClient(conn)
+	}
+	return nil
 }
 
 func main() {
@@ -323,11 +436,28 @@ func main() {
 	defer closeKafka()
 	log.Printf("succeed to connect to point queue")
 
+	userEndpoint := fmt.Sprintf("%s:%d", userHost, userPort)
+	userConn, err := grpc.Dial(userEndpoint, grpc.WithInsecure())
+	if err != nil {
+		log.Fatal(err)
+	}
+	userClient := userpb.NewUserAPIClient(userConn)
+	paymentInfoEndpoint := fmt.Sprintf("%s:%d", paymentInfoHost, paymentInfoPort)
+	paymentInfoConn, err := grpc.Dial(paymentInfoEndpoint, grpc.WithInsecure())
+	if err != nil {
+		log.Fatal(err)
+	}
+	paymentInfoClient := paymentinfopb.NewPaymentInfoAPIClient(paymentInfoConn)
+
 	s := grpc.NewServer()
 	api := &orderAPIServer{
 		orderRepository:              tidb,
 		orderSenderForDeliveryStatus: nats,
 		orderSenderForPoint:          kafka,
+		userClient:                   userClient,
+		userEndpoint:                 userEndpoint,
+		paymentInfoClient:            paymentInfoClient,
+		paymentInfoEndpoint:          paymentInfoEndpoint,
 	}
 	pb.RegisterOrderAPIServer(s, api)
 

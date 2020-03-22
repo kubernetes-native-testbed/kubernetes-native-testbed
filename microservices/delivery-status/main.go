@@ -6,6 +6,7 @@ import (
 	"net"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"
@@ -173,15 +174,22 @@ func (s *deliveryStatusAPIServer) subscribeOrderQueue() (func() error, error) {
 
 	go func() {
 		for {
-			uuid := <-orderCh
+			msg := strings.Split(<-orderCh, ":")
+			if len(msg) != 2 {
+				continue
+			}
+			orderUUID := msg[0]
+			userUUID := msg[1]
+
 			ds := &DeliveryStatus{
-				OrderUUID:     uuid,
+				OrderUUID:     orderUUID,
+				UserUUID:      userUUID,
 				Status:        Waiting,
 				InquiryNumber: generateInquiryNumber(),
 			}
 			log.Printf("[from subscribe] set %s", ds)
 
-			uuid, err := s.deliveryStatusRepository.store(ds)
+			_, err := s.deliveryStatusRepository.store(ds)
 			if err != nil {
 				log.Printf("[from subscribe] failed to store delivery status (%#v): %v", ds, err)
 			}

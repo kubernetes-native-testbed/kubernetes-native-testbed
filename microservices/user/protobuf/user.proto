@@ -10,6 +10,8 @@ service UserAPI {
     rpc Set(SetRequest) returns (SetResponse) {}
     rpc Update(UpdateRequest) returns (google.protobuf.Empty) {}
     rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+	rpc IsExists(IsExistsRequest) returns (IsExistsResponse) {}
+	rpc Authentication(AuthenticationRequest) returns (AuthenticationResponse) {}
 }
 
 message User {
@@ -59,4 +61,21 @@ message UpdateRequest {
 
 message DeleteRequest {
     string UUID = 1;
+}
+
+message IsExistsRequest {
+	string UUID = 1;
+}
+
+message IsExistsResponse {
+	bool isExists = 1;
+}
+
+message AuthenticationRequest {
+	string UUID = 1;
+	string passwordHash = 2;
+}
+
+message AuthenticationResponse {
+	string token = 1;
 }

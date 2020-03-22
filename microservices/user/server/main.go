@@ -6,12 +6,15 @@ import (
 	"log"
 	"net"
 	"os"
+	"strconv"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/golang/protobuf/ptypes/timestamp"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/user"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/user/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
@@ -23,7 +26,9 @@ var (
 	dbPassword string
 	dbName     string
 	dbHost     string
-	dbPort     string
+	dbPort     int
+
+	privateKey string
 )
 
 const (
@@ -34,10 +39,11 @@ const (
 	defaultDBPassword = componentName
 	defaultDBName     = componentName
 	defaultDBHost     = componentName
-	defaultDBHPort    = componentName
+	defaultDBPort     = 3306
 )
 
 func init() {
+	var err error
 	if dbUser = os.Getenv("DB_USER"); dbUser == "" {
 		dbUser = defaultDBUser
 	}
@@ -50,21 +56,28 @@ func init() {
 	if dbHost = os.Getenv("DB_HOST"); dbHost == "" {
 		dbHost = defaultDBHost
 	}
-	if dbPort = os.Getenv("DB_PORT"); dbPort == "" {
-		dbPort = defaultDBHPort
+	if dbPort, err = strconv.Atoi(os.Getenv("DB_PORT")); err != nil {
+		dbPort = defaultDBPort
+		log.Printf("dbPort parse error: %v", err)
+	}
+	if privateKey = os.Getenv("PRIVATE_KEY"); privateKey == "" {
+		log.Fatal("PRIVATE_KEY is required")
 	}
 }
 
 type userAPIServer struct {
-	userRepository userRepository
+	userRepository user.UserRepository
 }
 
 func (s *userAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	uuid := req.GetUUID()
 	log.Printf("{\"operation\":\"get\", \"uuid\":\"%s\"}", uuid)
-	u, err := s.userRepository.findByUUID(uuid)
+	u, nferr, err := s.userRepository.FindByUUID(uuid)
 	if err != nil {
 		return &pb.GetResponse{}, err
+	}
+	if nferr != nil {
+		return &pb.GetResponse{}, nferr
 	}
 
 	var resp pb.GetResponse
@@ -113,9 +126,9 @@ func (s *userAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetRes
 }
 
 func (s *userAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
-	addresses := make([]Address, len(req.GetUser().GetAddresses()))
+	addresses := make([]user.Address, len(req.GetUser().GetAddresses()))
 	for i, address := range req.GetUser().GetAddresses() {
-		addresses[i] = Address{
+		addresses[i] = user.Address{
 			ZipCode:     address.ZipCode,
 			Country:     address.Country,
 			State:       address.State,
@@ -125,7 +138,7 @@ func (s *userAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRes
 		}
 	}
 
-	u := &User{
+	u := &user.User{
 		Username:               req.GetUser().GetUsername(),
 		FirstName:              req.GetUser().GetFirstName(),
 		LastName:               req.GetUser().GetLastName(),
@@ -137,7 +150,7 @@ func (s *userAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRes
 	log.Printf("{\"operation\":\"set\", \"uuid\":\"%s\", \"username\":\"%s\", \"first_name\":\"%s\", \"last_name\":\"%s\", \"age\":\"%d\", \"password_hash\":\"%s\", \"default_payment_info_uuid\":\"%s\", \"addresses\":\"%v\"}",
 		u.UUID, u.Username, u.FirstName, u.LastName, u.Age, u.PasswordHash, u.DefaultPaymentInfoUUID, u.Addresses)
 
-	uuid, err := s.userRepository.store(u)
+	uuid, err := s.userRepository.Store(u)
 	if err != nil {
 		return &pb.SetResponse{}, err
 	}
@@ -146,9 +159,9 @@ func (s *userAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRes
 }
 
 func (s *userAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
-	addresses := make([]Address, len(req.GetUser().GetAddresses()))
+	addresses := make([]user.Address, len(req.GetUser().GetAddresses()))
 	for i, address := range req.GetUser().GetAddresses() {
-		addresses[i] = Address{
+		addresses[i] = user.Address{
 			UUID:        address.UUID,
 			ZipCode:     address.ZipCode,
 			Country:     address.Country,
@@ -158,7 +171,7 @@ func (s *userAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*emp
 			Disabled:    address.Disabled,
 		}
 	}
-	u := &User{
+	u := &user.User{
 		UUID:                   req.GetUser().GetUUID(),
 		Username:               req.GetUser().GetUsername(),
 		FirstName:              req.GetUser().GetFirstName(),
@@ -171,7 +184,7 @@ func (s *userAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*emp
 	log.Printf("{\"operation\":\"update\", \"uuid\":\"%s\", \"username\":\"%s\", \"first_name\":\"%s\", \"last_name\":\"%s\", \"age\":\"%d\", \"password_hash\":\"%s\", \"default_payment_info_uuid\":\"%s\", \"addresses\":\"%v\"}",
 		u.UUID, u.Username, u.FirstName, u.LastName, u.Age, u.PasswordHash, u.DefaultPaymentInfoUUID, u.Addresses)
 
-	if err := s.userRepository.update(u); err != nil {
+	if err := s.userRepository.Update(u); err != nil {
 		return &empty.Empty{}, err
 	}
 
@@ -182,11 +195,54 @@ func (s *userAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*emp
 	uuid := req.GetUUID()
 	log.Printf("{\"operation\":\"delete\", \"uuid\":\"%s\"}", uuid)
 
-	if err := s.userRepository.deleteByUUID(uuid); err != nil {
+	if err := s.userRepository.DeleteByUUID(uuid); err != nil {
 		return &empty.Empty{}, err
 	}
 
 	return &empty.Empty{}, nil
+}
+
+func (s *userAPIServer) IsExists(ctx context.Context, req *pb.IsExistsRequest) (*pb.IsExistsResponse, error) {
+	uuid := req.GetUUID()
+	log.Printf("isExists: {\"uuid\":\"%s\"}", uuid)
+	_, nferr, err := s.userRepository.FindByUUID(uuid)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.IsExistsResponse{IsExists: nferr == nil}, nil
+}
+
+func (s *userAPIServer) Authentication(ctx context.Context, req *pb.AuthenticationRequest) (*pb.AuthenticationResponse, error) {
+	uuid := req.GetUUID()
+	log.Printf("authentication: {\"uuid\":\"%s\"}", uuid)
+	u, nferr, err := s.userRepository.FindByUUID(uuid)
+	if err != nil {
+		return nil, err
+	}
+	if nferr != nil {
+		return nil, nferr
+	}
+
+	if u.PasswordHash != req.GetPasswordHash() {
+		return nil, fmt.Errorf("user_uuid or password is not match (userUUID=%s)", uuid)
+	}
+
+	signKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privateKey))
+	if err != nil {
+		return nil, err
+	}
+
+	token := jwt.New(jwt.SigningMethodES512)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["user_uuid"] = uuid
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+
+	tokenString, err := token.SignedString(signKey)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.AuthenticationResponse{Token: tokenString}, nil
 }
 
 func main() {
@@ -196,34 +252,30 @@ func main() {
 	}
 	log.Printf("listen on %s", defaultBindAddr)
 
-	db, err := gorm.Open(
-		"mysql",
-		fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
-			dbUser,
-			dbPassword,
-			dbHost,
-			dbPort,
-			dbName,
-		),
-	)
-	if err != nil {
-		log.Fatalf("failed to open database: %v", err)
+	mysqlConfig := user.UserRepositoryMySQLConfig{
+		Host:     dbHost,
+		Port:     dbPort,
+		Username: dbUser,
+		Password: dbPassword,
+		DBName:   dbName,
 	}
-	defer db.Close()
-	log.Printf("success for connection to %s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
+	mysql, closeMySQL, err := mysqlConfig.Connect()
+	if err != nil {
+		log.Fatalf("failed to open database: %v (config=%#v)", err, mysqlConfig)
+	}
+	defer closeMySQL()
+	log.Printf("succeed to open database")
 
 	s := grpc.NewServer()
 	api := &userAPIServer{
-		userRepository: &userRepositoryImpl{
-			db: db,
-		},
+		userRepository: mysql,
 	}
 	pb.RegisterUserAPIServer(s, api)
 
 	healthpb.RegisterHealthServer(s, health.NewServer())
 
 	log.Printf("setup database")
-	if err := api.userRepository.initDB(); err != nil {
+	if err := api.userRepository.InitDB(); err != nil {
 		log.Fatalf("failed to init database: %v", err)
 	}
 
