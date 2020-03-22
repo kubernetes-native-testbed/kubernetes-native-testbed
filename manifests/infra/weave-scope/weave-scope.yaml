@@ -193,10 +193,10 @@ items:
               resources:
                 requests:
                   cpu: 100m
-                  memory: 128Mi
+                  memory: 256Mi
                 limits:
                   cpu: 100m
-                  memory: 128Mi
+                  memory: 256Mi
               ports:
                 - containerPort: 4040
                   protocol: TCP

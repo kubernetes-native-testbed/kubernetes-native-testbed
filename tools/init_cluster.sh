@@ -8,6 +8,11 @@ until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/ns | kubectl appl
   sleep 1;
 done
 
+until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/system | kubectl apply -f -; do
+  echo retrying apply manifests at first time;
+  sleep 1;
+done
+
 until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/infra/contour | kubectl apply -f -; do
   echo retrying apply manifests at first time;
   sleep 1;
