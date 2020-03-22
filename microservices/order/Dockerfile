@@ -25,7 +25,12 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.3.1 && \
 
 FROM ubuntu:18.04
 EXPOSE 8080
-RUN apt-get update && apt-get -y install librdkafka-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install curl gnupg -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN curl -s https://packages.confluent.io/deb/5.4/archive.key | apt-key add -
+RUN apt-get update && apt-get -y install software-properties-common && \
+    add-apt-repository "deb [arch=amd64] https://packages.confluent.io/deb/5.4 stable main" && \
+    apt-get update && apt-get -y install librdkafka-dev librdkafka1 librdkafka++1 && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder1 /server .
 COPY --from=builder2 /bin/grpc_health_probe /bin/grpc_health_probe
 USER nobody

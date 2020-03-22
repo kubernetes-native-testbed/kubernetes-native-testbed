@@ -5,7 +5,8 @@ build:
   artifacts:
   - image: local-cart
     docker:
-      dockerfile: ./Dockerfile
+      dockerfile: ./cart/Dockerfile
+    context: ../
   tagPolicy:
     envTemplate:
       template: "local-cart:latest"

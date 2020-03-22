@@ -5,7 +5,8 @@ build:
   artifacts:
   - image: local-delivery-status
     docker:
-      dockerfile: ./Dockerfile
+      dockerfile: ./delivery-status/Dockerfile
+    context: ../
   tagPolicy:
     envTemplate:
       template: "local-delivery-status:latest"

@@ -5,7 +5,8 @@ build:
   artifacts:
   - image: local-comment
     docker:
-      dockerfile: ./Dockerfile
+      dockerfile: ./comment/Dockerfile
+    context: ../
   tagPolicy:
     envTemplate:
       template: "local-comment:latest"

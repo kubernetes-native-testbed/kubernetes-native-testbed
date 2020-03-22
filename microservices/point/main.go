@@ -2,10 +2,13 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/golang/protobuf/ptypes"
@@ -13,6 +16,7 @@ import (
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/point/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
@@ -20,14 +24,19 @@ import (
 )
 
 var (
-	dbUser     string
-	dbPassword string
-	dbName     string
-	dbHost     string
-	dbPort     string
-	dbSSL      string
-	kvsHost    string
-	kvsPort    string
+	dbUser             string
+	dbPassword         string
+	dbName             string
+	dbHost             string
+	dbPort             string
+	dbSSL              string
+	kvsHost            string
+	kvsPort            string
+	orderQueueUsername string
+	orderQueuePassword string
+	orderQueueHost     string
+	orderQueuePort     int
+	orderQueueTopic    string
 )
 
 const (
@@ -46,14 +55,15 @@ const (
 	defaultKVSHost = componentName
 	defaultKVSPort = componentName
 
-	// defaultQueueHost = componentName
-	// defaultQueuePort = componentName
-	// defaultQueueTopic = componentName
-	// defaultQueueUser = componentName
-	// defaultQueuePassword = componentName
+	defaultQueueHost     = componentName
+	defaultQueuePort     = 0
+	defaultQueueTopic    = componentName
+	defaultQueueUser     = componentName
+	defaultQueuePassword = componentName
 )
 
 func init() {
+	var err error
 	if dbUser = os.Getenv("DB_USER"); dbUser == "" {
 		dbUser = defaultDBUser
 	}
@@ -79,11 +89,29 @@ func init() {
 	if kvsPort = os.Getenv("KVS_PORT"); kvsPort == "" {
 		kvsPort = defaultKVSPort
 	}
+
+	if orderQueueUsername = os.Getenv("QUEUE_USER"); orderQueueUsername == "" {
+		orderQueueUsername = defaultQueueUser
+	}
+	if orderQueuePassword = os.Getenv("QUEUE_PASSWORD"); orderQueuePassword == "" {
+		orderQueuePassword = defaultQueuePassword
+	}
+	if orderQueueHost = os.Getenv("QUEUE_HOST"); orderQueueHost == "" {
+		orderQueueHost = defaultQueueHost
+	}
+	if orderQueuePort, err = strconv.Atoi(os.Getenv("QUEUE_PORT")); err != nil {
+		orderQueuePort = defaultQueuePort
+		log.Printf("orderQueuePort parse error: %v", err)
+	}
+	if orderQueueTopic = os.Getenv("QUEUE_TOPIC"); orderQueueTopic == "" {
+		orderQueueTopic = defaultQueueTopic
+	}
 }
 
 type pointAPIServer struct {
 	pointRepository      pointRepository
 	pointCacheRepository pointCacheRepository
+	orderQueue           orderQueue
 }
 
 func (s *pointAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
@@ -198,6 +226,72 @@ func (s *pointAPIServer) updateAmountCache(useruuid string) error {
 	return nil
 }
 
+func (s *pointAPIServer) subscribeOrderQueue() (func() error, error) {
+	orderCh, err := s.orderQueue.subscribe()
+	if err != nil {
+		return nil, err
+	}
+
+	go func() {
+		for {
+			msg := strings.Split(<-orderCh, ":")
+			if len(msg) != 2 {
+				log.Printf("received data is invalid: %s\n", msg)
+				continue
+			}
+			operation := msg[0]
+			data := msg[1]
+
+			o := &order.Order{}
+			err = json.Unmarshal([]byte(data), o)
+			if err != nil {
+				log.Printf("received body data is invalid: %s\n", data)
+				continue
+			}
+
+			switch order.Operation(operation) {
+			case order.CreateOperation:
+				cost := 0
+				for _, op := range o.OrderedProducts {
+					cost = cost + op.Price*op.Count
+				}
+
+				p := &Point{
+					UserUUID:    o.UserUUID,
+					Balance:     int32(cost),
+					Description: fmt.Sprintf("Order point [order id = %s, order date = %s]", o.UUID, o.CreatedAt),
+				}
+				_, err := s.pointRepository.store(p)
+				if err != nil {
+					log.Printf("[from subscribe] failed to store point (%#v): %v", p, err)
+				}
+
+			case order.DeleteOperation:
+				cost := 0
+				for _, op := range o.OrderedProducts {
+					cost = cost + op.Price*op.Count
+				}
+
+				p := &Point{
+					UserUUID:    o.UserUUID,
+					Balance:     -int32(cost),
+					Description: fmt.Sprintf("[Cancel] Order point [order id = %s, order date = %s]", o.UUID, o.CreatedAt),
+				}
+				_, err := s.pointRepository.store(p)
+				if err != nil {
+					log.Printf("[from subscribe] failed to store point (%#v): %v", p, err)
+				}
+			case order.UpdateOperation:
+				log.Printf("order update is not permitted")
+			default:
+				log.Printf("Unknown operation [%s]: %s", operation, msg)
+			}
+		}
+	}()
+
+	return s.orderQueue.unsubscribe, nil
+}
+
 func main() {
 	lis, err := net.Listen("tcp", defaultBindAddr)
 	if err != nil {
@@ -229,6 +323,22 @@ func main() {
 		),
 	)
 
+	oqConfig := orderQueueKafkaConfig{
+		host:     orderQueueHost,
+		port:     orderQueuePort,
+		username: orderQueueUsername,
+		password: orderQueuePassword,
+		topic:    orderQueueTopic,
+		group:    "point-consumer",
+		retry:    10,
+	}
+	oq, closeOq, err := oqConfig.connect()
+	if err != nil {
+		log.Fatalf("failed to connect to order queue: %v (config=%#v)", err, oqConfig)
+	}
+	defer closeOq()
+	log.Printf("successed to connect to order queue")
+
 	s := grpc.NewServer()
 	api := &pointAPIServer{
 		pointRepository: &pointRepositoryImpl{
@@ -237,6 +347,7 @@ func main() {
 		pointCacheRepository: &pointRepositoryMemcache{
 			cache: cache,
 		},
+		orderQueue: oq,
 	}
 	pb.RegisterPointAPIServer(s, api)
 
@@ -246,6 +357,12 @@ func main() {
 	if err := api.pointRepository.initDB(); err != nil {
 		log.Fatalf("failed to init database: %v", err)
 	}
+
+	unsubscribe, err := api.subscribeOrderQueue()
+	if err != nil {
+		log.Fatalf("failed to subscribe order queue: %v", err)
+	}
+	defer unsubscribe()
 
 	log.Printf("start point API server")
 	if err := s.Serve(lis); err != nil {

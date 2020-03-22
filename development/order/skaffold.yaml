@@ -5,7 +5,8 @@ build:
   artifacts:
   - image: local-order
     docker:
-      dockerfile: ./Dockerfile
+      dockerfile: ./order/Dockerfile
+    context: ../
   tagPolicy:
     envTemplate:
       template: "local-order:latest"
