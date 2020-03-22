@@ -5,7 +5,8 @@ build:
   artifacts:
   - image: local-point
     docker:
-      dockerfile: ./Dockerfile
+      dockerfile: ./point/Dockerfile
+    context: ../
   tagPolicy:
     envTemplate:
       template: "local-point:latest"

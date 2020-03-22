@@ -5,7 +5,8 @@ build:
   artifacts:
   - image: local-rate
     docker:
-      dockerfile: ./Dockerfile
+      dockerfile: ./rate/Dockerfile
+    context: ../
   tagPolicy:
     envTemplate:
       template: "local-rate:latest"

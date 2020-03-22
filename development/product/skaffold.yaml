@@ -5,7 +5,8 @@ build:
   artifacts:
   - image: local-product
     docker:
-      dockerfile: ./Dockerfile
+      dockerfile: ./product/Dockerfile
+    context: ../
   tagPolicy:
     envTemplate:
       template: "local-product:latest"

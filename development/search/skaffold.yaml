@@ -5,7 +5,8 @@ build:
   artifacts:
   - image: local-search
     docker:
-      dockerfile: ./Dockerfile
+      dockerfile: ./search/Dockerfile
+    context: ../
   tagPolicy:
     envTemplate:
       template: "local-search:latest"

@@ -5,7 +5,8 @@ build:
   artifacts:
   - image: local-payment-info
     docker:
-      dockerfile: ./Dockerfile
+      dockerfile: ./payment-info/Dockerfile
+    context: ../
   tagPolicy:
     envTemplate:
       template: "local-payment-info:latest"

@@ -5,7 +5,8 @@ build:
   artifacts:
   - image: local-admin
     docker:
-      dockerfile: ./Dockerfile
+      dockerfile: ./admin/Dockerfile
+    context: ../
   tagPolicy:
     envTemplate:
       template: "local-admin:latest"
