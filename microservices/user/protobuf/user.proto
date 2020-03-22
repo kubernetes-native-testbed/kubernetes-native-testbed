@@ -21,11 +21,12 @@ message User {
 	string lastName = 4;
 	int32 age = 5;
 	repeated Address addresses = 6;
-	string passwordHash = 7;
-	string defaultPaymentInfoUUID = 8;
-	google.protobuf.Timestamp createdAt = 9;
-	google.protobuf.Timestamp updatedAt = 10;
-	google.protobuf.Timestamp deletedAt = 11;
+	string password = 7;
+	string passwordHash = 8;
+	string defaultPaymentInfoUUID = 9;
+	google.protobuf.Timestamp createdAt = 10;
+	google.protobuf.Timestamp updatedAt = 11;
+	google.protobuf.Timestamp deletedAt = 12;
 }
 
 message Address {
@@ -73,7 +74,7 @@ message IsExistsResponse {
 
 message AuthenticationRequest {
 	string UUID = 1;
-	string passwordHash = 2;
+	string password = 2;
 }
 
 message AuthenticationResponse {

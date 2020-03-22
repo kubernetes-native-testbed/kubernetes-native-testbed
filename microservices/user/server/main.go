@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/md5"
 	"fmt"
 	"log"
 	"net"
@@ -19,6 +20,10 @@ import (
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
+)
+
+const (
+	passwordHashSalt = "uruamsy"
 )
 
 var (
@@ -138,12 +143,17 @@ func (s *userAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRes
 		}
 	}
 
+	passwordHash, err := generatePasswordHash(req.GetUser().GetPassword())
+	if err != nil {
+		return nil, err
+	}
+
 	u := &user.User{
 		Username:               req.GetUser().GetUsername(),
 		FirstName:              req.GetUser().GetFirstName(),
 		LastName:               req.GetUser().GetLastName(),
 		Age:                    req.GetUser().GetAge(),
-		PasswordHash:           req.GetUser().GetPasswordHash(),
+		PasswordHash:           passwordHash,
 		DefaultPaymentInfoUUID: req.GetUser().GetDefaultPaymentInfoUUID(),
 		Addresses:              addresses,
 	}
@@ -171,13 +181,19 @@ func (s *userAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*emp
 			Disabled:    address.Disabled,
 		}
 	}
+
+	passwordHash, err := generatePasswordHash(req.GetUser().GetPassword())
+	if err != nil {
+		return nil, err
+	}
+
 	u := &user.User{
 		UUID:                   req.GetUser().GetUUID(),
 		Username:               req.GetUser().GetUsername(),
 		FirstName:              req.GetUser().GetFirstName(),
 		LastName:               req.GetUser().GetLastName(),
 		Age:                    req.GetUser().GetAge(),
-		PasswordHash:           req.GetUser().GetPasswordHash(),
+		PasswordHash:           passwordHash,
 		DefaultPaymentInfoUUID: req.GetUser().GetDefaultPaymentInfoUUID(),
 		Addresses:              addresses,
 	}
@@ -223,11 +239,16 @@ func (s *userAPIServer) Authentication(ctx context.Context, req *pb.Authenticati
 		return nil, nferr
 	}
 
-	if u.PasswordHash != req.GetPasswordHash() {
+	passwordHash, err := generatePasswordHash(req.GetPassword())
+	if err != nil {
+		return nil, err
+	}
+
+	if u.PasswordHash != passwordHash {
 		return nil, fmt.Errorf("user_uuid or password is not match (userUUID=%s)", uuid)
 	}
 
-	signKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privateKey))
+	signKey, err := jwt.ParseECPrivateKeyFromPEM([]byte(privateKey))
 	if err != nil {
 		return nil, err
 	}
@@ -243,6 +264,13 @@ func (s *userAPIServer) Authentication(ctx context.Context, req *pb.Authenticati
 	}
 
 	return &pb.AuthenticationResponse{Token: tokenString}, nil
+}
+
+func generatePasswordHash(password string) (string, error) {
+	if password == "" {
+		return "", fmt.Errorf("empty password is not allowed")
+	}
+	return fmt.Sprintf("%X", md5.Sum([]byte(passwordHashSalt+password))), nil
 }
 
 func main() {

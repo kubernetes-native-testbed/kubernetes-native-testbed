@@ -326,8 +326,9 @@ proto.userpb.User.toObject = function(includeInstance, msg) {
     age: jspb.Message.getFieldWithDefault(msg, 5, 0),
     addressesList: jspb.Message.toObjectList(msg.getAddressesList(),
     proto.userpb.Address.toObject, includeInstance),
-    passwordhash: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    defaultpaymentinfouuid: jspb.Message.getFieldWithDefault(msg, 8, ""),
+    password: jspb.Message.getFieldWithDefault(msg, 7, ""),
+    passwordhash: jspb.Message.getFieldWithDefault(msg, 8, ""),
+    defaultpaymentinfouuid: jspb.Message.getFieldWithDefault(msg, 9, ""),
     createdat: (f = msg.getCreatedat()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     updatedat: (f = msg.getUpdatedat()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     deletedat: (f = msg.getDeletedat()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
@@ -394,23 +395,27 @@ proto.userpb.User.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 7:
       var value = /** @type {string} */ (reader.readString());
-      msg.setPasswordhash(value);
+      msg.setPassword(value);
       break;
     case 8:
       var value = /** @type {string} */ (reader.readString());
-      msg.setDefaultpaymentinfouuid(value);
+      msg.setPasswordhash(value);
       break;
     case 9:
-      var value = new google_protobuf_timestamp_pb.Timestamp;
-      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
-      msg.setCreatedat(value);
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDefaultpaymentinfouuid(value);
       break;
     case 10:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
-      msg.setUpdatedat(value);
+      msg.setCreatedat(value);
       break;
     case 11:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setUpdatedat(value);
+      break;
+    case 12:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setDeletedat(value);
@@ -487,29 +492,28 @@ proto.userpb.User.serializeBinaryToWriter = function(message, writer) {
       proto.userpb.Address.serializeBinaryToWriter
     );
   }
-  f = message.getPasswordhash();
+  f = message.getPassword();
   if (f.length > 0) {
     writer.writeString(
       7,
       f
     );
   }
-  f = message.getDefaultpaymentinfouuid();
+  f = message.getPasswordhash();
   if (f.length > 0) {
     writer.writeString(
       8,
       f
     );
   }
-  f = message.getCreatedat();
-  if (f != null) {
-    writer.writeMessage(
+  f = message.getDefaultpaymentinfouuid();
+  if (f.length > 0) {
+    writer.writeString(
       9,
-      f,
-      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+      f
     );
   }
-  f = message.getUpdatedat();
+  f = message.getCreatedat();
   if (f != null) {
     writer.writeMessage(
       10,
@@ -517,10 +521,18 @@ proto.userpb.User.serializeBinaryToWriter = function(message, writer) {
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
-  f = message.getDeletedat();
+  f = message.getUpdatedat();
   if (f != null) {
     writer.writeMessage(
       11,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
+  f = message.getDeletedat();
+  if (f != null) {
+    writer.writeMessage(
+      12,
       f,
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
@@ -638,48 +650,63 @@ proto.userpb.User.prototype.clearAddressesList = function() {
 
 
 /**
- * optional string passwordHash = 7;
+ * optional string password = 7;
  * @return {string}
  */
-proto.userpb.User.prototype.getPasswordhash = function() {
+proto.userpb.User.prototype.getPassword = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
 };
 
 
 /** @param {string} value */
-proto.userpb.User.prototype.setPasswordhash = function(value) {
+proto.userpb.User.prototype.setPassword = function(value) {
   jspb.Message.setProto3StringField(this, 7, value);
 };
 
 
 /**
- * optional string defaultPaymentInfoUUID = 8;
+ * optional string passwordHash = 8;
  * @return {string}
  */
-proto.userpb.User.prototype.getDefaultpaymentinfouuid = function() {
+proto.userpb.User.prototype.getPasswordhash = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
 };
 
 
 /** @param {string} value */
-proto.userpb.User.prototype.setDefaultpaymentinfouuid = function(value) {
+proto.userpb.User.prototype.setPasswordhash = function(value) {
   jspb.Message.setProto3StringField(this, 8, value);
 };
 
 
 /**
- * optional google.protobuf.Timestamp createdAt = 9;
+ * optional string defaultPaymentInfoUUID = 9;
+ * @return {string}
+ */
+proto.userpb.User.prototype.getDefaultpaymentinfouuid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+};
+
+
+/** @param {string} value */
+proto.userpb.User.prototype.setDefaultpaymentinfouuid = function(value) {
+  jspb.Message.setProto3StringField(this, 9, value);
+};
+
+
+/**
+ * optional google.protobuf.Timestamp createdAt = 10;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.userpb.User.prototype.getCreatedat = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 9));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 10));
 };
 
 
 /** @param {?proto.google.protobuf.Timestamp|undefined} value */
 proto.userpb.User.prototype.setCreatedat = function(value) {
-  jspb.Message.setWrapperField(this, 9, value);
+  jspb.Message.setWrapperField(this, 10, value);
 };
 
 
@@ -696,23 +723,23 @@ proto.userpb.User.prototype.clearCreatedat = function() {
  * @return {boolean}
  */
 proto.userpb.User.prototype.hasCreatedat = function() {
-  return jspb.Message.getField(this, 9) != null;
+  return jspb.Message.getField(this, 10) != null;
 };
 
 
 /**
- * optional google.protobuf.Timestamp updatedAt = 10;
+ * optional google.protobuf.Timestamp updatedAt = 11;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.userpb.User.prototype.getUpdatedat = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 10));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 11));
 };
 
 
 /** @param {?proto.google.protobuf.Timestamp|undefined} value */
 proto.userpb.User.prototype.setUpdatedat = function(value) {
-  jspb.Message.setWrapperField(this, 10, value);
+  jspb.Message.setWrapperField(this, 11, value);
 };
 
 
@@ -729,23 +756,23 @@ proto.userpb.User.prototype.clearUpdatedat = function() {
  * @return {boolean}
  */
 proto.userpb.User.prototype.hasUpdatedat = function() {
-  return jspb.Message.getField(this, 10) != null;
+  return jspb.Message.getField(this, 11) != null;
 };
 
 
 /**
- * optional google.protobuf.Timestamp deletedAt = 11;
+ * optional google.protobuf.Timestamp deletedAt = 12;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.userpb.User.prototype.getDeletedat = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 11));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 12));
 };
 
 
 /** @param {?proto.google.protobuf.Timestamp|undefined} value */
 proto.userpb.User.prototype.setDeletedat = function(value) {
-  jspb.Message.setWrapperField(this, 11, value);
+  jspb.Message.setWrapperField(this, 12, value);
 };
 
 
@@ -762,7 +789,7 @@ proto.userpb.User.prototype.clearDeletedat = function() {
  * @return {boolean}
  */
 proto.userpb.User.prototype.hasDeletedat = function() {
-  return jspb.Message.getField(this, 11) != null;
+  return jspb.Message.getField(this, 12) != null;
 };
 
 
@@ -2191,7 +2218,7 @@ proto.userpb.AuthenticationRequest.prototype.toObject = function(opt_includeInst
 proto.userpb.AuthenticationRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     uuid: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    passwordhash: jspb.Message.getFieldWithDefault(msg, 2, "")
+    password: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -2234,7 +2261,7 @@ proto.userpb.AuthenticationRequest.deserializeBinaryFromReader = function(msg, r
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setPasswordhash(value);
+      msg.setPassword(value);
       break;
     default:
       reader.skipField();
@@ -2272,7 +2299,7 @@ proto.userpb.AuthenticationRequest.serializeBinaryToWriter = function(message, w
       f
     );
   }
-  f = message.getPasswordhash();
+  f = message.getPassword();
   if (f.length > 0) {
     writer.writeString(
       2,
@@ -2298,16 +2325,16 @@ proto.userpb.AuthenticationRequest.prototype.setUuid = function(value) {
 
 
 /**
- * optional string passwordHash = 2;
+ * optional string password = 2;
  * @return {string}
  */
-proto.userpb.AuthenticationRequest.prototype.getPasswordhash = function() {
+proto.userpb.AuthenticationRequest.prototype.getPassword = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
-proto.userpb.AuthenticationRequest.prototype.setPasswordhash = function(value) {
+proto.userpb.AuthenticationRequest.prototype.setPassword = function(value) {
   jspb.Message.setProto3StringField(this, 2, value);
 };
 
