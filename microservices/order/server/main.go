@@ -330,6 +330,7 @@ func (s *orderAPIServer) orderValidation(ctx context.Context, order *pb.Order) e
 			}
 			continue
 		}
+		break
 	}
 	if err != nil {
 		return err
@@ -354,6 +355,7 @@ func (s *orderAPIServer) orderValidation(ctx context.Context, order *pb.Order) e
 			}
 			continue
 		}
+		break
 	}
 	if err != nil {
 		return err

@@ -172,6 +172,7 @@ func (s *cartAPIServer) Commit(ctx context.Context, req *pb.CommitRequest) (*pb.
 				}
 				continue
 			}
+			break
 		}
 		if err != nil {
 			return nil, fmt.Errorf("product request error: %w", err)
