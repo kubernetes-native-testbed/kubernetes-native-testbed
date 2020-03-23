@@ -4,7 +4,7 @@ export function SetTokenToCookie(token, age) {
 
 export function GetTokenMetadata() {
   const token = GetTokenFromCookie();
-  return {'X-Testbed-Token': token};
+  return {'x-testbed-token': token};
 }
 
 export function GetTokenFromCookie() {
