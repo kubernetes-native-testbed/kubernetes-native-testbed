@@ -46,7 +46,7 @@ const (
 	defaultProductHost = "product.product.svc.cluster.local"
 	defaultProductPort = 8080
 
-	tokenHeaderName = "X-Testbed-Token"
+	tokenHeaderName = "x-testbed-token"
 )
 
 func init() {
@@ -276,10 +276,12 @@ func verifyToken(ctx context.Context, userUUID string) error {
 	}
 
 	var tokenStr string
-	if tokens := header[tokenHeaderName]; len(tokens) == 1 {
-		tokenStr = tokens[0]
-	} else {
+	if tokens, ok := header[tokenHeaderName]; !ok {
+		return fmt.Errorf("token header is not found: %#v", header)
+	} else if len(tokens) != 1 {
 		return fmt.Errorf("token field is not valid: %v", tokens)
+	} else {
+		tokenStr = tokens[0]
 	}
 	log.Printf("validate target token is %s (userUUID=%s)", tokenStr, userUUID)
 

@@ -27,6 +27,11 @@ spec:
               value: cart-db-pd.cart.svc.cluster.local
             - name: KVS_PORT
               value: "2379"
+            - name: AUTH_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwtkey
+                  key: id_ecdsa_521.pub
           resources:
             requests:
               cpu: 100m
@@ -62,3 +67,20 @@ spec:
   selector:
     service: cart
     role: app
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jwtkey
+  namespace: cart
+  labels:
+    service: cart
+    role: app
+stringData:
+  id_ecdsa_521.pub: |
+    -----BEGIN PUBLIC KEY-----
+    MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBjjADY22rVltjskWUQBxRHOftt1JQ
+    use7YfTpH8HVj6XFMQLjlTFLx2zcUyS2N3VnyfIGQpxG+HQ51FjSir5u604B+s+/
+    MQJBgk3xndzo+qhO1x+iLSwGNUdMeOTzDfu2oihta2dyRQwd6FQvnqLE7LA8ZWIS
+    7CtuWc6IFAUvbxeCEzw=
+    -----END PUBLIC KEY-----
