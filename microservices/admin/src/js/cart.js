@@ -2,6 +2,8 @@ const {ShowRequest, ShowResponse, AddRequest, RemoveRequest, CommitRequest, Comm
 
 const {CartAPIClient} = require('./protobuf/cart_grpc_web_pb.js');
 
+const {GetTokenMetadata} = require('./cookie.js');
+
 export const order = new Vue({
   el: '#cart',
   data: {
@@ -46,7 +48,7 @@ export const order = new Vue({
       this.clearResponseField();
       const req = new ShowRequest();
       req.setUseruuid(this.form.userUUID);
-      this.client.show(req, {}, (err, resp) => {
+      this.client.show(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -68,7 +70,7 @@ export const order = new Vue({
         c.getCartproductsMap().set(v.productUUID, v.count);
       });
       req.setCart(c);
-      this.client.add(req, {}, (err, resp) => {
+      this.client.add(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -86,7 +88,7 @@ export const order = new Vue({
         c.getCartproductsMap().set(v.productUUID, v.count);
       });
       req.setCart(c);
-      this.client.remove(req, {}, (err, resp) => {
+      this.client.remove(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -99,7 +101,7 @@ export const order = new Vue({
       return new Promise((resolve, reject) => {
         const req = new ShowRequest();
         req.setUseruuid(userUUID);
-        this.client.show(req, {}, (err, resp) => {
+        this.client.show(req, GetTokenMetadata(), (err, resp) => {
           if (err) {
             this.resp.errorCode = err.code;
             this.resp.errorMsg = err.message;
@@ -125,7 +127,7 @@ export const order = new Vue({
       req.setAddressuuid(this.commitform.addressUUID);
       req.setPaymentinfouuid(this.commitform.paymentInfoUUID);
       console.log("cart:", c);
-      this.client.commit(req, {}, (err, resp) => {
+      this.client.commit(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;

@@ -14,6 +14,7 @@ require (
 	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart v0.0.0-00010101000000-000000000000
 	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order/protobuf v0.0.0-00010101000000-000000000000
 	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product/protobuf v0.0.0-00010101000000-000000000000
+	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/user v0.0.0-00010101000000-000000000000
 	github.com/pingcap/goleveldb v0.0.0-20191226122134-f82aafb29989 // indirect
 	github.com/pingcap/kvproto v0.0.0-20200317112120-78042b285b75 // indirect
 	github.com/pingcap/log v0.0.0-20200117041106-d28c14d3b1cd // indirect
@@ -34,4 +35,5 @@ replace (
 	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart => ../
 	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order/protobuf => ../../order/protobuf
 	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product/protobuf => ../../product/protobuf
+	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/user => ../../user
 )

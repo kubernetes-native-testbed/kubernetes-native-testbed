@@ -13,6 +13,7 @@ import (
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart/protobuf"
 	orderpb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order/protobuf"
 	productpb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product/protobuf"
+	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/user"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -27,6 +28,8 @@ var (
 
 	productHost string
 	productPort int
+
+	authPublicKey string
 )
 
 const (
@@ -66,6 +69,9 @@ func init() {
 		productPort = defaultProductPort
 		log.Printf("productPort parse error: %v", err)
 	}
+	if authPublicKey = os.Getenv("AUTH_PUBLIC_KEY"); authPublicKey == "" {
+		log.Fatal("AUTH_PUBLIC_KEY is required")
+	}
 }
 
 type cartAPIServer struct {
@@ -78,6 +84,11 @@ type cartAPIServer struct {
 
 func (s *cartAPIServer) Show(ctx context.Context, req *pb.ShowRequest) (*pb.ShowResponse, error) {
 	userUUID := req.GetUserUUID()
+
+	if err := user.VerifyToken(ctx, userUUID, authPublicKey); err != nil {
+		return nil, err
+	}
+
 	c, notfound, err := s.cartRepository.FindByUUID(userUUID)
 	if err != nil {
 		return nil, err
@@ -90,6 +101,10 @@ func (s *cartAPIServer) Show(ctx context.Context, req *pb.ShowRequest) (*pb.Show
 }
 
 func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Empty, error) {
+	if err := user.VerifyToken(ctx, req.GetCart().GetUserUUID(), authPublicKey); err != nil {
+		return nil, err
+	}
+
 	additionalCart := cart.ConvertToCart(req.GetCart())
 	log.Printf("add %s", additionalCart)
 	cart, notfound, err := s.cartRepository.FindByUUID(additionalCart.UserUUID)
@@ -124,6 +139,10 @@ func (s *cartAPIServer) Add(ctx context.Context, req *pb.AddRequest) (*empty.Emp
 }
 
 func (s *cartAPIServer) Remove(ctx context.Context, req *pb.RemoveRequest) (*empty.Empty, error) {
+	if err := user.VerifyToken(ctx, req.GetCart().GetUserUUID(), authPublicKey); err != nil {
+		return nil, err
+	}
+
 	additionalCart := cart.ConvertToCart(req.GetCart())
 	log.Printf("remove %s", additionalCart)
 	cart, notfound, err := s.cartRepository.FindByUUID(additionalCart.UserUUID)
@@ -156,6 +175,10 @@ func (s *cartAPIServer) Remove(ctx context.Context, req *pb.RemoveRequest) (*emp
 }
 
 func (s *cartAPIServer) Commit(ctx context.Context, req *pb.CommitRequest) (*pb.CommitResponse, error) {
+	if err := user.VerifyToken(ctx, req.GetCart().GetUserUUID(), authPublicKey); err != nil {
+		return nil, err
+	}
+
 	retry := 5
 	orderedProducts := make([]*orderpb.OrderedProduct, 0, len(req.GetCart().GetCartProducts()))
 	log.Printf("commit %s", cart.ConvertToCart(req.GetCart()))
