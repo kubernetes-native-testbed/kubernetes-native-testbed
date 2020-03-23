@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: rate
-          image: registry-harbor-core.infra.svc.cluster.local/library/rate:be966e8f8d1c686e9a7b6908447465a36decd984
+          image: registry-harbor-core.infra.svc.cluster.local/library/rate:3e5a988d908f7e726c9830d5d687673307c9f636
           env:
             - name: DB_HOST
               value: rfs-rate-kvs.rate.svc.cluster.local
