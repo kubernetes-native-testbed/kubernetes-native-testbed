@@ -30,6 +30,14 @@ if [ -z "${LOCAL_CONTEXT}" ]; then
   echo "Please set LOCAL_CONTEXT env var for local cluster";
   exit 1;
 fi
+if ! kubectl --context ${REMOTE_CONTEXT} version; then
+  echo "Context REMOTE_CONTEXT ${REMOTE_CONTEXT} cannot connect."
+  exit 1; 
+fi
+if ! kubectl --context ${LOCAL_CONTEXT} version; then
+  echo "Context LOCAL_CONTEXT ${LOCAL_CONTEXT} cannot connect."
+  exit 1;
+fi
 
 # connect remote kubernetes and local kubernetes by telepresence
 TELEPRESENCE_CMD="telepresence \
