@@ -12,6 +12,9 @@ export const point = new Vue({
       balance: null,
       description: '',
     },
+    totalAmountForm: {
+      userUUID: '',
+    },
     resp: {
       point: [],
       errorCode: 0,
@@ -29,7 +32,7 @@ export const point = new Vue({
       this.form.description = '';
     },
     clearTotalAmountForm: function() {
-      this.totalAmountForm.useruuid = '';
+      this.totalAmountForm.userUUID = '';
     },
     clearResponseField: function() {
       this.resp.point = [];
@@ -113,7 +116,7 @@ export const point = new Vue({
     getTotalAmount: function() {
       this.clearResponseField();
       const req = new GetTotalAmountRequest();
-      req.setUseruuid(this.totalAmountForm.useruuid);
+      req.setUseruuid(this.totalAmountForm.userUUID);
       this.client.getTotalAmount(req, {}, (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
