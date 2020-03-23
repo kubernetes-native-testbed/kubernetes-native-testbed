@@ -22,9 +22,9 @@ func (pr *pointRepositoryMemcache) findByUUID(uuid string) (*PointCache, error) 
 	if err != nil {
 		return nil, fmt.Errorf("findByID error: %w (uuid: %s)", err, uuid)
 	}
-	amount, err := strconv.ParseInt(string(item.Value), 10, 32)
+	amount, err := strconv.ParseInt(fmt.Sprintf("%s", item.Value), 10, 32)
 	if err != nil {
-		return nil, fmt.Errorf("findByID error: %w (uuid: %s)", err, uuid)
+		return nil, fmt.Errorf("findByID parse error: %w (uuid: %s)", err, uuid)
 	}
 
 	pc := &PointCache{UserUUID: uuid, TotalAmount: int32(amount)}
@@ -32,7 +32,7 @@ func (pr *pointRepositoryMemcache) findByUUID(uuid string) (*PointCache, error) 
 }
 
 func (pr *pointRepositoryMemcache) store(pc *PointCache) error {
-	if err := pr.cache.Set(&memcache.Item{Key: pc.UserUUID, Value: []byte(string(pc.TotalAmount))}); err != nil {
+	if err := pr.cache.Set(&memcache.Item{Key: pc.UserUUID, Value: []byte(strconv.Itoa(int(pc.TotalAmount)))}); err != nil {
 		return fmt.Errorf("store error: %w (pointCache: %v)", err, pc)
 	}
 	return nil

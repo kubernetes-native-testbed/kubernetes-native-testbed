@@ -214,9 +214,16 @@ func (s *pointAPIServer) GetTotalAmount(ctx context.Context, req *pb.GetTotalAmo
 	user_uuid := req.GetUserUUID()
 	pc, err := s.pointCacheRepository.findByUUID(user_uuid)
 	if err != nil {
+		log.Printf("cannot find cache for %s", user_uuid)
 		if err := s.updateTotalAmountCache(user_uuid); err != nil {
 			log.Printf("failed to update amout cache for %s: %w", user_uuid, err)
 			return nil, err
+		} else {
+			pc, err = s.pointCacheRepository.findByUUID(user_uuid)
+			if err != nil {
+				log.Printf("cannot store cache for %s", user_uuid)
+				return nil, err
+			}
 		}
 	}
 
