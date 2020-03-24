@@ -1,6 +1,6 @@
 const {ShowRequest, ShowResponse, AddRequest, RemoveRequest, CommitRequest, CommitResponse, Cart} = require('./protobuf/cart_pb.js');
 
-const {CartAPIClient} = require('./protobuf/cart_grpc_web_pb.js');
+const {CartAPIClient, CartAPIPromiseClient} = require('./protobuf/cart_grpc_web_pb.js');
 
 const {GetTokenMetadata} = require('./cookie.js');
 
@@ -25,6 +25,7 @@ export const order = new Vue({
   },
   created: function() {
       this.client = new CartAPIClient(this.endpoint);
+      this.promiseClient = new CartAPIPromiseClient(this.endpoint);
   },
   methods: {
     addCartProduct: function() {
@@ -97,26 +98,17 @@ export const order = new Vue({
         }
       });
     },
-    getCartProducts: function(userUUID) {
-      return new Promise((resolve, reject) => {
-        const req = new ShowRequest();
-        req.setUseruuid(userUUID);
-        this.client.show(req, GetTokenMetadata(), (err, resp) => {
-          if (err) {
-            this.resp.errorCode = err.code;
-            this.resp.errorMsg = err.message;
-          } else {
-            resolve(resp.getCart().getCartproductsMap())
-          }
-        });
-      });
-    },
     commitCart: async function() {
       this.clearResponseField();
       const req = new CommitRequest();
       const c = new Cart();
       c.setUseruuid(this.commitform.userUUID);
-      const cartProducts = await this.getCartProducts(this.commitform.userUUID);
+
+      const sreq = new ShowRequest();
+      sreq.setUseruuid(this.commitform.userUUID);
+      const resp = await this.promiseClient.show(sreq, GetTokenMetadata());
+      const cartProducts = resp.getCart().getCartproductsMap();
+
       console.log("cartProducts:", cartProducts);
       cartProducts.forEach(function(count, productUUID) {
         console.log("products uuid:", productUUID);
