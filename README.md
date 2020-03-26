@@ -27,42 +27,41 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 | admin        | -          |   |   |   |
 
 # OSS
-
-| Name | Description | Version | CNCF Project | URL |
-|--------------|-----------|---|---|
-| Vitess | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| NATS | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| presslabs-mysql-operator | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| oracle-mysql-operator | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| cassandra-operator | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| elastic-cloud-operator (ElasticSearch, Kibana) | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| kafka-operator | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| mcrouter-operator | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| minio-operator | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| postgres-operator | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| prometheus-operator | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| redis-operator | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| tidb-operator (TiDB & TiKV) | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| rook-ceph | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| rook-yugabytedb | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| KubeDB | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| nginx-ingress | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| Harbor | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| Clair | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| kubernetes-dashboard v2 | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| Loki | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| weave-scope | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| Contour (Envoy) | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| Tekton Pipelines & Triggers | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| Kaniko | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| Telepresence | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| Kustomize | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| ArgoCD | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| conftest | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| gRPC | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| gRPC-web | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| (TBR): Knative | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
-| (TBR): OPA Gatekeeper | MySQL as a Service | v0.0.0 (MySQL: v0.0.0)| | https://example.com |
+| Name                                           | Description        | Version                | CNCF Project | URL                 |
+| ---------------------------------------------- | ------------------ | ---------------------- | ------------ | ------------------- |
+| Vitess                                         | Relational Database | v0.0.0 (MySQL: v0.0.0) |              | https://vitess.io/<br>https://github.com/planetscale/vitess-operator|
+| presslabs-mysql-operator                       | Relational Database | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/presslabs/mysql-operator |
+| oracle-mysql-operator                          | Relational Database | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/oracle/mysql-operator |
+| rook-yugabytedb                                | Relational Database | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/rook/rook/blob/master/cluster/examples/kubernetes/yugabytedb |
+| postgres-operator                              | Relational Database | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/zalando/postgres-operator |
+| tidb-operator (TiDB & TiKV)                    | RDB / KVS | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/pingcap/tidb-operator |
+| mcrouter-operator                              | Key Value Store | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/geerlingguy/mcrouter-operator |
+| redis-operator                                 | Key Value Store | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/spotahome/redis-operator |
+| cassandra-operator (CassKop)                            | NoSQL (RDB) | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/Orange-OpenSource/casskop |
+| KubeDB (MongoDB)                               | NoSQL (Document DB)| v0.0.0 (MySQL: v0.0.0) |              | https://github.com/kubedb/operator |
+| nats-operator                                           | Message Queue | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/nats-io/nats-operator |
+| kafka-operator                                 | Message Queue | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/strimzi/strimzi-kafka-operator |
+| minio-operator                                 | Object Storage | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/minio/minio-operator |
+| rook-ceph                                      | Block Storage | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/rook/rook/tree/master/cluster/examples/kubernetes/ceph |
+| nginx-ingress                                  | Ingress Controller | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/kubernetes/ingress-nginx |
+| Contour (Envoy)                                | L7 LoadBalancer | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/projectcontour/contour |
+| Harbor                                         | Container Registry | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/goharbor/harbor |
+| Kaniko                                         | Container Build Tool | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/GoogleContainerTools/kaniko |
+| Tekton Pipelines & Triggers                    | CI | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/tektoncd/triggers |
+| ArgoCD                                         | CD | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/argoproj/argo-cd |
+| prometheus-operator                            | Monitoring | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/coreos/prometheus-operator |
+| weave-scope                                    | Monitoring | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/weaveworks/scope |
+| kubernetes-dashboard v2                        | Monitoring | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/kubernetes/dashboard |
+| Loki                                           | Logging | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/grafana/loki |
+| Telepresence                                   | Local Development | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/telepresenceio/telepresence |
+| Kustomize                                      | Manifest Management | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/kubernetes-sigs/kustomize |
+| conftest                                       | Manifest Management | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/instrumenta/conftest |
+| gRPC                                           | Microservice Interconnect | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/grpc/grpc-go |
+| gRPC-web                                       | Microservice Interconnect | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/grpc/grpc-web |
+| elastic-cloud-operator (ElasticSearch, Kibana) | Search Engine | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/elastic/cloud-on-k8s |
+| Clair                                          | Security | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/quay/clair |
+| (TBR): OPA Gatekeeper                          | Security | v0.0.0 (MySQL: v0.0.0) |              | https://github.com/open-policy-agent/gatekeeper |
+| (TBR): Knative                                 | Serverless | v0.0.0 (MySQL: v0.0.0) |              | https://knative.dev/ |
 
 # How to use
 
