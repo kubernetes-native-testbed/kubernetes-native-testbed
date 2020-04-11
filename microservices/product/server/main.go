@@ -7,8 +7,8 @@ import (
 	"strconv"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product"
-	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product/protobuf"
+	"github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/product"
+	pb "github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/product/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"

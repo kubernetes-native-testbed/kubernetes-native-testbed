@@ -1,4 +1,4 @@
-module github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart
+module github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/cart
 
 go 1.13
 

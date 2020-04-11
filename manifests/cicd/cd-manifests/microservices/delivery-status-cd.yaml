@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed.git
+    repoURL: https://github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed.git
     targetRevision: develop
     path: manifests/delivery-status
     directory:

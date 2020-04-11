@@ -7,8 +7,8 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/golang/protobuf/ptypes/timestamp"
-	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product"
-	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product/protobuf"
+	"github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/product"
+	pb "github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/product/protobuf"
 )
 
 type productAPIServer struct {

@@ -1,4 +1,4 @@
-module github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/rate/protobuf
+module github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/rate/protobuf
 
 go 1.13
 

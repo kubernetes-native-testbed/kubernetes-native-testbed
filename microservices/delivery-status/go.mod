@@ -1,4 +1,4 @@
-module github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/deliveryStatus
+module github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/deliveryStatus
 
 go 1.13
 

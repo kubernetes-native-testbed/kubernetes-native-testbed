@@ -1,4 +1,4 @@
-module github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product
+module github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/product
 
 go 1.13
 
