@@ -1,4 +1,4 @@
-module github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/comment
+module github.com/__GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/comment
 
 go 1.13
 

@@ -12,7 +12,7 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	pb "github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/deliveryStatus/protobuf"
+	pb "github.com/__GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/deliveryStatus/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"

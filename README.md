@@ -70,15 +70,26 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 # How to use
 
 * pre-requirement
-  * "type: LoadBalancer" service provide global IP address
-  * replace xxx.xxx.xxx.xxx.nip.io
-    * contour LoadBalancer static IP
-    * Certification settings for issuer
-    * webhook url from github for tekton triggers
-  * fork this repository and replace repo settings
   * set up github webhook to tekton triggers with event-listener secret [please-modify-for-high-security-here]
 
-* run following command
++ Fork repo
+
+https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
+
++ Allocate regional static ip address
+
+https://console.cloud.google.com/networking/addresses/add
+
++ Initialize repo to replace placeholder
+
+```
+LOADBALANCER_IP_ADDRESS=xxx.xxx.xxx.xxx
+GITHUB_ORG_NAME=kubernetes-native-testbed
+
+./tools/init_repo.sh
+```
+
++ Deploy applications and so on
 
 ```
 ./tools/init.sh

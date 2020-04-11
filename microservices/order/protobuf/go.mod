@@ -1,4 +1,4 @@
-module github.com/__GITHUB_REPO_NAME__/kubernetes-native-testbed/microservices/order/protobuf
+module github.com/__GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/order/protobuf
 
 go 1.13
 
