@@ -45,7 +45,7 @@ const (
 	defaultS3AccessKeyID     = componentName
 	defaultS3SecretAccessKey = componentName
 	defaultS3BucketName      = componentName + "-image"
-	defaultS3PublicHost      = "minio.34.84.105.184.nip.io"
+	defaultS3PublicHost      = "minio.__LOADBALANCER_IP_ADDRESS__.nip.io"
 	defaultS3PublicPort      = 443
 )
 

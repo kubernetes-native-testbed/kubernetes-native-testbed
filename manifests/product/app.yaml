@@ -49,7 +49,7 @@ spec:
             - name: S3_BUCKET_NAME
               value: product-image
             - name: S3_PUBLIC_HOST
-              value: minio.34.84.105.184.nip.io
+              value: minio.__LOADBALANCER_IP_ADDRESS__.nip.io
             - name: S3_PUBLIC_PORT
               value: "443"
             - name: S3_ACCESS_KEY_ID
