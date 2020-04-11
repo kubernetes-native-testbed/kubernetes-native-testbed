@@ -10,30 +10,30 @@ import (
 )
 
 type RateRepository interface {
-	findByUUID(string) (*Rate, error)
-	store(*Rate) (string, error)
-	update(*Rate) error
-	deleteByUUID(string) error
+	FindByUUID(string) (*Rate, error)
+	Store(*Rate) (string, error)
+	Update(*Rate) error
+	DeleteByUUID(string) error
 }
 
-type rateRepositoryImpl struct {
+type rateRepositoryRedis struct {
 	config *RateRepositoryRedisConfig
 	pool   *redis.Pool
 }
 
-func (rr *rateRepositoryImpl) findByUUID(uuid string) (*Rate, error) {
+func (rr *rateRepositoryRedis) FindByUUID(uuid string) (*Rate, error) {
 	return nil, nil
 }
 
-func (rr *rateRepositoryImpl) store(r *Rate) (string, error) {
+func (rr *rateRepositoryRedis) Store(r *Rate) (string, error) {
 	return "", nil
 }
 
-func (rr *rateRepositoryImpl) update(r *Rate) error {
+func (rr *rateRepositoryRedis) Update(r *Rate) error {
 	return nil
 }
 
-func (rr *rateRepositoryImpl) deleteByUUID(uuid string) error {
+func (rr *rateRepositoryRedis) DeleteByUUID(uuid string) error {
 	return nil
 }
 
@@ -83,5 +83,5 @@ func (c *RateRepositoryRedisConfig) Connect() RateRepository {
 		},
 	}
 
-	return &rateRepositoryImpl{pool: pool, config: c}
+	return &rateRepositoryRedis{pool: pool, config: c}
 }
