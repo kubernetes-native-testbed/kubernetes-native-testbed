@@ -69,25 +69,42 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 
 # How to use
 
-* pre-requirement
-  * set up github webhook to tekton triggers with event-listener secret [please-modify-for-high-security-here]
++ Fork repo to your org
 
-+ Fork repo
+from https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
 
-https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
++ Edit environment settings（tools/env）
 
-+ Allocate regional static ip address
+```
+$ cat tools/env
+export KUBERNETES_PLATFORM=gke
+export GCP_PROJECT=replace-here
+export GCP_REGION=asia-northeast1
+```
 
-https://console.cloud.google.com/networking/addresses/add
++ Allocate static ip address
+
+```
+./tools/allocate_staticip.sh
+```
 
 + Initialize repo to replace placeholder
 
 ```
-LOADBALANCER_IP_ADDRESS=xxx.xxx.xxx.xxx
-GITHUB_ORG_NAME=kubernetes-native-testbed
-
 ./tools/init_repo.sh
 ```
+
++ Add webhook settings for forked repo
+
+from https://github.com/GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
+
+  * Payload URL: https://tekton.LOADBALANCER_IP_ADDRESS.nip.io/event-listener
+  * Content type: application/json
+  * Secret: sample-github-webhook-secret
+    * if you want to change, please edit manifests/infra/instances/ci.yaml
+  * Enable SSL verification: [*]
+  * Just the push event: [*]
+  * Active: [*]
 
 + Deploy applications and so on
 
@@ -106,6 +123,7 @@ GITHUB_ORG_NAME=kubernetes-native-testbed
 * manifests/
   * Kubernetes manifests
   * infra/: system or infrastructure manifests
+  * cicd/: CI/CD pipeline settings
     * ci-manifests/: tekton pipelines manifests
     * cd-manifests/: argocd pipelines manifests
 * microservices/

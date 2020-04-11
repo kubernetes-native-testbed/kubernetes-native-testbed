@@ -1,5 +1,6 @@
 #!/bin/bash
-set -u
+export LOADBALANCER_IP_ADDRESS=$(gcloud compute addresses list --filter="name=testbed-ip" --format="value(address)")
+export GITHUB_ORG_NAME=$(git config --get remote.origin.url | cut -d ":" -f 2 | cut -d "/" -f 1)
 
 CURRENT_DIR=$(cd $(dirname $0); pwd)
 

@@ -337,5 +337,5 @@ metadata:
   namespace: tekton-pipelines
 type: Opaque
 stringData:
-  github-webhook-secret: please-modify-for-high-security-here
+  github-webhook-secret: sample-github-webhook-secret
 ---

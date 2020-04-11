@@ -1,3 +1,4 @@
 export KUBERNETES_PLATFORM=gke
-#export GCP_PROJECT=replace-here
+export GCP_PROJECT=replace-here
+export GCP_REGION=asia-northeast1
 
