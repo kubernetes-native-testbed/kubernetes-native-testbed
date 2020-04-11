@@ -1,13 +1,13 @@
-package main
+package comment
 
 import "time"
 
 type Comment struct {
-	UUID          string `gorm:"primary_key"`
+	UUID          string
 	Message       string
 	UserUUID      string
-	ParentComment []Comment `gorm:"many2many:friendships;association_jointable_foreignkey:parend_comment_uuid"`
+	ParentComment *Comment
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
-	DeletedAt     *time.Time `sql:"index"`
+	DeletedAt     *time.Time
 }

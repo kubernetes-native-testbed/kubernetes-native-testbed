@@ -553,6 +553,126 @@
     </div>
 
 
+    <!--
+      ###########################################################################################
+      # Rate
+      ###########################################################################################
+    -->
+    <hr>
+    <div id="rate">
+      <div>
+        <h2>Rate</h2>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">CommentUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.commentUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">ProductUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.productUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Rating:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.rating" type="text" placeholder="100"><br/>
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="getRate">Get</button>
+        <button class="uk-button uk-button-primary" v-on:click="setRate">Set</button>
+        <button class="uk-button uk-button-primary" v-on:click="updateRate">Update</button>
+        <button class="uk-button uk-button-primary" v-on:click="deleteRate">Delete</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+      </div>
+      <hr class="uk-divider-small">
+      <label>Response</label><br/>
+      <div class="output">
+        <textarea class="uk-textarea" rows=5>{{ resp.rate }}</textarea>
+        <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+      </div>
+    </div>
+
+
+    <!--
+      ###########################################################################################
+      # Comment
+      ###########################################################################################
+    -->
+    <hr>
+    <div id="comment">
+      <div>
+        <h2>Comment</h2>
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.uuid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">UserUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.userUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">ParentCommentUUID:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.parentCommentUUID" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          </div>
+        </div>
+        </br>
+
+        <div uk-grid>
+          <div class="uk-width-1-4"><label class="uk-align-right">Message:</label></div>
+          <div class="uk-width-3-4">
+            <input class="uk-input" v-model="form.message" type="text" placeholder="This is good product!"><br/>
+          </div>
+        </div>
+        </br>
+
+        <button class="uk-button uk-button-primary" v-on:click="getComment">Get</button>
+        <button class="uk-button uk-button-primary" v-on:click="setComment">Set</button>
+        <button class="uk-button uk-button-primary" v-on:click="updateComment">Update</button>
+        <button class="uk-button uk-button-primary" v-on:click="deleteComment">Delete</button>
+        <button class="uk-button uk-button-danger" v-on:click="clearForm">Clear</button>
+      </div>
+      <hr class="uk-divider-small">
+      <label>Response</label><br/>
+      <div class="output">
+        <textarea class="uk-textarea" rows=5>{{ resp.comment }}</textarea>
+        <span v-show="resp.errorCode != 0">Error: {{ resp.errorMsg }}({{ resp.errorCode }})</span>
+      </div>
+    </div>
+
+
     <!-- 
       ###########################################################################################
       # Utils

@@ -5,9 +5,11 @@ import (
 	"log"
 	"net"
 	"os"
+	"strconv"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/rate"
 	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/rate/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
@@ -16,7 +18,9 @@ import (
 
 var (
 	sentinelHost string
+	sentinelPort int
 	kvsPassword  string
+	masterName   string
 )
 
 const (
@@ -24,20 +28,30 @@ const (
 
 	componentName       = "rate"
 	defaultSentinelHost = componentName
+	defaultSentinelPort = 26379
 	defaultKvsPassword  = componentName
+	defaultMasterName   = "mymaster"
 )
 
 func init() {
+	var err error
 	if sentinelHost = os.Getenv("SENTINEL_HOST"); sentinelHost == "" {
 		sentinelHost = defaultSentinelHost
+	}
+	if sentinelPort, err = strconv.Atoi(os.Getenv("SENTINEL_PORT")); err != nil {
+		sentinelPort = defaultSentinelPort
+		log.Printf("sentinelPort parse error: %v", err)
 	}
 	if kvsPassword = os.Getenv("KVS_PASSWORD"); kvsPassword == "" {
 		kvsPassword = defaultKvsPassword
 	}
+	if masterName = os.Getenv("REDIS_MASTER_NAME"); masterName == "" {
+		masterName = defaultMasterName
+	}
 }
 
 type rateAPIServer struct {
-	rateRepository rateRepository
+	rateRepository rate.RateRepository
 }
 
 func (s *rateAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
@@ -63,11 +77,21 @@ func main() {
 	}
 	log.Printf("listen on %s", defaultBindAddr)
 
-	s := grpc.NewServer()
-	api := &rateAPIServer{
-		rateRepository: &rateRepositoryImpl{},
+	redisConfig := rate.RateRepositoryRedisConfig{
+		SentinelHost: sentinelHost,
+		SentinelPort: sentinelPort,
+		Password:     kvsPassword,
+		MasterName:   masterName,
 	}
-	pb.RegisterRateAPIServer(s, api)
+	redis := redisConfig.Connect()
+	log.Printf("succeed to open kvs")
+
+	rateAPI := &rateAPIServer{
+		rateRepository: redis,
+	}
+
+	s := grpc.NewServer()
+	pb.RegisterRateAPIServer(s, rateAPI)
 
 	healthpb.RegisterHealthServer(s, health.NewServer())
 

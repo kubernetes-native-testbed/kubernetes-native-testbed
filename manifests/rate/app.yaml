@@ -23,15 +23,20 @@ spec:
         - name: rate
           image: registry-harbor-core.infra.svc.cluster.local/library/rate:be966e8f8d1c686e9a7b6908447465a36decd984
           env:
-            - name: DB_HOST
+            - name: KVS_HOST
               value: rfs-rate-kvs.rate.svc.cluster.local
-            - name: DB_PORT
+            - name: KVS_PORT
               value: "26379"
-            - name: DB_PASSWORD
+            - name: KVS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: rate-kvs
                   key: password
+            - name: AUTH_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwtkey
+                  key: id_ecdsa_521.pub
           resources:
             requests:
               cpu: 100m
@@ -67,3 +72,20 @@ spec:
   selector:
     service: rate
     role: app
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jwtkey
+  namespace: rate
+  labels:
+    service: rate
+    role: app
+stringData:
+  id_ecdsa_521.pub: |
+    -----BEGIN PUBLIC KEY-----
+    MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBjjADY22rVltjskWUQBxRHOftt1JQ
+    use7YfTpH8HVj6XFMQLjlTFLx2zcUyS2N3VnyfIGQpxG+HQ51FjSir5u604B+s+/
+    MQJBgk3xndzo+qhO1x+iLSwGNUdMeOTzDfu2oihta2dyRQwd6FQvnqLE7LA8ZWIS
+    7CtuWc6IFAUvbxeCEzw=
+    -----END PUBLIC KEY-----
