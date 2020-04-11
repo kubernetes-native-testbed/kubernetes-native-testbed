@@ -1,27 +1,39 @@
-package main
+package comment
 
-type commentRepository interface {
-	findByUUID(string) (*Comment, error)
-	store(*Comment) (string, error)
-	update(*Comment) error
-	deleteByUUID(string) error
+type CommentRepository interface {
+	FindByUUID(string) (*Comment, error)
+	Store(*Comment) (string, error)
+	Update(*Comment) error
+	DeleteByUUID(string) error
 }
 
-type commentRepositoryImpl struct {
+type commentRepositoryMongo struct {
 }
 
-func (rr *commentRepositoryImpl) findByUUID(uuid string) (*Comment, error) {
+func (rr *commentRepositoryMongo) FindByUUID(uuid string) (*Comment, error) {
 	return nil, nil
 }
 
-func (rr *commentRepositoryImpl) store(r *Comment) (string, error) {
+func (rr *commentRepositoryMongo) Store(r *Comment) (string, error) {
 	return "", nil
 }
 
-func (rr *commentRepositoryImpl) update(r *Comment) error {
+func (rr *commentRepositoryMongo) Update(r *Comment) error {
 	return nil
 }
 
-func (rr *commentRepositoryImpl) deleteByUUID(uuid string) error {
+func (rr *commentRepositoryMongo) DeleteByUUID(uuid string) error {
 	return nil
+}
+
+type CommentRepositoryMongoConfig struct {
+	Host     string
+	Port     int
+	Username string
+	Password string
+	DBName   string
+}
+
+func (c *CommentRepositoryMongoConfig) Connect() (CommentRepository, func() error, error) {
+	return nil, nil, nil
 }
