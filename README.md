@@ -188,7 +188,7 @@ Following script do:
 
 | Kind | Endpoint | Username | Password |
 | ---- | -------- | -------- | -------- |
-| Admin | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/admin | NO | NO |
+| Admin | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/admin/ | NO | NO |
 
 # Directory structure
 
