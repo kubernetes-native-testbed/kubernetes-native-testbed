@@ -73,49 +73,83 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 
 from https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
 
-+ Edit environment settings（tools/env）
++ Setup cloud settings
+
+This testbed use your cloud settings, so please check your settings.
 
 ```
-$ cat tools/env
-export KUBERNETES_PLATFORM=gke
-export GCP_PROJECT=replace-here
-export GCP_REGION=asia-northeast1
+# at GCP
+$ gcloud config list
+[compute]
+region = asia-northeast1
+
+[core]
+account = xxx@gmail.com
+project = GCP_PROJECT
 ```
 
-+ Allocate static ip address
++ Set environment variable
+
+`PLEASE CREATE A NEW DEDICATED GITHUB USER FOR ONLY THIS TESTBED, NOW TOKEN IS TOO WEAK`
 
 ```
-./tools/allocate_staticip.sh
+export GITHUB_USER=XXXXX
+export GITHUB_TOKEN=XXXXX
 ```
 
-+ Initialize repo to replace placeholder
++ Initialize
 
-```
-./tools/init_repo.sh
-```
-
-+ Add webhook settings for forked repo
-
-from https://github.com/GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
-
-  * Payload URL: https://tekton.LOADBALANCER_IP_ADDRESS.nip.io/event-listener
-  * Content type: application/json
-  * Secret: sample-github-webhook-secret
-    * if you want to change, please edit manifests/infra/instances/ci.yaml
-  * Enable SSL verification: [*]
-  * Just the push event: [*]
-  * Active: [*]
-
-+ Deploy applications and so on
+* Following script do:
+	* Download client tools
+	* Allocate static IP address
+	* Replace placeholder in manifests on this repo, with above IP address
 
 ```
 ./tools/init.sh
 ```
 
-# Destroy clusters
+* Add webhook settings for forked repo
+
+from https://github.com/GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
 
 ```
-./tools/destroy_cluster.sh
+* Payload URL: https://tekton.YOUR_STATIC_LB_IP.nip.io/event-listener
+	* replace from YOUR_STATIC_LB_IP to your allocated address
+* Content type: application/json
+* Secret: sample-github-webhook-secret
+  * if you want to change, please edit manifests/infra/instances/ci.yaml
+* Enable SSL verification: [*]
+* Just the push event: [*]
+* Active: [*]
+```
+
++ Deploy applications and so on
+
+* Following script do:
+	* Create cluster
+	* Deploy applications to Kubernetes
+
+```
+./tools/start.sh
+```
+
++ Shutdown
+
+* Following script do:
+	* Delete "Service" resource which use allocated IP address
+	* Destroy cluster
+
+```
+./tools/shutdown.sh
+```
+
++ Finalize
+
+* Following script do:
+	* Deallocate IP Address
+
+```
+./tools/finalize.sh
 ```
 
 # Directory structure
@@ -151,4 +185,3 @@ http://localhost:8080/
 # Memo
 
 https://docs.google.com/spreadsheets/d/18Pza74gohErR-58ib8nUFeJcMJaTr65Jalh7EKAVc7g/edit#gid=0
-
