@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: order
-          image: registry-harbor-core.infra.svc.cluster.local/library/order:f82e7640afb4f5a1d8d9a8f7a694428cb221a345
+          image: registry-harbor-core.infra.svc.cluster.local/library/order:c57ea1d59ad621a4cd3bdae8d334dd83952cfbd5
           env:
             - name: DB_HOST
               value: order-db-tidb.order.svc.cluster.local
