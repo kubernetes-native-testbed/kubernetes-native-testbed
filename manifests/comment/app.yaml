@@ -42,6 +42,11 @@ spec:
                 configMapKeyRef:
                   name: comment-db-init-script
                   key: dbname
+            - name: AUTH_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwtkey
+                  key: id_ecdsa_521.pub
           resources:
             requests:
               cpu: 100m
@@ -77,3 +82,20 @@ spec:
   selector:
     service: comment
     role: app
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jwtkey
+  namespace: comment
+  labels:
+    service: comment
+    role: app
+stringData:
+  id_ecdsa_521.pub: |
+    -----BEGIN PUBLIC KEY-----
+    MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBjjADY22rVltjskWUQBxRHOftt1JQ
+    use7YfTpH8HVj6XFMQLjlTFLx2zcUyS2N3VnyfIGQpxG+HQ51FjSir5u604B+s+/
+    MQJBgk3xndzo+qhO1x+iLSwGNUdMeOTzDfu2oihta2dyRQwd6FQvnqLE7LA8ZWIS
+    7CtuWc6IFAUvbxeCEzw=
+    -----END PUBLIC KEY-----
