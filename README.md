@@ -1,6 +1,6 @@
 # kubernetes-native-testbed
 
-`THIS REPOSITORY IS STILL WORK IN PROGRESS NOW. WE PLAN TO PUBLISH AT APRIL 2020`
+**Note: This repository is still `alpha` release, and we focus to `Beta` at `JUNE 2020`, and `GA` at `KUBECON NA 2020`.**
 
 This is fully Kubernetes-native testbed environment.
 Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
