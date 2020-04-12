@@ -8,6 +8,8 @@ Note: This repository is still **alpha** release, and we focus to:
 * **BETA-2** at **SEP 2020 (CloudNative Days Tokyo 2020, Kubernetes Forum Tokyo)**
 * **GA** at **KubeCon + CNCon NA 2020**
 
+For Cloud Providers, we are looking for a sponsor to provide cloud environment. If you can help, please email us (amsy810@gmail.com).
+
 # Authors
 
 * Masaya Aoyama [@amsy810](https://twitter.com/amsy810)
@@ -30,6 +32,7 @@ Note: This repository is still **alpha** release, and we focus to:
 | admin        | -          |   |   |   |
 
 # OSS
+
 | Name                                                                             | Genre                     | Version | CNCF Project | URL                                                                                                                                         |
 | -------------------------------------------------------------------------------- | ------------------------- | :-----: | :----------: | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Vitess](https://vitess.io/)                                                     | Relational Database       |  v0.0.0 |       ○      | [planetscale/vitess-operator](https://github.com/planetscale/vitess-operator)                                                               |
@@ -160,6 +163,25 @@ Following script do:
 ./tools/finalize.sh
 ```
 
+# Endpoint
+
+| Kind | Endpoint | Username | Password |
+| ---- | -------- | -------- | -------- |
+| Image Registry | https://harbor.__LOADBALANCER_IP_ADDRESS__.nip.io | admin | admin |
+| CI | https://tekton.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
+| CD | https://argocd.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
+| Object Storage | https://minio.__LOADBALANCER_IP_ADDRESS__.nip.io | minio | miniosecret |
+| Block/Shared Storage | https://rook.__LOADBALANCER_IP_ADDRESS__.nip.io/ | admin | 'kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 -d' |
+| Dashboard | https://dashboard.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
+| Monitoring | https://grafana.__LOADBALANCER_IP_ADDRESS__.nip.io/
+| Monitoring | https://prometheus.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
+| Monitoring | https://weave-scope.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
+| Alerting | https://alertmanager.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
+| Search ES | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/search/es | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
+| Search Kibana | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/search/kibana | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
+| Point DB | https://yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io/point/master/ | NO | NO |
+| Point DB | https://yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io/point/tserver/ | NO | NO |
+
 # Directory structure
 
 * manifests/
@@ -185,7 +207,7 @@ source ./development/initialize.sh
 ./development/local-development.sh admin
 
 # access service with  whole system or only local check
-https://testbed.xxx.xxx.xxx.xxx.nip.io/admin/index.html
+https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/admin/index.html
   or
 http://localhost:8080/
 ```
