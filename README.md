@@ -1,9 +1,12 @@
-# kubernetes-native-testbed
-
-**Note: This repository is still `alpha` release, and we focus to `Beta` at `JUNE 2020`, and `GA` at `KUBECON NA 2020`.**
+# Kubernetes-native testbed for the future
 
 This is fully Kubernetes-native testbed environment.
 Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
+
+Note: This repository is still **alpha** release, and we focus to:
+* **BETA-1** at **JUNE 2020 (Kubernetes Community Day Tokyo)**
+* **BETA-2** at **SEP 2020 (CloudNative Days Tokyo 2020, Kubernetes Forum Tokyo)**
+* **GA** at **KUBECON NA 2020**
 
 # Authors
 
