@@ -7,8 +7,8 @@ import (
 	"strconv"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product"
-	pb "github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product/protobuf"
+	"github.com/__GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/product"
+	pb "github.com/__GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/product/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -45,7 +45,7 @@ const (
 	defaultS3AccessKeyID     = componentName
 	defaultS3SecretAccessKey = componentName
 	defaultS3BucketName      = componentName + "-image"
-	defaultS3PublicHost      = "minio.34.84.105.184.nip.io"
+	defaultS3PublicHost      = "minio.127.0.0.1.nip.io"
 	defaultS3PublicPort      = 443
 )
 

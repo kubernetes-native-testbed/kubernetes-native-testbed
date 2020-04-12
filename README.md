@@ -1,6 +1,6 @@
 # kubernetes-native-testbed
 
-`THIS REPOSITORY IS STILL WORK IN PROGRESS NOW. WE PLAN TO PUBLISH AT APRIL 2020`
+**Note: This repository is still `alpha` release, and we focus to `Beta` at `JUNE 2020`, and `GA` at `KUBECON NA 2020`.**
 
 This is fully Kubernetes-native testbed environment.
 Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
@@ -69,25 +69,87 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 
 # How to use
 
-* pre-requirement
-  * "type: LoadBalancer" service provide global IP address
-  * replace xxx.xxx.xxx.xxx.nip.io
-    * contour LoadBalancer static IP
-    * Certification settings for issuer
-    * webhook url from github for tekton triggers
-  * fork this repository and replace repo settings
-  * set up github webhook to tekton triggers with event-listener secret [please-modify-for-high-security-here]
++ Fork repo to your org
 
-* run following command
+from https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
+
++ Setup cloud settings
+
+This testbed use your cloud settings, so please check your settings.
+
+```
+# at GCP
+$ gcloud config list
+[compute]
+region = asia-northeast1
+
+[core]
+account = xxx@gmail.com
+project = GCP_PROJECT
+```
+
++ Set environment variable
+
+`PLEASE CREATE A NEW DEDICATED GITHUB USER FOR ONLY THIS TESTBED, NOW TOKEN IS TOO WEAK`
+
+```
+export GITHUB_USER=XXXXX
+export GITHUB_TOKEN=XXXXX
+```
+
++ Initialize
+
+* Following script do:
+	* Download client tools
+	* Allocate static IP address
+	* Replace placeholder in manifests on this repo, with above IP address
 
 ```
 ./tools/init.sh
 ```
 
-# Destroy clusters
+* Add webhook settings for forked repo
+
+from https://github.com/GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
 
 ```
-./tools/destroy_cluster.sh
+* Payload URL: https://tekton.YOUR_STATIC_LB_IP.nip.io/event-listener
+	* replace from YOUR_STATIC_LB_IP to your allocated address
+* Content type: application/json
+* Secret: sample-github-webhook-secret
+  * if you want to change, please edit manifests/infra/instances/ci.yaml
+* Enable SSL verification: [*]
+* Just the push event: [*]
+* Active: [*]
+```
+
++ Deploy applications and so on
+
+* Following script do:
+	* Create cluster
+	* Deploy applications to Kubernetes
+
+```
+./tools/start.sh
+```
+
++ Shutdown
+
+* Following script do:
+	* Delete "Service" resource which use allocated IP address
+	* Destroy cluster
+
+```
+./tools/shutdown.sh
+```
+
++ Finalize
+
+* Following script do:
+	* Deallocate IP Address
+
+```
+./tools/finalize.sh
 ```
 
 # Directory structure
@@ -95,6 +157,7 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 * manifests/
   * Kubernetes manifests
   * infra/: system or infrastructure manifests
+  * cicd/: CI/CD pipeline settings
     * ci-manifests/: tekton pipelines manifests
     * cd-manifests/: argocd pipelines manifests
 * microservices/
@@ -122,4 +185,3 @@ http://localhost:8080/
 # Memo
 
 https://docs.google.com/spreadsheets/d/18Pza74gohErR-58ib8nUFeJcMJaTr65Jalh7EKAVc7g/edit#gid=0
-

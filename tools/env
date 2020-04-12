@@ -1,3 +1,26 @@
-export KUBERNETES_PLATFORM=gke
-#export GCP_PROJECT=replace-here
+# For all settings
+set -eu
+
+export CLUSTER_NAME=${CLUSTER_NAME:testbed}
+export LOADBALANCER_IP_NAME=${LOADBALANCER_IP_NAME:testbedip}
+export KUBERNETES_PLATFORM=${KUBERNETES_PLATFORM:-gke}
+export GITHUB_ORG_NAME=$(git config --get remote.origin.url | cut -d ":" -f 2 | cut -d "/" -f 1)
+
+# For GKE Settings
+if [ "${KUBERNETES_PLATFORM}" == "gke" ]; then
+  export GCP_PROJECT=$(gcloud config get-value core/project)
+  export GCP_REGION=${$(gcloud config get-value compute/region):-asia-northeast1}
+  echo "Using GCP_PROJECT=${GCP_PROJECT}, GCP_REGION=${GCP_REGION}"
+fi
+
+# For EKS Settings
+# TODO
+
+# For Azure Settings
+# TODO
+
+if [ -z "${GITHUB_USER}" ] || [ -z "${GITHUB_TOKEN}" ]; then
+  echo "Please set GITHUB_USER and GITHUB_TOKEN env var."
+  exit 1
+fi
 

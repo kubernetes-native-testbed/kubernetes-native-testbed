@@ -116,10 +116,10 @@ data:
     RP is opened at $(date +%s)
 
     Changes:
-    https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/commit/${COMMIT_HASH}
+    https://github.com/__GITHUB_ORG_NAME__/kubernetes-native-testbed/commit/${COMMIT_HASH}
 
     Files:
-    https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/tree/${COMMIT_HASH}/microservices/${MICROSERVICE}
+    https://github.com/__GITHUB_ORG_NAME__/kubernetes-native-testbed/tree/${COMMIT_HASH}/microservices/${MICROSERVICE}
     _EOF_
 
     gh pr create --base develop --title "[Update manifest] ${MICROSERVICE} for new image tag ${COMMIT_HASH}" --body "$(cat ~/pr-body.txt)";
@@ -273,7 +273,7 @@ spec:
   params:
     - name: GIT_REPO_URL
       description: The git repository url
-      default: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
+      default: https://github.com/__GITHUB_ORG_NAME__/kubernetes-native-testbed
     - name: MICROSERVICE
       default: somemicroservice
     - name: COMMIT_HASH
@@ -337,5 +337,5 @@ metadata:
   namespace: tekton-pipelines
 type: Opaque
 stringData:
-  github-webhook-secret: please-modify-for-high-security-here
+  github-webhook-secret: sample-github-webhook-secret
 ---

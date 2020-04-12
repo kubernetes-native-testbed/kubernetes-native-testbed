@@ -38,7 +38,7 @@ until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/cicd/cd-manifests
   sleep 1;
 done
 
-for MICROSERVICE in `find ../microservices -name Dockerfile | cut -d "/" -f 3`; do
+for MICROSERVICE in `find ${CURRENT_DIR}/../microservices -name Dockerfile | awk -F "/" '{print $(NF-1)}'`; do
   echo "applying ${MICROSERVICE} manifests"
   until kubectl sort-manifests -R -f ${CURRENT_DIR}/../manifests/${MICROSERVICE} | kubectl apply -f -; do
     echo retrying apply manifests at first time;
