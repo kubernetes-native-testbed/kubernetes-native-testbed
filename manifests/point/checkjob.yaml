@@ -219,6 +219,6 @@ spec:
           volumes:
             - name: scripts-volume
               configMap:
-                name: check-scripts-kvs
+                name: check-scripts-db
                 defaultMode: 493 # mode 755
 ---
