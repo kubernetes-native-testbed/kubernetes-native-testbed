@@ -72,7 +72,7 @@ export const comment = new Vue({
         } else {
           let o = new Object();
           o.uuid = resp.getUuid();
-          this.resp.rate.push(o);
+          this.resp.comment.push(o);
           this.resp.errorCode = err.code;
         }
       });
