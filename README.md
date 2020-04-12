@@ -72,6 +72,11 @@ Note: This repository is still **alpha** release, and we focus to:
 
 # How to use
 
++ Pre-requirements
+
+* kubectl ~1.17.x
+  * in kubectl 1.18.x~, we cannot use CRD and CR obj on one manifest file
+
 + Fork repo to your org, and clone it
 
 from https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
