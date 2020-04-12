@@ -119,7 +119,7 @@ func (s *commentAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.Set
 }
 
 func (s *commentAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
-	if err := user.VerifyToken(ctx, req.GetComment().GetUUID(), authPublicKey); err != nil {
+	if err := user.VerifyToken(ctx, req.GetComment().GetUserUUID(), authPublicKey); err != nil {
 		return nil, err
 	}
 
