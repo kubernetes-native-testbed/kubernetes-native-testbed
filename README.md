@@ -72,6 +72,11 @@ Note: This repository is still **alpha** release, and we focus to:
 
 # How to use
 
++ Pre-requirements
+
+* kubectl ~1.17.x
+  * in kubectl 1.18.x~, we cannot use CRD and CR obj on one manifest file
+
 + Fork repo to your org, and clone it
 
 from https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
@@ -93,7 +98,7 @@ project = GCP_PROJECT
 
 + Set environment variable
 
-`PLEASE CREATE A NEW DEDICATED GITHUB USER FOR ONLY THIS TESTBED, NOW TOKEN IS TOO WEAK`
+**PLEASE CREATE A NEW DEDICATED GITHUB USER FOR ONLY THIS TESTBED REPO. NOW TOKEN IS WEAK**
 
 ```
 export TB_GITHUB_USER=XXXXX
@@ -103,9 +108,9 @@ export TB_GITHUB_TOKEN=XXXXX
 ## Initialize
 
 Following script do:
-	* Download client tools
-	* Allocate static IP address
-	* Replace placeholder in manifests on this repo, with above IP address
+* Download client tools
+* Allocate static IP address
+* Replace placeholder in manifests on this repo, with above IP address
 
 ```
 ./tools/init.sh
@@ -113,11 +118,11 @@ Following script do:
 
 Add webhook settings for forked repo
 
-from https://github.com/TB_GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
+from https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/settings/hooks
 
 ```
-* Payload URL: https://tekton.YOUR_STATIC_LB_IP.nip.io/event-listener
-	* replace from YOUR_STATIC_LB_IP to your allocated address
+* Payload URL: https://tekton.__LOADBALANCER_IP_ADDRESS__.nip.io/event-listener
+	* replace to your allocated address
 * Content type: application/json
 * Secret: sample-github-webhook-secret
   * if you want to change, please edit manifests/infra/instances/ci.yaml
@@ -129,8 +134,8 @@ from https://github.com/TB_GITHUB_ORG_NAME/kubernetes-native-testbed/settings/ho
 ## Deploy applications and so on
 
 Following script do:
-	* Create cluster
-	* Deploy applications to Kubernetes
+* Create cluster
+* Deploy applications to Kubernetes
 
 ```
 ./tools/start.sh
@@ -139,8 +144,8 @@ Following script do:
 ## Shutdown
 
 Following script do:
-	* Delete "Service" resource which use allocated IP address
-	* Destroy cluster
+* Delete "Service" resource which use allocated IP address
+* Destroy cluster
 
 ```
 ./tools/shutdown.sh
@@ -149,7 +154,7 @@ Following script do:
 ## Finalize
 
 Following script do:
-	* Deallocate IP Address
+* Deallocate IP Address
 
 ```
 ./tools/finalize.sh
@@ -185,6 +190,7 @@ https://testbed.xxx.xxx.xxx.xxx.nip.io/admin/index.html
 http://localhost:8080/
 ```
 
-# Memo
+# For contributors only
 
-https://docs.google.com/spreadsheets/d/18Pza74gohErR-58ib8nUFeJcMJaTr65Jalh7EKAVc7g/edit#gid=0
+* archtecture and scheme memo
+  * https://docs.google.com/spreadsheets/d/18Pza74gohErR-58ib8nUFeJcMJaTr65Jalh7EKAVc7g/edit#gid=0
