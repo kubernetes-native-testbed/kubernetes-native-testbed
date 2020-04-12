@@ -9,8 +9,8 @@ import (
 
 	"github.com/golang/protobuf/ptypes/empty"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/comment"
-	pb "github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/comment/protobuf"
+	"github.com/kubernetes-native-testbed-user/kubernetes-native-testbed/microservices/comment"
+	pb "github.com/kubernetes-native-testbed-user/kubernetes-native-testbed/microservices/comment/protobuf"
 	"google.golang.org/grpc"
 	health "google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"

@@ -1,4 +1,4 @@
-# helm --namespace infra template registry  harbor/harbor --set expose.ingress.hosts.core=harbor.__LOADBALANCER_IP_ADDRESS__.nip.io --set expose.ingress.hosts.notary=notary.__LOADBALANCER_IP_ADDRESS__.nip.io  --set persistence.persistentVolumeClaim.registry.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.chartmuseum.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.jobservice.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.database.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.redis.storageClass=rook-ceph-block --set harborAdminPassword=admin  --set expose.tls.commonName=harbor.infra.svc.cluster.local > fuga | perl -p -e 's|^  selfLink: .*\n||g' | perl -p -e 's|^  uid: .*\n||g'| perl -p -e 's|^  resourceVersion: .*\n||g' | perl -p -e 's|^  creationTimestamp: .*\n||g' | perl -p -e 's|^  creationTimestamp: .*\n||g' > harbor.yaml
+# helm --namespace infra template registry  harbor/harbor --set expose.ingress.hosts.core=harbor.35.187.205.212.nip.io --set expose.ingress.hosts.notary=notary.35.187.205.212.nip.io  --set persistence.persistentVolumeClaim.registry.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.chartmuseum.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.jobservice.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.database.storageClass=rook-ceph-block --set persistence.persistentVolumeClaim.redis.storageClass=rook-ceph-block --set harborAdminPassword=admin  --set expose.tls.commonName=harbor.infra.svc.cluster.local > fuga | perl -p -e 's|^  selfLink: .*\n||g' | perl -p -e 's|^  uid: .*\n||g'| perl -p -e 's|^  resourceVersion: .*\n||g' | perl -p -e 's|^  creationTimestamp: .*\n||g' | perl -p -e 's|^  creationTimestamp: .*\n||g' > harbor.yaml
 # modify namespace
 # replace harbor.domain
 ---
@@ -162,7 +162,7 @@ data:
   DISABLE_API: "false"
   DISABLE_STATEFILES: "false"
   ALLOW_OVERWRITE: "true"
-  CHART_URL: https://harbor.__LOADBALANCER_IP_ADDRESS__.nip.io/chartrepo
+  CHART_URL: https://harbor.35.187.205.212.nip.io/chartrepo
   AUTH_ANONYMOUS_GET: "false"
   TLS_CERT: ""
   TLS_KEY: ""
@@ -205,7 +205,7 @@ data:
   POSTGRESQL_SSLMODE: "disable"
   POSTGRESQL_MAX_IDLE_CONNS: "50"
   POSTGRESQL_MAX_OPEN_CONNS: "100"
-  EXT_ENDPOINT: "https://harbor.__LOADBALANCER_IP_ADDRESS__.nip.io"
+  EXT_ENDPOINT: "https://harbor.35.187.205.212.nip.io"
   CORE_URL: "http://registry-harbor-core"
   JOBSERVICE_URL: "http://registry-harbor-jobservice"
   REGISTRY_URL: "http://registry-harbor-registry:5000"
@@ -316,7 +316,7 @@ data:
     auth:
       token:
         issuer: harbor-token-issuer
-        realm: "https://harbor.__LOADBALANCER_IP_ADDRESS__.nip.io/service/token"
+        realm: "https://harbor.35.187.205.212.nip.io/service/token"
         rootcertbundle: /etc/registry/root.crt
         service: harbor-registry
     validation:

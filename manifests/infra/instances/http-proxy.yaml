@@ -9,7 +9,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: testbed.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: testbed.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -80,7 +80,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: argocd.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: argocd.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -106,7 +106,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: tekton.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: tekton.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -132,7 +132,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: harbor.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: harbor.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -158,7 +158,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: notary.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: notary.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -184,7 +184,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: dashboard.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: dashboard.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -210,7 +210,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: rook.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: rook.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -236,7 +236,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: prometheus.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: prometheus.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -262,7 +262,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: grafana.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: grafana.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -288,7 +288,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: alertmanager.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: alertmanager.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -314,7 +314,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: weave-scope.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: weave-scope.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -340,7 +340,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: yugabyte.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
@@ -366,7 +366,7 @@ metadata:
     role: proxy
 spec:
   virtualhost:
-    fqdn: minio.__LOADBALANCER_IP_ADDRESS__.nip.io
+    fqdn: minio.35.187.205.212.nip.io
     tls:
       secretName: testbed-cert
   includes:
