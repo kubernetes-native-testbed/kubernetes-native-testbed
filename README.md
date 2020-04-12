@@ -8,7 +8,7 @@ Note: This repository is still **alpha** release, and we focus to:
 * **BETA-2** at **SEP 2020 (CloudNative Days Tokyo 2020, Kubernetes Forum Tokyo)**
 * **GA** at **KubeCon + CNCon NA 2020**
 
-For Cloud Providers, we are looking for a sponsor to provide cloud environment. If you can help, please email us (amsy810@gmail.com).
+For Cloud Providers, we are looking for a sponsor to provide cloud environment. If you can help, please email us (kubernetes-native-testbed@googlegroups.com).
 
 # Authors
 
@@ -71,6 +71,7 @@ For Cloud Providers, we are looking for a sponsor to provide cloud environment. 
 | Clair                                                                            | Security                  |  v0.0.0 |              | [quay/clair](https://github.com/quay/clair)                                                                                                 |
 | (TBR): [OPA](https://www.openpolicyagent.org/) Gatekeeper                        | Security                  |  v0.0.0 |       ○      | [open-policy-agent/gatekeeper](https://github.com/open-policy-agent/gatekeeper)                                                             |
 | (TBR): [Knative](https://knative.dev/)                                           | Serverless                |  v0.0.0 |              | [knative/serving](https://github.com/knative/serving), [knative/eventing](https://github.com/knative/eventing)                              |
+
 \*1: strictly speaking, strimzi is just a member of CNCF project, not Apache Kafka.
 
 # How to use
