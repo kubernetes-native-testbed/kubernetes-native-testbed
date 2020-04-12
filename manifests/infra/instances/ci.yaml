@@ -116,13 +116,13 @@ data:
     RP is opened at $(date +%s)
 
     Changes:
-    https://github.com/kubernetes-native-testbed-user/kubernetes-native-testbed/commit/${COMMIT_HASH}
+    https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/commit/${COMMIT_HASH}
 
     Files:
-    https://github.com/kubernetes-native-testbed-user/kubernetes-native-testbed/tree/${COMMIT_HASH}/microservices/${MICROSERVICE}
+    https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/tree/${COMMIT_HASH}/microservices/${MICROSERVICE}
     _EOF_
 
-    gh pr create --repo kubernetes-native-testbed-user/kubernetes-native-testbed --base develop --title "[Update manifest] ${MICROSERVICE} for new image tag ${COMMIT_HASH}" --body "$(cat ~/pr-body.txt)";
+    gh pr create --repo __TB_GITHUB_ORG_NAME__/kubernetes-native-testbed --base develop --title "[Update manifest] ${MICROSERVICE} for new image tag ${COMMIT_HASH}" --body "$(cat ~/pr-body.txt)";
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Condition
@@ -273,7 +273,7 @@ spec:
   params:
     - name: GIT_REPO_URL
       description: The git repository url
-      default: https://github.com/kubernetes-native-testbed-user/kubernetes-native-testbed
+      default: https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed
     - name: MICROSERVICE
       default: somemicroservice
     - name: COMMIT_HASH

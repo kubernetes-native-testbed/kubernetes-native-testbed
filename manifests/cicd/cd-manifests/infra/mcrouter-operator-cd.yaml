@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/kubernetes-native-testbed-user/kubernetes-native-testbed.git
+    repoURL: https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed.git
     targetRevision: develop
     path: manifests/infra/mcrouter-operator
     directory:
