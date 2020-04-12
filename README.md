@@ -121,10 +121,10 @@ Following script do:
 
 Add webhook settings for forked repo
 
-from https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/settings/hooks
+from https://github.com/kubernetes-native-testbed-user/kubernetes-native-testbed/settings/hooks
 
 ```
-* Payload URL: https://tekton.__LOADBALANCER_IP_ADDRESS__.nip.io/event-listener
+* Payload URL: https://tekton.34.84.49.133.nip.io/event-listener
 	* replace to your allocated address
 * Content type: application/json
 * Secret: sample-github-webhook-secret
@@ -169,26 +169,26 @@ Following script do:
 
 | Kind | Endpoint | Username | Password |
 | ---- | -------- | -------- | -------- |
-| Image Registry | https://harbor.__LOADBALANCER_IP_ADDRESS__.nip.io | admin | admin |
-| CI | https://tekton.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
-| CD | https://argocd.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
-| Object Storage | https://minio.__LOADBALANCER_IP_ADDRESS__.nip.io | minio | miniosecret |
-| Block/Shared Storage | https://rook.__LOADBALANCER_IP_ADDRESS__.nip.io/ | admin | 'kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 -d' |
-| Dashboard | https://dashboard.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
-| Monitoring | https://grafana.__LOADBALANCER_IP_ADDRESS__.nip.io/
-| Monitoring | https://prometheus.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
-| Monitoring | https://weave-scope.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
-| Alerting | https://alertmanager.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
-| Search - ES | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/search/es | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
-| Search - Kibana | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/search/kibana | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
-| Point - DB | https://yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io/point/master/ | NO | NO |
-| Point - DB | https://yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io/point/tserver/ | NO | NO |
+| Image Registry | https://harbor.34.84.49.133.nip.io | admin | admin |
+| CI | https://tekton.34.84.49.133.nip.io | NO | NO |
+| CD | https://argocd.34.84.49.133.nip.io | NO | NO |
+| Object Storage | https://minio.34.84.49.133.nip.io | minio | miniosecret |
+| Block/Shared Storage | https://rook.34.84.49.133.nip.io/ | admin | 'kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 -d' |
+| Dashboard | https://dashboard.34.84.49.133.nip.io/ | NO | NO |
+| Monitoring | https://grafana.34.84.49.133.nip.io/
+| Monitoring | https://prometheus.34.84.49.133.nip.io/ | NO | NO |
+| Monitoring | https://weave-scope.34.84.49.133.nip.io | NO | NO |
+| Alerting | https://alertmanager.34.84.49.133.nip.io/ | NO | NO |
+| Search - ES | https://testbed.34.84.49.133.nip.io/search/es | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
+| Search - Kibana | https://testbed.34.84.49.133.nip.io/search/kibana | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
+| Point - DB | https://yugabyte.34.84.49.133.nip.io/point/master/ | NO | NO |
+| Point - DB | https://yugabyte.34.84.49.133.nip.io/point/tserver/ | NO | NO |
 
 * Microservice
 
 | Kind | Endpoint | Username | Password |
 | ---- | -------- | -------- | -------- |
-| Admin | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/admin | NO | NO |
+| Admin | https://testbed.34.84.49.133.nip.io/admin | NO | NO |
 
 # Directory structure
 
@@ -215,7 +215,7 @@ source ./development/initialize.sh
 ./development/local-development.sh admin
 
 # access service with  whole system or only local check
-https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/admin/index.html
+https://testbed.34.84.49.133.nip.io/admin/index.html
   or
 http://localhost:8080/
 ```

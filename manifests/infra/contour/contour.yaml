@@ -1428,7 +1428,7 @@ spec:
   selector:
     app: envoy
   type: LoadBalancer
-  loadBalancerIP: __LOADBALANCER_IP_ADDRESS__
+  loadBalancerIP: 34.84.49.133
 ---
 apiVersion: apps/v1
 kind: Deployment
