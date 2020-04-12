@@ -87,7 +87,7 @@ You can try to commit to your own repo for CI/CD.
 ## Pre-requirements
 
 * kubectl ~1.17.x
-  * in kubectl 1.18.x~, we cannot use CRD and CR obj on one manifest file
+  * in kubectl 1.18.x~, we cannot use CRD and CR obj on one manifest file (https://github.com/kubernetes/kubectl/issues/845)
 
 ## Fork repo to your org, and clone it
 
