@@ -103,9 +103,9 @@ export TB_GITHUB_TOKEN=XXXXX
 ## Initialize
 
 Following script do:
-	* Download client tools
-	* Allocate static IP address
-	* Replace placeholder in manifests on this repo, with above IP address
+* Download client tools
+* Allocate static IP address
+* Replace placeholder in manifests on this repo, with above IP address
 
 ```
 ./tools/init.sh
@@ -129,8 +129,8 @@ from https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/setting
 ## Deploy applications and so on
 
 Following script do:
-	* Create cluster
-	* Deploy applications to Kubernetes
+* Create cluster
+* Deploy applications to Kubernetes
 
 ```
 ./tools/start.sh
@@ -139,8 +139,8 @@ Following script do:
 ## Shutdown
 
 Following script do:
-	* Delete "Service" resource which use allocated IP address
-	* Destroy cluster
+* Delete "Service" resource which use allocated IP address
+* Destroy cluster
 
 ```
 ./tools/shutdown.sh
@@ -149,7 +149,7 @@ Following script do:
 ## Finalize
 
 Following script do:
-	* Deallocate IP Address
+* Deallocate IP Address
 
 ```
 ./tools/finalize.sh
@@ -185,6 +185,7 @@ https://testbed.xxx.xxx.xxx.xxx.nip.io/admin/index.html
 http://localhost:8080/
 ```
 
-# Memo
+# For contributors only
 
-https://docs.google.com/spreadsheets/d/18Pza74gohErR-58ib8nUFeJcMJaTr65Jalh7EKAVc7g/edit#gid=0
+* archtecture and scheme memo
+  * https://docs.google.com/spreadsheets/d/18Pza74gohErR-58ib8nUFeJcMJaTr65Jalh7EKAVc7g/edit#gid=0
