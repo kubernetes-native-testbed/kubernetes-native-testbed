@@ -9,5 +9,4 @@ ${CURRENT_DIR}/create_cluster.sh
 ${CURRENT_DIR}/init_clean_cloudprovider_config.sh
 ${CURRENT_DIR}/init_cluster.sh
 ${CURRENT_DIR}/init_credential.sh
-${CURRENT_DIR}/init_workarounds.sh
 
