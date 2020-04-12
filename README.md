@@ -175,7 +175,7 @@ Following script do:
 | Object Storage | https://minio.__LOADBALANCER_IP_ADDRESS__.nip.io | minio | miniosecret |
 | Block/Shared Storage | https://rook.__LOADBALANCER_IP_ADDRESS__.nip.io/ | admin | 'kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 -d' |
 | Dashboard | https://dashboard.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
-| Monitoring | https://grafana.__LOADBALANCER_IP_ADDRESS__.nip.io/
+| Monitoring | https://grafana.__LOADBALANCER_IP_ADDRESS__.nip.io/ | admin | admin |
 | Monitoring | https://prometheus.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
 | Monitoring | https://weave-scope.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
 | Alerting | https://alertmanager.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
