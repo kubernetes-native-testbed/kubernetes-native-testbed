@@ -75,16 +75,16 @@ For Cloud Providers, we are looking for a sponsor to provide cloud environment. 
 
 # How to use
 
-+ Pre-requirements
+## Pre-requirements
 
 * kubectl ~1.17.x
   * in kubectl 1.18.x~, we cannot use CRD and CR obj on one manifest file
 
-+ Fork repo to your org, and clone it
+## Fork repo to your org, and clone it
 
 from https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
 
-+ Setup cloud settings
+## Setup cloud settings
 
 This testbed use your cloud settings, so please check your settings.
 
@@ -99,7 +99,7 @@ account = xxx@gmail.com
 project = GCP_PROJECT
 ```
 
-+ Set environment variable
+## Set environment variable
 
 **PLEASE CREATE A NEW DEDICATED GITHUB USER FOR ONLY THIS TESTBED REPO. NOW TOKEN IS WEAK**
 
@@ -121,7 +121,7 @@ Following script do:
 
 Add webhook settings for forked repo
 
-from https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/settings/hooks
+from https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/settings/hooks/new
 
 ```
 * Payload URL: https://tekton.__LOADBALANCER_IP_ADDRESS__.nip.io/event-listener
@@ -175,7 +175,7 @@ Following script do:
 | Object Storage | https://minio.__LOADBALANCER_IP_ADDRESS__.nip.io | minio | miniosecret |
 | Block/Shared Storage | https://rook.__LOADBALANCER_IP_ADDRESS__.nip.io/ | admin | 'kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 -d' |
 | Dashboard | https://dashboard.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
-| Monitoring | https://grafana.__LOADBALANCER_IP_ADDRESS__.nip.io/
+| Monitoring | https://grafana.__LOADBALANCER_IP_ADDRESS__.nip.io/ | admin | admin |
 | Monitoring | https://prometheus.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
 | Monitoring | https://weave-scope.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
 | Alerting | https://alertmanager.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
