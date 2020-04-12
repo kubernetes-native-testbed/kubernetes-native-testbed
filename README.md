@@ -17,19 +17,19 @@ For Cloud Providers, we are looking for a sponsor to provide cloud environment. 
 
 # Microservices
 
-| microservice | datastore |   |   |   |
-|--------------|-----------|---|---|---|
-| cart      | TiKV          |   |   |   |
-| comment         | MongoDB          |   |   |   |
-| delivery-status         | Cassandra, NATS          |   |   |   |
-| order         |  TiDB         |   |   |   |
-| payment-info         | PostgreSQL          |   |   |   |
-| point         | YugabyteDB, Kafka, Memcached(MCRouter)          |   |   |   |
-| product         | MySQL          |   |   |   |
-| rate         | Redis(Centinel)          |   |   |   |
-| search         | Elasticsearch          |   |   |   |
-| user         | MySQL          |   |   |   |
-| admin        | -          |   |   |   |
+| microservice | datastore |
+|--------------|-----------|
+| cart      | TiKV          |
+| comment         | MongoDB          |
+| delivery-status         | Cassandra, NATS          |
+| order         |  TiDB         |
+| payment-info         | PostgreSQL          |
+| point         | YugabyteDB, Kafka, Memcached(MCRouter)          |
+| product         | MySQL          |
+| rate         | Redis(Centinel)          |
+| search         | Elasticsearch          |
+| user         | MySQL          |
+| admin        | -          |
 
 # OSS
 
