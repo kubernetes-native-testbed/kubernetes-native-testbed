@@ -8,9 +8,9 @@ CURRENT_DIR=$(cd $(dirname $0); pwd)
 git checkout develop
 
 for DIR in manifests microservices; do
-  for FILE in `find ../${DIR} -type f`; do
-    perl -pi -e "s|34.84.31.199|${LOADBALANCER_IP_ADDRESS}|g" $FILE;
-    perl -pi -e "s|kubernetes-native-testbed-user|${TB_GITHUB_ORG_NAME}|g" $FILE;
+  for FILE in `find ${CURRENT_DIR}/../${DIR}/ -type f`; do
+    perl -pi -e "s|__LOADBALANCER_IP_ADDRESS__|${LOADBALANCER_IP_ADDRESS}|g" $FILE;
+    perl -pi -e "s|__TB_GITHUB_ORG_NAME__|${TB_GITHUB_ORG_NAME}|g" $FILE;
   done
 done
 
