@@ -162,14 +162,18 @@ func (c *RateRepositoryRedisConfig) Connect() RateRepository {
 			if err != nil {
 				return nil, err
 			}
-			c, err := redis.Dial("tcp", masterAddr)
+			conn, err := redis.Dial("tcp", masterAddr)
 			if err != nil {
 				return nil, err
 			}
-			return c, nil
+			if _, err := conn.Do("AUTH", c.Password); err != nil {
+				conn.Close()
+				return nil, err
+			}
+			return conn, nil
 		},
-		TestOnBorrow: func(c redis.Conn, t time.Time) error {
-			if !sentinel.TestRole(c, "master") {
+		TestOnBorrow: func(conn redis.Conn, t time.Time) error {
+			if !sentinel.TestRole(conn, "master") {
 				return errors.New("Role check failed")
 			} else {
 				return nil
