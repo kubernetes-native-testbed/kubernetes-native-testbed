@@ -75,16 +75,16 @@ For Cloud Providers, we are looking for a sponsor to provide cloud environment. 
 
 # How to use
 
-+ Pre-requirements
+## Pre-requirements
 
 * kubectl ~1.17.x
   * in kubectl 1.18.x~, we cannot use CRD and CR obj on one manifest file
 
-+ Fork repo to your org, and clone it
+## Fork repo to your org, and clone it
 
 from https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
 
-+ Setup cloud settings
+## Setup cloud settings
 
 This testbed use your cloud settings, so please check your settings.
 
@@ -99,7 +99,7 @@ account = xxx@gmail.com
 project = GCP_PROJECT
 ```
 
-+ Set environment variable
+## Set environment variable
 
 **PLEASE CREATE A NEW DEDICATED GITHUB USER FOR ONLY THIS TESTBED REPO. NOW TOKEN IS WEAK**
 
