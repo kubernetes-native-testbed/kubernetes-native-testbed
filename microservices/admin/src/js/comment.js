@@ -128,7 +128,7 @@ export const comment = new Vue({
     childComments: function() {
       this.clearResponseField();
       const req = new ChildCommentsRequest();
-      req.setUuid(this.form.uuid);
+      req.setParentuuid(this.form.uuid);
       this.client.childComments(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;

@@ -149,6 +149,55 @@ func (s *commentAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*
 	return &empty.Empty{}, nil
 }
 
+func (s *commentAPIServer) IsExists(ctx context.Context, req *pb.IsExistsRequest) (*pb.IsExistsResponse, error) {
+	uuid := req.GetUUID()
+	log.Printf("isExists: %s", uuid)
+	if _, err := s.commentRepository.FindByUUID(uuid); err != nil {
+		return &pb.IsExistsResponse{IsExists: false}, err
+	}
+	return &pb.IsExistsResponse{IsExists: true}, nil
+}
+
+func (s *commentAPIServer) ChildComments(ctx context.Context, req *pb.ChildCommentsRequest) (*pb.ChildCommentsResponse, error) {
+	uuid := req.GetParentUUID()
+	// bad code
+	comments, err := s.commentRepository.List(map[string]interface{}{"parentcommentuuid": uuid})
+	if err != nil {
+		return &pb.ChildCommentsResponse{}, err
+	}
+	log.Printf("childComments %s", comments)
+
+	var resp pb.ChildCommentsResponse
+	for _, c := range comments {
+		var cat, uat, dat *timestamp.Timestamp
+		if cat, err = ptypes.TimestampProto(c.CreatedAt); err != nil {
+			return &pb.ChildCommentsResponse{}, err
+		}
+		if uat, err = ptypes.TimestampProto(c.UpdatedAt); err != nil {
+			return &pb.ChildCommentsResponse{}, err
+		}
+		if c.DeletedAt != nil {
+			if dat, err = ptypes.TimestampProto(*c.DeletedAt); err != nil {
+				return &pb.ChildCommentsResponse{}, err
+			}
+		}
+
+		pbComment := &pb.Comment{
+			UUID:              c.UUID,
+			UserUUID:          c.UserUUID,
+			ParentCommentUUID: c.ParentCommentUUID,
+			Message:           c.Message,
+			CreatedAt:         cat,
+			UpdatedAt:         uat,
+			DeletedAt:         dat,
+		}
+
+		resp.ChildComments = append(resp.ChildComments, pbComment)
+	}
+
+	return &resp, nil
+}
+
 func main() {
 	lis, err := net.Listen("tcp", defaultBindAddr)
 	if err != nil {
