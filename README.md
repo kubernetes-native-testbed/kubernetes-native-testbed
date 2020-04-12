@@ -1,9 +1,14 @@
-# kubernetes-native-testbed
-
-`THIS REPOSITORY IS STILL WORK IN PROGRESS NOW. WE PLAN TO PUBLISH AT APRIL 2020`
+# Kubernetes-native testbed for the future
 
 This is fully Kubernetes-native testbed environment.
 Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
+
+Note: This repository is still **alpha** release, and we focus to:
+* **BETA-1** at **JUNE 2020 (Kubernetes Community Day Tokyo)**
+* **BETA-2** at **SEP 2020 (CloudNative Days Tokyo 2020, Kubernetes Forum Tokyo)**
+* **GA** at **KubeCon + CNCon NA 2020**
+
+For Cloud Providers, we are looking for a sponsor to provide cloud environment. If you can help, please email us (amsy810@gmail.com).
 
 # Authors
 
@@ -27,6 +32,7 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 | admin        | -          |   |   |   |
 
 # OSS
+
 | Name                                                                             | Genre                     | Version | CNCF Project | URL                                                                                                                                         |
 | -------------------------------------------------------------------------------- | ------------------------- | :-----: | :----------: | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Vitess](https://vitess.io/)                                                     | Relational Database       |  v0.0.0 |       ○      | [planetscale/vitess-operator](https://github.com/planetscale/vitess-operator)                                                               |
@@ -69,32 +75,127 @@ Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 
 # How to use
 
-* pre-requirement
-  * "type: LoadBalancer" service provide global IP address
-  * replace xxx.xxx.xxx.xxx.nip.io
-    * contour LoadBalancer static IP
-    * Certification settings for issuer
-    * webhook url from github for tekton triggers
-  * fork this repository and replace repo settings
-  * set up github webhook to tekton triggers with event-listener secret [please-modify-for-high-security-here]
++ Pre-requirements
 
-* run following command
+* kubectl ~1.17.x
+  * in kubectl 1.18.x~, we cannot use CRD and CR obj on one manifest file
+
++ Fork repo to your org, and clone it
+
+from https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
+
++ Setup cloud settings
+
+This testbed use your cloud settings, so please check your settings.
+
+```
+# at GCP
+$ gcloud config list
+[compute]
+region = asia-northeast1
+
+[core]
+account = xxx@gmail.com
+project = GCP_PROJECT
+```
+
++ Set environment variable
+
+**PLEASE CREATE A NEW DEDICATED GITHUB USER FOR ONLY THIS TESTBED REPO. NOW TOKEN IS WEAK**
+
+```
+export TB_GITHUB_USER=XXXXX
+export TB_GITHUB_TOKEN=XXXXX
+```
+
+## Initialize
+
+Following script do:
+* Download client tools
+* Allocate static IP address
+* Replace placeholder in manifests on this repo, with above IP address
 
 ```
 ./tools/init.sh
 ```
 
-# Destroy clusters
+Add webhook settings for forked repo
+
+from https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/settings/hooks
 
 ```
-./tools/destroy_cluster.sh
+* Payload URL: https://tekton.__LOADBALANCER_IP_ADDRESS__.nip.io/event-listener
+	* replace to your allocated address
+* Content type: application/json
+* Secret: sample-github-webhook-secret
+  * if you want to change, please edit manifests/infra/instances/ci.yaml
+* Enable SSL verification: [*]
+* Just the push event: [*]
+* Active: [*]
 ```
+
+## Deploy applications and so on
+
+Following script do:
+* Create cluster
+* Deploy applications to Kubernetes
+
+```
+./tools/start.sh
+```
+
+## Shutdown
+
+Following script do:
+* Delete "Service" resource which use allocated IP address
+* Destroy cluster
+
+```
+./tools/shutdown.sh
+```
+
+## Finalize
+
+Following script do:
+* Deallocate IP Address
+
+```
+./tools/finalize.sh
+```
+
+# Endpoint
+
+* Infrastructure
+
+| Kind | Endpoint | Username | Password |
+| ---- | -------- | -------- | -------- |
+| Image Registry | https://harbor.__LOADBALANCER_IP_ADDRESS__.nip.io | admin | admin |
+| CI | https://tekton.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
+| CD | https://argocd.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
+| Object Storage | https://minio.__LOADBALANCER_IP_ADDRESS__.nip.io | minio | miniosecret |
+| Block/Shared Storage | https://rook.__LOADBALANCER_IP_ADDRESS__.nip.io/ | admin | 'kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 -d' |
+| Dashboard | https://dashboard.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
+| Monitoring | https://grafana.__LOADBALANCER_IP_ADDRESS__.nip.io/
+| Monitoring | https://prometheus.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
+| Monitoring | https://weave-scope.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
+| Alerting | https://alertmanager.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
+| Search - ES | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/search/es | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
+| Search - Kibana | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/search/kibana | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
+| Point - DB | https://yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io/point/master/ | NO | NO |
+| Point - DB | https://yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io/point/tserver/ | NO | NO |
+
+* Microservice
+
+| Kind | Endpoint | Username | Password |
+| ---- | -------- | -------- | -------- |
+| Admin | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/admin | NO | NO |
 
 # Directory structure
 
 * manifests/
   * Kubernetes manifests
   * infra/: system or infrastructure manifests
+  * cicd/: CI/CD pipeline settings
     * ci-manifests/: tekton pipelines manifests
     * cd-manifests/: argocd pipelines manifests
 * microservices/
@@ -114,12 +215,12 @@ source ./development/initialize.sh
 ./development/local-development.sh admin
 
 # access service with  whole system or only local check
-https://testbed.xxx.xxx.xxx.xxx.nip.io/admin/index.html
+https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/admin/index.html
   or
 http://localhost:8080/
 ```
 
-# Memo
+# For contributors only
 
-https://docs.google.com/spreadsheets/d/18Pza74gohErR-58ib8nUFeJcMJaTr65Jalh7EKAVc7g/edit#gid=0
-
+* archtecture and scheme memo
+  * https://docs.google.com/spreadsheets/d/18Pza74gohErR-58ib8nUFeJcMJaTr65Jalh7EKAVc7g/edit#gid=0

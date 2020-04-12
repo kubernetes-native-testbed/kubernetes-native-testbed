@@ -1,4 +1,4 @@
-module github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart/server
+module github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/cart/server
 
 go 1.13
 
@@ -11,10 +11,10 @@ require (
 	github.com/google/btree v1.0.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
-	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart v0.0.0-00010101000000-000000000000
-	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order/protobuf v0.0.0-00010101000000-000000000000
-	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product/protobuf v0.0.0-00010101000000-000000000000
-	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/user v0.0.0-00010101000000-000000000000
+	github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/cart v0.0.0-00010101000000-000000000000
+	github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/order/protobuf v0.0.0-00010101000000-000000000000
+	github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/product/protobuf v0.0.0-00010101000000-000000000000
+	github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/user v0.0.0-00010101000000-000000000000
 	github.com/pingcap/goleveldb v0.0.0-20191226122134-f82aafb29989 // indirect
 	github.com/pingcap/kvproto v0.0.0-20200317112120-78042b285b75 // indirect
 	github.com/pingcap/log v0.0.0-20200117041106-d28c14d3b1cd // indirect
@@ -32,8 +32,8 @@ require (
 )
 
 replace (
-	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/cart => ../
-	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/order/protobuf => ../../order/protobuf
-	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/product/protobuf => ../../product/protobuf
-	github.com/kubernetes-native-testbed/kubernetes-native-testbed/microservices/user => ../../user
+	github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/cart => ../
+	github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/order/protobuf => ../../order/protobuf
+	github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/product/protobuf => ../../product/protobuf
+	github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/user => ../../user
 )

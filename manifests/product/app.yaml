@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: product-app
-          image: registry-harbor-core.infra.svc.cluster.local/library/product:be966e8f8d1c686e9a7b6908447465a36decd984
+          image: registry-harbor-core.infra.svc.cluster.local/library/product:latest-cache
           env:
             - name: DB_HOST
               value: product-db-mysql-master.product.svc.cluster.local
@@ -49,7 +49,7 @@ spec:
             - name: S3_BUCKET_NAME
               value: product-image
             - name: S3_PUBLIC_HOST
-              value: minio.34.84.105.184.nip.io
+              value: minio.__LOADBALANCER_IP_ADDRESS__.nip.io
             - name: S3_PUBLIC_PORT
               value: "443"
             - name: S3_ACCESS_KEY_ID

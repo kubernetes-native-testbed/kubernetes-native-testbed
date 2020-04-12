@@ -1,14 +1,12 @@
 #!/bin/bash
-if [ -z "$KUBERNETES_PLATFORM" ]; then
-  echo "please set KUBERNETES_PLATFORM env var";
-  exit 1;
-fi
-
+set -u
 CURRENT_DIR=$(cd $(dirname $0); pwd)
 
-kubectl -n argocd delete applications --all
-kubectl -n projectcontour delete svc envoy
-
 if [ $KUBERNETES_PLATFORM = "gke" ]; then
-  sh ${CURRENT_DIR}/destroy_cluster_gke.sh
+  gcloud container clusters delete ${CLUSTER_NAME} --region ${GCP_REGION} --quiet
+
+  export GCP_SA_NAME=testbed-gcp-sa
+  export GCP_SA_EMAIL=$(gcloud iam service-accounts list --filter="Name:${GCP_SA_NAME}" --format='value(email)')
+
+  gcloud iam service-accounts delete $GCP_SA_EMAIL --quiet
 fi

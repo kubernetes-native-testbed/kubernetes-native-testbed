@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eu
 
 KREW_PLUGINS=(sort-manifests)
 

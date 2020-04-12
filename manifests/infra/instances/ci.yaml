@@ -96,17 +96,17 @@ data:
     #!/bin/bash
 
     git checkout -b ${MICROSERVICE}-${COMMIT_HASH};
-    git config --global user.email "${GITHUB_USER}@example.com";
-    git config --global user.name "${GITHUB_USER}";
+    git config --global user.email "${TB_GITHUB_USER}@example.com";
+    git config --global user.name "${TB_GITHUB_USER}";
     git config --global credential.helper "store --file ~/.config/gh/git-cmd-credential"
     mkdir -p ~/.config/gh
     cat << _EOF_ > ~/.config/gh/git-cmd-credential
-    https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com
+    https://${TB_GITHUB_USER}:${TB_GITHUB_TOKEN}@github.com
     _EOF_
     cat << _EOF_ > ~/.config/gh/config.yml
     github.com:
-      - user: ${GITHUB_USER}
-        oauth_token: ${GITHUB_TOKEN}
+      - user: ${TB_GITHUB_USER}
+        oauth_token: ${TB_GITHUB_TOKEN}
     _EOF_
     sed -i -e "s|image: .*/${MICROSERVICE}:.*|image: ${REGISTRY_REPO}/${MICROSERVICE}:${COMMIT_HASH}|g" /workspace/source-repo/manifests/${MICROSERVICE}/app.yaml;
     git add --all;
@@ -116,13 +116,13 @@ data:
     RP is opened at $(date +%s)
 
     Changes:
-    https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/commit/${COMMIT_HASH}
+    https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/commit/${COMMIT_HASH}
 
     Files:
-    https://github.com/kubernetes-native-testbed/kubernetes-native-testbed/tree/${COMMIT_HASH}/microservices/${MICROSERVICE}
+    https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/tree/${COMMIT_HASH}/microservices/${MICROSERVICE}
     _EOF_
 
-    gh pr create --base develop --title "[Update manifest] ${MICROSERVICE} for new image tag ${COMMIT_HASH}" --body "$(cat ~/pr-body.txt)";
+    gh pr create --repo __TB_GITHUB_ORG_NAME__/kubernetes-native-testbed --base develop --title "[Update manifest] ${MICROSERVICE} for new image tag ${COMMIT_HASH}" --body "$(cat ~/pr-body.txt)";
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Condition
@@ -178,16 +178,16 @@ spec:
         value: $(inputs.params.COMMIT_HASH)
       - name: REGISTRY_REPO
         value: $(inputs.params.REGISTRY_REPO)
-      - name: GITHUB_USER
+      - name: TB_GITHUB_USER
         valueFrom:
           secretKeyRef:
             name: github-credentials
-            key: GITHUB_USER
-      - name: GITHUB_TOKEN
+            key: TB_GITHUB_USER
+      - name: TB_GITHUB_TOKEN
         valueFrom:
           secretKeyRef:
             name: github-credentials
-            key: GITHUB_TOKEN
+            key: TB_GITHUB_TOKEN
     resources:
       limits:
         cpu: 2
@@ -273,7 +273,7 @@ spec:
   params:
     - name: GIT_REPO_URL
       description: The git repository url
-      default: https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
+      default: https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed
     - name: MICROSERVICE
       default: somemicroservice
     - name: COMMIT_HASH
@@ -337,5 +337,5 @@ metadata:
   namespace: tekton-pipelines
 type: Opaque
 stringData:
-  github-webhook-secret: please-modify-for-high-security-here
+  github-webhook-secret: sample-github-webhook-secret
 ---

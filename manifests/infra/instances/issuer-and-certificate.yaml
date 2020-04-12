@@ -18,7 +18,7 @@ spec:
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
-  name: testbed.34.84.105.184.nip.io
+  name: testbed.__LOADBALANCER_IP_ADDRESS__.nip.io
   namespace: infra
 spec:
   secretName: testbed-cert
@@ -26,17 +26,17 @@ spec:
     name: letsencrypt-issuer
     kind: ClusterIssuer
   dnsNames:
-  - testbed.34.84.105.184.nip.io
-  - argocd.34.84.105.184.nip.io
-  - tekton.34.84.105.184.nip.io
-  - harbor.34.84.105.184.nip.io
-  - notary.34.84.105.184.nip.io
-  - dashboard.34.84.105.184.nip.io
-  - rook.34.84.105.184.nip.io
-  - prometheus.34.84.105.184.nip.io
-  - grafana.34.84.105.184.nip.io
-  - alertmanager.34.84.105.184.nip.io
-  - weave-scope.34.84.105.184.nip.io
-  - yugabyte.34.84.105.184.nip.io
-  - minio.34.84.105.184.nip.io
-  commonName: testbed.34.84.105.184.nip.io
+  - testbed.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - argocd.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - tekton.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - harbor.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - notary.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - dashboard.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - rook.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - prometheus.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - grafana.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - alertmanager.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - weave-scope.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io
+  - minio.__LOADBALANCER_IP_ADDRESS__.nip.io
+  commonName: testbed.__LOADBALANCER_IP_ADDRESS__.nip.io
