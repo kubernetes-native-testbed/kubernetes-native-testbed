@@ -1,4 +1,4 @@
-const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Comment} = require('./protobuf/comment_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, IsExistsRequest, IsExistsResponse, ChildCommentsRequest, ChildCommentResponse, Comment} = require('./protobuf/comment_pb.js');
 
 const {CommentAPIClient} = require('./protobuf/comment_grpc_web_pb.js');
 
@@ -104,6 +104,39 @@ export const comment = new Vue({
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    isExistsComment: function() {
+      this.clearResponseField();
+      const req = new IsExistsRequest();
+      req.setUuid(this.form.uuid);
+      this.client.isExists(req, GetTokenMetadata(), (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let o = new Object();
+          o.commentUUID = this.form.uuid;
+          o.isExists = resp.getIsexists();
+          this.resp.comment.push(o);
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    childComments: function() {
+      this.clearResponseField();
+      const req = new ChildCommentsRequest();
+      req.setUuid(this.form.uuid);
+      this.client.childComments(req, GetTokenMetadata(), (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let o = new Object();
+          o.childComments = resp.getChildcommentsList();
+          this.resp.comment.push(o);
           this.resp.errorCode = err.code;
         }
       });
