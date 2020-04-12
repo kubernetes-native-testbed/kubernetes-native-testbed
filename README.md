@@ -31,6 +31,14 @@ For Cloud Providers, we are looking for a sponsor to provide cloud environment. 
 | user         | MySQL          |
 | admin        | -          |
 
+![Kubernetes-native testbed architecture](./docs/images/kubernetes-native-testbed-architecture.png)
+
+# CI/CD
+
+You can try to commit to your own repo for CI/CD.
+
+![Kubernetes-native testbed CI/CD](./docs/images/kubernetes-native-testbed-cicd.png)
+
 # OSS
 
 | Name                                                                             | Genre                     | Version | CNCF Project | URL                                                                                                                                         |
