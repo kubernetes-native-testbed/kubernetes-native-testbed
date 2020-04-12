@@ -13,6 +13,8 @@ for DIR in manifests microservices; do
     perl -pi -e "s|__TB_GITHUB_ORG_NAME__|${TB_GITHUB_ORG_NAME}|g" $FILE;
   done
 done
+perl -pi -e "s|__LOADBALANCER_IP_ADDRESS__|${LOADBALANCER_IP_ADDRESS}|g" ${CURRENT_DIR}/../README.md
+perl -pi -e "s|__TB_GITHUB_ORG_NAME__|${TB_GITHUB_ORG_NAME}|g" ${CURRENT_DIR}/../README.md
 
 git add --all
 git commit -m "initialized repo"

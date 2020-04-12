@@ -113,11 +113,11 @@ Following script do:
 
 Add webhook settings for forked repo
 
-from https://github.com/TB_GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
+from https://github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/settings/hooks
 
 ```
-* Payload URL: https://tekton.YOUR_STATIC_LB_IP.nip.io/event-listener
-	* replace from YOUR_STATIC_LB_IP to your allocated address
+* Payload URL: https://tekton.__LOADBALANCER_IP_ADDRESS__.nip.io/event-listener
+	* replace to your allocated address
 * Content type: application/json
 * Secret: sample-github-webhook-secret
   * if you want to change, please edit manifests/infra/instances/ci.yaml
