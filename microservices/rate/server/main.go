@@ -118,7 +118,7 @@ func (s *rateAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRes
 }
 
 func (s *rateAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*empty.Empty, error) {
-	if err := user.VerifyToken(ctx, req.GetRate().GetUUID(), authPublicKey); err != nil {
+	if err := user.VerifyToken(ctx, req.GetRate().GetUserUUID(), authPublicKey); err != nil {
 		return nil, err
 	}
 

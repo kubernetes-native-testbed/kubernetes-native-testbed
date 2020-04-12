@@ -2,6 +2,8 @@ const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRe
 
 const {RateAPIClient} = require('./protobuf/rate_grpc_web_pb.js');
 
+const {GetTokenMetadata} = require('./cookie.js');
+
 export const rate = new Vue({
   el: '#rate',
   data: {
@@ -39,7 +41,7 @@ export const rate = new Vue({
       this.clearResponseField();
       const req = new GetRequest();
       req.setUuid(this.form.uuid);
-      this.client.get(req, {}, (err, resp) => {
+      this.client.get(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -67,7 +69,7 @@ export const rate = new Vue({
       r.setProductuuid(this.form.productUUID);
       r.setRating(this.form.rating);
       req.setRate(r);
-      this.client.set(req, {}, (err, resp) => {
+      this.client.set(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -89,7 +91,7 @@ export const rate = new Vue({
       r.setProductuuid(this.form.productUUID);
       r.setRating(this.form.rating);
       req.setRate(r);
-      this.client.update(req, {}, (err, resp) => {
+      this.client.update(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -102,7 +104,7 @@ export const rate = new Vue({
       this.clearResponseField();
       const req = new DeleteRequest();
       req.setUuid(this.form.uuid);
-      this.client.delete(req, {}, (err, resp) => {
+      this.client.delete(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;

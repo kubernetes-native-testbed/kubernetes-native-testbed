@@ -2,6 +2,8 @@ const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRe
 
 const {CommentAPIClient} = require('./protobuf/comment_grpc_web_pb.js');
 
+const {GetTokenMetadata} = require('./cookie.js');
+
 export const comment = new Vue({
   el: '#comment',
   data: {
@@ -37,7 +39,7 @@ export const comment = new Vue({
       this.clearResponseField();
       const req = new GetRequest();
       req.setUuid(this.form.uuid);
-      this.client.get(req, {}, (err, resp) => {
+      this.client.get(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -63,7 +65,7 @@ export const comment = new Vue({
       c.setParentcommentuuid(this.form.parentCommentUUID);
       c.setMessage(this.form.message);
       req.setComment(c);
-      this.client.set(req, {}, (err, resp) => {
+      this.client.set(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -84,7 +86,7 @@ export const comment = new Vue({
       c.setParentcommentuuid(this.form.parentCommentUUID);
       c.setMessage(this.form.message);
       req.setComment(c);
-      this.client.update(req, {}, (err, resp) => {
+      this.client.update(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -97,7 +99,7 @@ export const comment = new Vue({
       this.clearResponseField();
       const req = new DeleteRequest();
       req.setUuid(this.form.uuid);
-      this.client.delete(req, {}, (err, resp) => {
+      this.client.delete(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
