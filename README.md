@@ -165,6 +165,8 @@ Following script do:
 
 # Endpoint
 
+* Infrastructure
+
 | Kind | Endpoint | Username | Password |
 | ---- | -------- | -------- | -------- |
 | Image Registry | https://harbor.__LOADBALANCER_IP_ADDRESS__.nip.io | admin | admin |
@@ -177,10 +179,16 @@ Following script do:
 | Monitoring | https://prometheus.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
 | Monitoring | https://weave-scope.__LOADBALANCER_IP_ADDRESS__.nip.io | NO | NO |
 | Alerting | https://alertmanager.__LOADBALANCER_IP_ADDRESS__.nip.io/ | NO | NO |
-| Search ES | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/search/es | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
-| Search Kibana | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/search/kibana | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
-| Point DB | https://yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io/point/master/ | NO | NO |
-| Point DB | https://yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io/point/tserver/ | NO | NO |
+| Search - ES | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/search/es | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
+| Search - Kibana | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/search/kibana | elastic | 'kubectl -n search get secret search-db-es-elastic-user -o jsonpath="{.data.elastic}" | base64 -d' |
+| Point - DB | https://yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io/point/master/ | NO | NO |
+| Point - DB | https://yugabyte.__LOADBALANCER_IP_ADDRESS__.nip.io/point/tserver/ | NO | NO |
+
+* Microservice
+
+| Kind | Endpoint | Username | Password |
+| ---- | -------- | -------- | -------- |
+| Admin | https://testbed.__LOADBALANCER_IP_ADDRESS__.nip.io/admin | NO | NO |
 
 # Directory structure
 
