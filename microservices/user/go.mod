@@ -1,4 +1,4 @@
-module github.com/__GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/user
+module github.com/__TB_GITHUB_ORG_NAME__/kubernetes-native-testbed/microservices/user
 
 go 1.13
 

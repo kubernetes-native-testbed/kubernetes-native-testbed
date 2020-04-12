@@ -1,5 +1,5 @@
 #!/bin/bash
-set -u
+set -eu
 
 CURRENT_DIR=$(cd $(dirname $0); pwd)
 

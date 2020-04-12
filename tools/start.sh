@@ -5,9 +5,9 @@ CURRENT_DIR=$(cd $(dirname $0); pwd)
 
 source ${CURRENT_DIR}/env
 
-sh ${CURRENT_DIR}/create_cluster.sh
-sh ${CURRENT_DIR}/init_clean_cloudprovider_config.sh
-sh ${CURRENT_DIR}/init_cluster.sh
-sh ${CURRENT_DIR}/init_credential.sh
-sh ${CURRENT_DIR}/init_workarounds.sh
+${CURRENT_DIR}/create_cluster.sh
+${CURRENT_DIR}/init_clean_cloudprovider_config.sh
+${CURRENT_DIR}/init_cluster.sh
+${CURRENT_DIR}/init_credential.sh
+${CURRENT_DIR}/init_workarounds.sh
 

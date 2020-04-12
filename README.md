@@ -72,7 +72,7 @@ Note: This repository is still **alpha** release, and we focus to:
 
 # How to use
 
-+ Fork repo to your org
++ Fork repo to your org, and clone it
 
 from https://github.com/kubernetes-native-testbed/kubernetes-native-testbed
 
@@ -96,13 +96,13 @@ project = GCP_PROJECT
 `PLEASE CREATE A NEW DEDICATED GITHUB USER FOR ONLY THIS TESTBED, NOW TOKEN IS TOO WEAK`
 
 ```
-export GITHUB_USER=XXXXX
-export GITHUB_TOKEN=XXXXX
+export TB_GITHUB_USER=XXXXX
+export TB_GITHUB_TOKEN=XXXXX
 ```
 
-+ Initialize
+## Initialize
 
-* Following script do:
+Following script do:
 	* Download client tools
 	* Allocate static IP address
 	* Replace placeholder in manifests on this repo, with above IP address
@@ -111,9 +111,9 @@ export GITHUB_TOKEN=XXXXX
 ./tools/init.sh
 ```
 
-* Add webhook settings for forked repo
+Add webhook settings for forked repo
 
-from https://github.com/GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
+from https://github.com/TB_GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
 
 ```
 * Payload URL: https://tekton.YOUR_STATIC_LB_IP.nip.io/event-listener
@@ -126,9 +126,9 @@ from https://github.com/GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
 * Active: [*]
 ```
 
-+ Deploy applications and so on
+## Deploy applications and so on
 
-* Following script do:
+Following script do:
 	* Create cluster
 	* Deploy applications to Kubernetes
 
@@ -136,9 +136,9 @@ from https://github.com/GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
 ./tools/start.sh
 ```
 
-+ Shutdown
+## Shutdown
 
-* Following script do:
+Following script do:
 	* Delete "Service" resource which use allocated IP address
 	* Destroy cluster
 
@@ -146,9 +146,9 @@ from https://github.com/GITHUB_ORG_NAME/kubernetes-native-testbed/settings/hooks
 ./tools/shutdown.sh
 ```
 
-+ Finalize
+## Finalize
 
-* Following script do:
+Following script do:
 	* Deallocate IP Address
 
 ```
