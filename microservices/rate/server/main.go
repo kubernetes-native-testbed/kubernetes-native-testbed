@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"os"
@@ -12,6 +13,7 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	commentpb "github.com/kubernetes-native-testbed-user/kubernetes-native-testbed/microservices/comment/protobuf"
 	"github.com/kubernetes-native-testbed-user/kubernetes-native-testbed/microservices/rate"
 	pb "github.com/kubernetes-native-testbed-user/kubernetes-native-testbed/microservices/rate/protobuf"
 	"github.com/kubernetes-native-testbed-user/kubernetes-native-testbed/microservices/user"
@@ -27,6 +29,9 @@ var (
 	masterName   string
 
 	authPublicKey string
+
+	commentHost string
+	commentPort int
 )
 
 const (
@@ -37,6 +42,9 @@ const (
 	defaultSentinelPort = 26379
 	defaultKvsPassword  = componentName
 	defaultMasterName   = "mymaster"
+
+	defaultCommentHost = "comment.comment.svc.cluster.local"
+	defaultCommentPort = 8080
 )
 
 func init() {
@@ -57,10 +65,19 @@ func init() {
 	if authPublicKey = os.Getenv("AUTH_PUBLIC_KEY"); authPublicKey == "" {
 		log.Fatal("AUTH_PUBLIC_KEY is required")
 	}
+	if commentHost = os.Getenv("COMMENT_HOST"); commentHost == "" {
+		commentHost = defaultCommentHost
+	}
+	if commentPort, err = strconv.Atoi(os.Getenv("COMMENT_PORT")); err != nil {
+		commentPort = defaultCommentPort
+		log.Printf("commentPort parse error: %v", err)
+	}
 }
 
 type rateAPIServer struct {
-	rateRepository rate.RateRepository
+	rateRepository  rate.RateRepository
+	commentClient   commentpb.CommentAPIClient
+	commentEndpoint string
 }
 
 func (s *rateAPIServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
@@ -109,6 +126,21 @@ func (s *rateAPIServer) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRes
 	}
 	log.Printf("set %s", r)
 
+	retry := 5
+	var err error
+	for i := 0; i < retry; i++ {
+		if _, err = s.commentClient.Get(ctx, &commentpb.GetRequest{UUID: r.CommentUUID}); err != nil {
+			if err := s.recoverMicroserviceConnection(s.commentClient); err != nil {
+				return nil, err
+			}
+			continue
+		}
+		break
+	}
+	if err != nil {
+		return nil, fmt.Errorf("comment request error: %w", err)
+	}
+
 	uuid, err := s.rateRepository.Store(r)
 	if err != nil {
 		return &pb.SetResponse{}, err
@@ -131,6 +163,21 @@ func (s *rateAPIServer) Update(ctx context.Context, req *pb.UpdateRequest) (*emp
 	}
 	log.Printf("update %s", r)
 
+	retry := 5
+	var err error
+	for i := 0; i < retry; i++ {
+		if _, err = s.commentClient.Get(ctx, &commentpb.GetRequest{UUID: r.CommentUUID}); err != nil {
+			if err := s.recoverMicroserviceConnection(s.commentClient); err != nil {
+				return nil, err
+			}
+			continue
+		}
+		break
+	}
+	if err != nil {
+		return nil, fmt.Errorf("comment request error: %w", err)
+	}
+
 	if err := s.rateRepository.Update(r); err != nil {
 		return &empty.Empty{}, err
 	}
@@ -149,6 +196,18 @@ func (s *rateAPIServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*emp
 	return &empty.Empty{}, nil
 }
 
+func (s *rateAPIServer) recoverMicroserviceConnection(client interface{}) error {
+	switch client.(type) {
+	case commentpb.CommentAPIClient:
+		conn, err := grpc.Dial(s.commentEndpoint, grpc.WithInsecure())
+		if err != nil {
+			return err
+		}
+		s.commentClient = commentpb.NewCommentAPIClient(conn)
+	}
+	return nil
+}
+
 func main() {
 	lis, err := net.Listen("tcp", defaultBindAddr)
 	if err != nil {
@@ -165,8 +224,17 @@ func main() {
 	redis := redisConfig.Connect()
 	log.Printf("succeed to open kvs")
 
+	commentEndpoint := fmt.Sprintf("%s:%d", commentHost, commentPort)
+	commentConn, err := grpc.Dial(commentEndpoint, grpc.WithInsecure())
+	if err != nil {
+		log.Fatal(err)
+	}
+	commentClient := commentpb.NewCommentAPIClient(commentConn)
+
 	rateAPI := &rateAPIServer{
-		rateRepository: redis,
+		rateRepository:  redis,
+		commentClient:   commentClient,
+		commentEndpoint: commentEndpoint,
 	}
 
 	s := grpc.NewServer()
