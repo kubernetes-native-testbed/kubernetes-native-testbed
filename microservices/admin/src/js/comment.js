@@ -1,6 +1,8 @@
-const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, Comment} = require('./protobuf/comment_pb.js');
+const {GetRequest, GetResponse, SetRequest, SetResponse, UpdateRequest, DeleteRequest, IsExistsRequest, IsExistsResponse, ChildCommentsRequest, ChildCommentResponse, Comment} = require('./protobuf/comment_pb.js');
 
 const {CommentAPIClient} = require('./protobuf/comment_grpc_web_pb.js');
+
+const {GetTokenMetadata} = require('./cookie.js');
 
 export const comment = new Vue({
   el: '#comment',
@@ -37,7 +39,7 @@ export const comment = new Vue({
       this.clearResponseField();
       const req = new GetRequest();
       req.setUuid(this.form.uuid);
-      this.client.get(req, {}, (err, resp) => {
+      this.client.get(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -63,14 +65,14 @@ export const comment = new Vue({
       c.setParentcommentuuid(this.form.parentCommentUUID);
       c.setMessage(this.form.message);
       req.setComment(c);
-      this.client.set(req, {}, (err, resp) => {
+      this.client.set(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
           let o = new Object();
           o.uuid = resp.getUuid();
-          this.resp.rate.push(o);
+          this.resp.comment.push(o);
           this.resp.errorCode = err.code;
         }
       });
@@ -84,7 +86,7 @@ export const comment = new Vue({
       c.setParentcommentuuid(this.form.parentCommentUUID);
       c.setMessage(this.form.message);
       req.setComment(c);
-      this.client.update(req, {}, (err, resp) => {
+      this.client.update(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
@@ -97,11 +99,44 @@ export const comment = new Vue({
       this.clearResponseField();
       const req = new DeleteRequest();
       req.setUuid(this.form.uuid);
-      this.client.delete(req, {}, (err, resp) => {
+      this.client.delete(req, GetTokenMetadata(), (err, resp) => {
         if (err) {
           this.resp.errorCode = err.code;
           this.resp.errorMsg = err.message;
         } else {
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    isExistsComment: function() {
+      this.clearResponseField();
+      const req = new IsExistsRequest();
+      req.setUuid(this.form.uuid);
+      this.client.isExists(req, GetTokenMetadata(), (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let o = new Object();
+          o.commentUUID = this.form.uuid;
+          o.isExists = resp.getIsexists();
+          this.resp.comment.push(o);
+          this.resp.errorCode = err.code;
+        }
+      });
+    },
+    childComments: function() {
+      this.clearResponseField();
+      const req = new ChildCommentsRequest();
+      req.setParentuuid(this.form.uuid);
+      this.client.childComments(req, GetTokenMetadata(), (err, resp) => {
+        if (err) {
+          this.resp.errorCode = err.code;
+          this.resp.errorMsg = err.message;
+        } else {
+          let o = new Object();
+          o.childComments = resp.getChildcommentsList();
+          this.resp.comment.push(o);
           this.resp.errorCode = err.code;
         }
       });

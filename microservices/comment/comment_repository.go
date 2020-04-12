@@ -17,6 +17,7 @@ type CommentRepository interface {
 	Store(*Comment) (string, error)
 	Update(*Comment) error
 	DeleteByUUID(string) error
+	List(map[string]interface{}) ([]Comment, error)
 }
 
 type commentRepositoryMongo struct {
@@ -59,6 +60,14 @@ func (cr *commentRepositoryMongo) Store(c *Comment) (string, error) {
 	c.UUID = uuid.New().String()
 	c.CreatedAt = time.Now()
 
+	// parent comment check
+	if c.ParentCommentUUID != "" {
+		var parentComment Comment
+		if err := coll.FindOne(ctx, bson.M{"uuid": c.ParentCommentUUID}, options.FindOne()).Decode(&parentComment); err != nil {
+			return "", err
+		}
+	}
+
 	// exists check
 	var ret Comment
 	filter := bson.M{"uuid": c.UUID}
@@ -85,6 +94,14 @@ func (cr *commentRepositoryMongo) Update(c *Comment) error {
 		return err
 	}
 	coll := cr.client.Database(cr.dbName).Collection("comments")
+
+	// parent comment check
+	if c.ParentCommentUUID != "" {
+		var parentComment Comment
+		if err := coll.FindOne(ctx, bson.M{"uuid": c.ParentCommentUUID}, options.FindOne()).Decode(&parentComment); err != nil {
+			return err
+		}
+	}
 
 	filter := bson.M{"uuid": c.UUID}
 	update := bson.M{"$set": bson.M{
@@ -118,6 +135,29 @@ func (cr *commentRepositoryMongo) DeleteByUUID(uuid string) error {
 	}
 
 	return nil
+}
+
+func (cr *commentRepositoryMongo) List(filter map[string]interface{}) ([]Comment, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+	if err := updateConnection(cr.client, ctx); err != nil {
+		return nil, err
+	}
+	coll := cr.client.Database(cr.dbName).Collection("comments")
+
+	var comments []Comment
+	filter["deletedat"] = nil
+	f := bson.M(filter)
+	cur, err := coll.Find(ctx, f, options.Find())
+	if err != nil {
+		return nil, err
+	}
+
+	if err := cur.All(ctx, &comments); err != nil {
+		return nil, err
+	}
+
+	return comments, nil
 }
 
 func updateConnection(client *mongo.Client, ctx context.Context) error {

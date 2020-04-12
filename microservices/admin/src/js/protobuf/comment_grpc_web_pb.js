@@ -390,5 +390,165 @@ proto.commentpb.CommentAPIPromiseClient.prototype.delete =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.commentpb.IsExistsRequest,
+ *   !proto.commentpb.IsExistsResponse>}
+ */
+const methodDescriptor_CommentAPI_IsExists = new grpc.web.MethodDescriptor(
+  '/commentpb.CommentAPI/IsExists',
+  grpc.web.MethodType.UNARY,
+  proto.commentpb.IsExistsRequest,
+  proto.commentpb.IsExistsResponse,
+  /**
+   * @param {!proto.commentpb.IsExistsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.commentpb.IsExistsResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.commentpb.IsExistsRequest,
+ *   !proto.commentpb.IsExistsResponse>}
+ */
+const methodInfo_CommentAPI_IsExists = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.commentpb.IsExistsResponse,
+  /**
+   * @param {!proto.commentpb.IsExistsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.commentpb.IsExistsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.commentpb.IsExistsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.commentpb.IsExistsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.commentpb.IsExistsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.commentpb.CommentAPIClient.prototype.isExists =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/commentpb.CommentAPI/IsExists',
+      request,
+      metadata || {},
+      methodDescriptor_CommentAPI_IsExists,
+      callback);
+};
+
+
+/**
+ * @param {!proto.commentpb.IsExistsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.commentpb.IsExistsResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.commentpb.CommentAPIPromiseClient.prototype.isExists =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/commentpb.CommentAPI/IsExists',
+      request,
+      metadata || {},
+      methodDescriptor_CommentAPI_IsExists);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.commentpb.ChildCommentsRequest,
+ *   !proto.commentpb.ChildCommentsResponse>}
+ */
+const methodDescriptor_CommentAPI_ChildComments = new grpc.web.MethodDescriptor(
+  '/commentpb.CommentAPI/ChildComments',
+  grpc.web.MethodType.UNARY,
+  proto.commentpb.ChildCommentsRequest,
+  proto.commentpb.ChildCommentsResponse,
+  /**
+   * @param {!proto.commentpb.ChildCommentsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.commentpb.ChildCommentsResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.commentpb.ChildCommentsRequest,
+ *   !proto.commentpb.ChildCommentsResponse>}
+ */
+const methodInfo_CommentAPI_ChildComments = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.commentpb.ChildCommentsResponse,
+  /**
+   * @param {!proto.commentpb.ChildCommentsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.commentpb.ChildCommentsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.commentpb.ChildCommentsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.commentpb.ChildCommentsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.commentpb.ChildCommentsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.commentpb.CommentAPIClient.prototype.childComments =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/commentpb.CommentAPI/ChildComments',
+      request,
+      metadata || {},
+      methodDescriptor_CommentAPI_ChildComments,
+      callback);
+};
+
+
+/**
+ * @param {!proto.commentpb.ChildCommentsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.commentpb.ChildCommentsResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.commentpb.CommentAPIPromiseClient.prototype.childComments =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/commentpb.CommentAPI/ChildComments',
+      request,
+      metadata || {},
+      methodDescriptor_CommentAPI_ChildComments);
+};
+
+
 module.exports = proto.commentpb;
 

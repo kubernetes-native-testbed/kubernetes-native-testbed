@@ -23,9 +23,9 @@ spec:
         - name: rate
           image: registry-harbor-core.infra.svc.cluster.local/library/rate:latest-cache
           env:
-            - name: KVS_HOST
+            - name: SENTINEL_HOST
               value: rfs-rate-kvs.rate.svc.cluster.local
-            - name: KVS_PORT
+            - name: SENTINEL_PORT
               value: "26379"
             - name: KVS_PASSWORD
               valueFrom:
