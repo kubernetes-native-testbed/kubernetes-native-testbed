@@ -132,7 +132,7 @@ rules:
     resources: ["pods", "nodes"]
     verbs: ["get", "list", "watch"]
   - apiGroups: ["*"]
-    resources: ["*"]
+    resources: ["pods", "nodes", "replicasets", "deployments", "statefulsets", "daemonsets", "jobs", "cronjobs", "services", "ingresses", "configmaps", "persistentvolumes", "persistentvolumeclaims", "replicationcontrollers", "storageclasses", "namespaces", "clusterroles", "roles", "clusterrolebindings", "rolebindings", "endpoints", "customresourcedefinitions", "endpoints", "events", "endpointslices"]
     verbs: ["get", "list", "watch"]
 ---
 
