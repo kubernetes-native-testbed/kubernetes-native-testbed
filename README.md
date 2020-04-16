@@ -15,6 +15,16 @@ For Cloud Providers, we are looking for a sponsor to provide cloud environment. 
 * Masaya Aoyama [@amsy810](https://twitter.com/amsy810)
 * Mizuki Urushida [@zuiurs](https://twitter.com/zuiurs)
 
+# ToC
+
+- [Microservices](#microservices)
+- [CI/CD](#cicd)
+- [OSS](#oss)
+- [How to use](#how-to-use)
+- [Endpoint](#endpoint)
+- [Directory structure](#directory-structure)
+- [Local development](#local-development)
+
 # Microservices
 
 | microservice | datastore |
