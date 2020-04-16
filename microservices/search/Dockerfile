@@ -3,7 +3,7 @@ WORKDIR /app
 COPY ./ /app/
 RUN cd search; go get; go build -o /server
 
-FROM busybox as builder2
+FROM ubuntu:18.04 as builder2
 RUN GRPC_HEALTH_PROBE_VERSION=v0.3.1 && \
     wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
     chmod +x /bin/grpc_health_probe
