@@ -147,7 +147,7 @@ Please install [Krew](https://github.com/kubernetes-sigs/krew) which is kubectl 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 ```
 
-For other operation system, please refer to official installation document.
+For other operation system, please refer to [official installation document](https://krew.sigs.k8s.io/docs/user-guide/setup/install/).
 
 ## Initialize
 
