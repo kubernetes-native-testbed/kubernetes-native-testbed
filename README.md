@@ -15,6 +15,16 @@ For Cloud Providers, we are looking for a sponsor to provide cloud environment. 
 * Masaya Aoyama [@amsy810](https://twitter.com/amsy810)
 * Mizuki Urushida [@zuiurs](https://twitter.com/zuiurs)
 
+# ToC
+
+- [Microservices](#microservices)
+- [CI/CD](#cicd)
+- [OSS](#oss)
+- [How to use](#how-to-use)
+- [Endpoint](#endpoint)
+- [Directory structure](#directory-structure)
+- [Local development](#local-development)
+
 # Microservices
 
 | microservice | datastore |
@@ -117,6 +127,27 @@ project = GCP_PROJECT
 export TB_GITHUB_USER=XXXXX
 export TB_GITHUB_TOKEN=XXXXX
 ```
+
+## Install Kubectl plugin "Krew"
+
+Please install [Krew](https://github.com/kubernetes-sigs/krew) which is kubectl plugins manager.
+
+```sh
+# for macOS / Linux
+
+(
+  set -x; cd "$(mktemp -d)" &&
+  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew.{tar.gz,yaml}" &&
+  tar zxvf krew.tar.gz &&
+  KREW=./krew-"$(uname | tr '[:upper:]' '[:lower:]')_amd64" &&
+  "$KREW" install --manifest=krew.yaml --archive=krew.tar.gz &&
+  "$KREW" update
+)
+
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+```
+
+For other operation system, please refer to [official installation document](https://krew.sigs.k8s.io/docs/user-guide/setup/install/).
 
 ## Initialize
 
