@@ -128,6 +128,27 @@ export TB_GITHUB_USER=XXXXX
 export TB_GITHUB_TOKEN=XXXXX
 ```
 
+## Install Kubectl plugin "Krew"
+
+Please install [Krew](https://github.com/kubernetes-sigs/krew) which is kubectl plugins manager.
+
+```sh
+# for macOS / Linux
+
+(
+  set -x; cd "$(mktemp -d)" &&
+  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew.{tar.gz,yaml}" &&
+  tar zxvf krew.tar.gz &&
+  KREW=./krew-"$(uname | tr '[:upper:]' '[:lower:]')_amd64" &&
+  "$KREW" install --manifest=krew.yaml --archive=krew.tar.gz &&
+  "$KREW" update
+)
+
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+```
+
+For other operation system, please refer to official installation document.
+
 ## Initialize
 
 Following script do:
