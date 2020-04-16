@@ -263,5 +263,5 @@ http://localhost:8080/
 
 # For contributors only
 
-* archtecture and scheme memo
+* architecture and scheme memo
   * https://docs.google.com/spreadsheets/d/18Pza74gohErR-58ib8nUFeJcMJaTr65Jalh7EKAVc7g/edit#gid=0
