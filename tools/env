@@ -5,14 +5,14 @@ export CLUSTER_NAME=${CLUSTER_NAME:-testbed}
 export LOADBALANCER_IP_NAME=${LOADBALANCER_IP_NAME:-testbedip}
 export KUBERNETES_PLATFORM=${KUBERNETES_PLATFORM:-gke}
 
-GET_REMOTE_ORIGIN_URL=$(git config --get remote.origin.url)
+REMOTE_ORIGIN_URL=$(git config --get remote.origin.url)
 
-if [ -n "$(echo ${GET_REMOTE_ORIGIN_URL} | grep -E ^https://github.com)" ]; then
-  export TB_GITHUB_ORG_NAME=$(git config --get remote.origin.url | cut -d "/" -f 4)
+if [ -n "$(echo ${REMOTE_ORIGIN_URL} | grep -E ^https://github.com)" ]; then
+  export TB_GITHUB_ORG_NAME=$(echo ${REMOTE_ORIGIN_URL} | cut -d "/" -f 4)
 fi
 
-if [ -n "$(echo "${GET_REMOTE_ORIGIN_URL}" | grep -E ^git@github.com)" ]; then
-  export TB_GITHUB_ORG_NAME=$(git config --get remote.origin.url | cut -d ":" -f 2 | cut -d "/" -f 1)
+if [ -n "$(echo "${REMOTE_ORIGIN_URL}" | grep -E ^git@github.com)" ]; then
+  export TB_GITHUB_ORG_NAME=$(echo ${REMOTE_ORIGIN_URL} | cut -d ":" -f 2 | cut -d "/" -f 1)
 fi
 
 # For GKE Settings
