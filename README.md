@@ -3,6 +3,8 @@
 This is fully Kubernetes-native testbed environment.
 Please contribute for add additional OSS (Vitess, NATS, etc) or microservices.
 
+![Kubernetes-native testbed](./docs/images/kubernetes-native-testbed-logo-small.png)
+
 Note: This repository is still **alpha** release, and we focus on:
 * **BETA-1** at **JUNE 2020 (Kubernetes Community Day Tokyo)**
 * **BETA-2** at **SEP 2020 (CloudNative Days Tokyo 2020, Kubernetes Forum Tokyo)**
