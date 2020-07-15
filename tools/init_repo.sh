@@ -5,6 +5,9 @@ if [ $KUBERNETES_PLATFORM = "gke" ]; then
   export LOADBALANCER_IP_ADDRESS=$(gcloud compute addresses list --filter="name=${LOADBALANCER_IP_NAME}" --format="value(address)")
 fi
 
+echo ${TB_GITHUB_ORG_NAME:?Variable not set. Aborting...}
+echo ${LOADBALANCER_IP_ADDRESS:?Variable not set. Aborting...}
+
 echo "Repository will be initialized with the following information."
 echo "TB_GITHUB_ORG_NAME=${TB_GITHUB_ORG_NAME}"
 echo "KUBERNETES_PLATFORM=${KUBERNETES_PLATFORM}"
