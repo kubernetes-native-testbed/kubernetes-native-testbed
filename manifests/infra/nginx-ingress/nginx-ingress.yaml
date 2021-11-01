@@ -313,7 +313,7 @@ spec:
                 add:
                 - NET_BIND_SERVICE
             runAsUser: 101
-            allowPrivilegeEscalation: true
+            allowPrivilegeEscalation: false
           env:
             - name: POD_NAME
               valueFrom:
